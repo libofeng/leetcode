@@ -1,0 +1,93 @@
+## Version 1: We should ignore everything that is generated, backups, IDE specifics (once we know more we can enable them)
+
+## generic files to ignore, we ignore backup files (*~) and vim swap file (.swp), MacOS dir file (.DS_Store) and any file with .out extension (a.out ..etc)
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+*.tmp
+
+# OS generated files #
+###########################################
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Other version control #
+###########################################
+.svn
+
+
+# Packages #
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+###########################################
+*.tar
+*.zip
+*.tgz
+
+# Java #
+# java specific
+###########################################
+*.class
+*.jad
+#*.jar
+
+
+# Build #
+# Build artifacts
+###########################################
+# everything should be in /output/
+output
+
+
+# Logs #
+###########################################
+*.log
+logs/
+
+# Intellij #
+# IDE project sould not be commit
+###########################################
+*.iml
+*.ipr
+*.iws
+.idea
+target
+/*/target
+
+# netbeans #
+# IDE project sould not be commit
+###########################################
+#netbeans projects ignored
+nbproject
+#netbeans ignore personal stuff
+#nbproject/private/
+
+# Eclipse
+######################
+.mtj
+.classpath
+.project
+.metadata
+.mtj.tmp
+.settings
+.workspace
+.eclipseme
+/build.properties
+/Application Descriptor
+
+# Temporary folders
+######################
+/target/tmp*/
+
+# Application files
+######################
+*.exe
+
+# Backup files
+######################
+*.bak
+
