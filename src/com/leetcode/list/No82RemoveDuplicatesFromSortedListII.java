@@ -1,7 +1,7 @@
 package com.leetcode.list;
 
 public class No82RemoveDuplicatesFromSortedListII {
-    public ListNode deleteDuplicates(ListNode head) {
+    public ListNode deleteDuplicates2(ListNode head) {
         ListNode dummy = new ListNode(0), tail = dummy;
 
         while (head != null) {
@@ -19,5 +19,19 @@ public class No82RemoveDuplicatesFromSortedListII {
         }
 
         return dummy.next;
+    }
+
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode next = head.next;
+        if (head.val == next.val) {
+            while (next != null && next.val == head.val) next = next.next;
+            return deleteDuplicates(next);
+        } else {
+            head.next = deleteDuplicates(next);
+        }
+
+        return head;
     }
 }
