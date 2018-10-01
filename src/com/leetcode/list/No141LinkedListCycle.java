@@ -18,12 +18,12 @@ public class No141LinkedListCycle {
     public boolean hasCycle2(ListNode head) {
         if (head == null || head.next == null) return false;
 
-        ListNode slow = head, fast = slow.next;
+        ListNode slow = head, fast = slow;
         while (fast != null && fast.next != null) {
-            if (fast == slow) return true;
-
             slow = slow.next;
             fast = fast.next.next;
+
+            if (fast == slow) return true;
         }
 
         return false;
