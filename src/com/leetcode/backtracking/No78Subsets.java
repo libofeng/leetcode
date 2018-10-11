@@ -26,12 +26,9 @@ public class No78Subsets {
     public List<List<Integer>> subsets2(int[] nums) {
         final List<List<Integer>> R = new LinkedList<>();
 
-        int total = (int) Math.pow(2, nums.length);
-        for (int i = 0; i < total; i++) {
+        for (int i = 0; i < (1 << nums.length); i++) {
             List<Integer> list = new LinkedList<>();
-            for (int k = 0; k < nums.length; k++) {
-                if (((i >> k) & 1) == 1) list.add(nums[k]);
-            }
+            for (int j = 0; j < nums.length; j++) if (((i >> j) & 1) > 0) list.add(nums[j]);
             R.add(list);
         }
 
