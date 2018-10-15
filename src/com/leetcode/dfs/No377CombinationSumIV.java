@@ -38,6 +38,7 @@ public class No377CombinationSumIV {
 
     // dfs + backtracking
     private int count = 0;
+
     public int combinationSum42(int[] nums, int target) {
         dfs(nums, target);
         return count;
@@ -60,10 +61,7 @@ public class No377CombinationSumIV {
         final int[] f = new int[target + 1];
         f[0] = 1;
 
-        for (int i = 1; i <= target; i++) {
-            for (int j = 0; j < nums.length; j++) if (i >= nums[j]) f[i] += f[i - nums[j]];
-        }
-
+        for (int i = 1; i <= target; i++) for (int num : nums) if (i >= num) f[i] += f[i - num];
         return f[target];
     }
 }
