@@ -20,4 +20,49 @@ public class No132PalindromePartitioningII {
 
         return cuts[len - 1];
     }
+
+    // refer to this very good article:
+    // https://blog.csdn.net/yutianzuijin/article/details/16850031
+    public int minCut2(String s) {
+        final int n = s.length();
+        final char[] c = s.toCharArray();
+
+        final boolean[][] p = new boolean[n][n];
+        final int[] cuts = new int[n + 1];
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i; j < n; j++)
+                if (c[i] == c[j] && (j - i <= 1 || p[i + 1][j - 1])) {
+                    p[i][j] = true;
+                }
+        }
+
+
+        for (int i = n - 1; i >= 0; i--) {
+            cuts[i] = Integer.MAX_VALUE;
+            for (int j = i; j < n; j++) if (p[i][j]) cuts[i] = Math.min(cuts[j + 1] + 1, cuts[i]);
+        }
+
+        return cuts[0] - 1;
+    }
+
+    // simplify minCut2 to have this minCut3 solution
+    public int minCut3(String s) {
+        final int n = s.length();
+        final char[] c = s.toCharArray();
+
+        final boolean[][] p = new boolean[n][n];
+        final int[] cuts = new int[n + 1];
+
+        for (int i = n - 1; i >= 0; i--) {
+            cuts[i] = Integer.MAX_VALUE;
+            for (int j = i; j < n; j++) {
+                if (c[i] == c[j] && (j - i <= 1 || p[i + 1][j - 1])) {
+                    p[i][j] = true;
+                    cuts[i] = Math.min(cuts[j + 1] + 1, cuts[i]);
+                }
+            }
+        }
+
+        return cuts[0] - 1;
+    }
 }
