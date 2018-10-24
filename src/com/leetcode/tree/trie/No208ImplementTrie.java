@@ -3,7 +3,7 @@ package com.leetcode.tree.trie;
 public class No208ImplementTrie {
     class TrieNode {
         boolean isWord;
-        TrieNode[] children = new TrieNode[26];
+        TrieNode[] children = new TrieNode[128];
     }
 
     /**
@@ -23,8 +23,8 @@ public class No208ImplementTrie {
 
         TrieNode current = root;
         for (char c : word.toCharArray()) {
-            if (current.children[c - 'a'] == null) current.children[c - 'a'] = new TrieNode();
-            current = current.children[c - 'a'];
+            if (current.children[c] == null) current.children[c] = new TrieNode();
+            current = current.children[c];
         }
 
         current.isWord = true;
@@ -38,7 +38,7 @@ public class No208ImplementTrie {
 
         TrieNode current = root;
         for (char c : word.toCharArray()) {
-            current = current.children[c - 'a'];
+            current = current.children[c];
             if (current == null) return false;
         }
 
@@ -53,7 +53,7 @@ public class No208ImplementTrie {
 
         TrieNode current = root;
         for (char c : prefix.toCharArray()) {
-            current = current.children[c - 'a'];
+            current = current.children[c];
             if (current == null) return false;
         }
 
