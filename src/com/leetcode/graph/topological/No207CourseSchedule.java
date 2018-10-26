@@ -1,4 +1,4 @@
-package com.leetcode.graph.topologicl;
+package com.leetcode.graph.topological;
 
 import java.util.*;
 
