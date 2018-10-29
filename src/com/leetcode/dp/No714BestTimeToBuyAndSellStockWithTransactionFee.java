@@ -1,0 +1,6 @@
+package com.leetcode.dp;
+
+import com.lintcode.dp.No1000BestTimeToBuyAndSellStockWithTransactionFee;
+
+public class No714BestTimeToBuyAndSellStockWithTransactionFee extends No1000BestTimeToBuyAndSellStockWithTransactionFee {
+}
