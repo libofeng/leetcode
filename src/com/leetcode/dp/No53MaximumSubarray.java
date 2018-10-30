@@ -38,4 +38,12 @@ public class No53MaximumSubarray {
 
         return maxSum;
     }
+
+    // simplify from maxSubArray3
+    public int maxSubArray4(int[] nums) {
+        int max = nums[0];
+        for (int i = 1, sum = nums[0]; i < nums.length; i++) max = Math.max(max, sum = (Math.max(nums[i], sum + nums[i])));
+
+        return max;
+    }
 }
