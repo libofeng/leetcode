@@ -1,6 +1,61 @@
 package com.lintcode.trie;
 
 public class No722MaximumSubarrayVI {
+
+    /**
+     * @param nums: the array
+     * @return: the max xor sum of the subarray in a given array
+     */
+    public int maxXorSubarray(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+
+        final int N = nums.length;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < N; i++)
+            for (int j = i, xor = 0; j < N; j++) max = Math.max(max, (xor ^= nums[j]));
+
+        return max;
+    }
+
+    /**
+     * @param nums: the array
+     * @return: the max xor sum of the subarray in a given array
+     */
+    public int maxXorSubarray2(int[] nums) {
+        if (nums.length == 0) return 0;
+        int[] xors = new int[nums.length + 1];
+        for (int i = 0; i < nums.length; i++) xors[i + 1] = xors[i] ^ nums[i];
+
+        int max = 0;
+        for (int i = 0; i < xors.length; i++) {
+            for (int j = i + 1; j < xors.length; j++) {
+                max = Math.max(max, xors[i] ^ xors[j]);
+            }
+        }
+
+        return max;
+    }
+
+
+    /**
+     * @param nums: the array
+     * @return: the max xor sum of the subarray in a given array
+     */
+    public int maxXorSubarray3(int[] nums) {
+        final TrieTree tree = new TrieTree();
+        int preXor = 0;
+        tree.insert(preXor);
+
+        int max = Integer.MIN_VALUE;
+        for (int n : nums) {
+            preXor = preXor ^ n;
+            tree.insert(preXor);
+            max = Math.max(max, tree.search(preXor));
+        }
+
+        return max;
+    }
+
     class TrieNode {
         int value;
         TrieNode[] children = new TrieNode[2];
@@ -38,42 +93,4 @@ public class No722MaximumSubarrayVI {
         }
     }
 
-    /**
-     * @param nums: the array
-     * @return: the max xor sum of the subarray in a given array
-     */
-    public int maxXorSubarray(int[] nums) {
-        final TrieTree tree = new TrieTree();
-        int preXor = 0;
-        tree.insert(preXor);
-
-        int max = Integer.MIN_VALUE;
-        for (int n : nums) {
-            preXor = preXor ^ n;
-            tree.insert(preXor);
-            max = Math.max(max, tree.search(preXor));
-        }
-
-        return max;
-    }
-
-
-    /**
-     * @param nums: the array
-     * @return: the max xor sum of the subarray in a given array
-     */
-    public int maxXorSubarray2(int[] nums) {
-        if (nums.length == 0) return 0;
-        int[] xors = new int[nums.length + 1];
-        for (int i = 0; i < nums.length; i++) xors[i + 1] = xors[i] ^ nums[i];
-
-        int max = 0;
-        for (int i = 0; i < xors.length; i++) {
-            for (int j = i + 1; j < xors.length; j++) {
-                max = Math.max(max, xors[i] ^ xors[j]);
-            }
-        }
-
-        return max;
-    }
 }
