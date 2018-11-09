@@ -7,20 +7,19 @@ public class No1575SpringTour {
      * @return: Return the minimum number of car
      */
     public int getAnswer(int[] a) {
-        int total = 0;
-        int[] count = new int[5];
-        for (int n : a) count[n]++;
+        int[] num = new int[5];
+        for (int n : a) num[n]++;
 
-        total = count[4] + count[3] + count[2] / 2;
-        count[1] -= count[3];
-        count[2] %= 2;
+        int cars = num[4] + num[3] + num[2] / 2;
+        num[1] -= num[3];
+        num[2] %= 2;
 
-        if (count[2] > 0) {
-            count[1] -= 2;
-            total++;
+        if (num[2] > 0) {
+            num[1] -= 2;
+            cars++;
         }
 
-        if (count[1] > 0) total += (count[1] + 3) / 4;
-        return total;
+        if (num[1] > 0) cars += (num[1] + 3) / 4;
+        return cars;
     }
 }
