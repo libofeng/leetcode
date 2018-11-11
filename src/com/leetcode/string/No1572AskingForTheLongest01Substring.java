@@ -47,8 +47,55 @@ public class No1572AskingForTheLongest01Substring {
         return maxVal;
     }
 
+    // DP
+    public int askingForTheLongest01Substring1(String str) {
+        final int len = str.length();
+        final String s = str + str;
+        final int[] dp = new int[len * 2];
+        dp[0] = 1;
 
+        int max = 1;
+        for (int i = 1; i < s.length(); i++) {
+            dp[i] = s.charAt(i) == s.charAt(i - 1) ? 1 : dp[i - 1] + 1;
+
+            if (dp[i] > len) return len;
+            max = Math.max(max, dp[i]);
+        }
+
+        return max;
+    }
+
+    // DP2, simplified version
     public int askingForTheLongest01Substring2(String str) {
+        final String s = str + str;
+
+        int maxLen = 1, len = 1;
+        for (int i = 1; i < s.length(); i++) {
+            len = s.charAt(i) == s.charAt(i - 1) ? 1 : len + 1;
+
+            if (len > str.length()) return str.length();
+            maxLen = Math.max(maxLen, len);
+        }
+
+        return maxLen;
+    }
+
+
+    public int askingForTheLongest01Substring3(String str) {
+        final int sLen = str.length();
+
+        int maxLen = 1, len = 1;
+        for (int i = 1; i < sLen * 2; i++) {
+            len = str.charAt(i % sLen) == str.charAt((i - 1) % sLen) ? 1 : len + 1;
+
+            if (len > sLen) return sLen;
+            maxLen = Math.max(maxLen, len);
+        }
+
+        return maxLen;
+    }
+
+    public int askingForTheLongest01Substring4(String str) {
         int maxLen = 1, sLen = str.length();
 
         for (int i = 1, len = 1; i < sLen; i++) {
