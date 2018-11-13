@@ -28,6 +28,20 @@ public class No192WildcardMatching {
         return match;
     }
 
+    private boolean isMatch(char[] s, int i, char[] p, int j) {
+        final int m = s.length, n = p.length;
+        if (j == n) return m == i;
+        if (m == i) {
+            while (j < n) if (p[j++] != '*') return false;
+            return true;
+        }
+
+        if (s[i] == p[j] || p[j] == '?') return isMatch(s, i + 1, p, j + 1);
+        if (p[j] == '*') return isMatch(s, i, p, j + 1) || isMatch(s, i + 1, p, j + 1) || isMatch(s, i + 1, p, j);
+
+        return false;
+    }
+
     // DP
     public boolean isMatch2(String s, String p) {
         boolean[][] dp = new boolean[p.length() + 1][s.length() + 1];
