@@ -16,4 +16,22 @@ public class No1393FriendsOfAppropriateAges {
 
         return total;
     }
+
+    // Brute force, timeout
+    public int numFriendRequests2(int[] ages) {
+        int count = 0;
+        for (int i = 0; i < ages.length; i++) {
+            for (int j = i + 1; j < ages.length; j++) {
+                if (allow(ages[i], ages[j])) count++;
+                if (allow(ages[j], ages[i])) count++;
+            }
+        }
+
+        return count;
+    }
+
+    private boolean allow(int A, int B) {
+        if (B <= A * 0.5 + 7 || B > A || B > 100 && A < 100 ) return false;
+        return true;
+    }
 }
