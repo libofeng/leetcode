@@ -49,22 +49,17 @@ public class No1305IntegerToEnglishWords {
     };
 
     public String numberToWords(int num) {
-        if (num == 0) {
-            return "Zero";
-        }
+        if (num == 0) return "Zero";
 
-        StringBuilder result = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         int i = 0;
         while (num != 0) {
-            String pre = helper(num % 1000);
-            if (pre.length() > 0) {
-                result.insert(0, pre + " " + OVER_THOUSAND[i] + " ");
-            }
+            String pre = helper(num % 1000).trim();
+            sb.insert(0, pre + " " + OVER_THOUSAND[i++] + " ");
             num /= 1000;
-            i++;
         }
 
-        return result.toString().trim();
+        return sb.toString().trim();
     }
 
     public String helper(int n) {
