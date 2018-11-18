@@ -18,7 +18,7 @@ public class No1016MinimumSwapsToMakeSequencesIncreasing {
         dp[0][0] = 0;
         dp[0][1] = 1;
 
-        for (int i = 1; i < n; ++i) {
+        for (int i = 1; i < n; i++) {
             if (A[i - 1] < A[i] && B[i - 1] < B[i]) {
                 dp[i][0] = Math.min(dp[i - 1][0], dp[i][0]);
                 dp[i][1] = Math.min(1 + dp[i - 1][1], dp[i][1]);
@@ -31,5 +31,27 @@ public class No1016MinimumSwapsToMakeSequencesIncreasing {
         }
 
         return Math.min(dp[n - 1][0], dp[n - 1][1]);
+    }
+
+    // simplified
+    public int minSwap2(int[] A, int[] B) {
+        int prevKeep = 0, prevSwap = 1;
+        for (int i = 1; i < A.length; i++) {
+            int keep = Integer.MAX_VALUE, swap = keep;
+            if (A[i - 1] < A[i] && B[i - 1] < B[i]) {
+                keep = Math.min(keep, prevKeep);
+                swap = Math.min(swap, prevSwap + 1);
+            }
+
+            if (A[i - 1] < B[i] && B[i - 1] < A[i]) {
+                keep = Math.min(keep, prevSwap);
+                swap = Math.min(swap, prevKeep + 1);
+            }
+
+            prevKeep = keep;
+            prevSwap = swap;
+        }
+
+        return Math.min(prevKeep, prevSwap);
     }
 }
