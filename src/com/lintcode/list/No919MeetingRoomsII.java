@@ -1,8 +1,6 @@
 package com.lintcode.list;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class No919MeetingRoomsII {
     /**
@@ -11,15 +9,27 @@ public class No919MeetingRoomsII {
      */
     public int minMeetingRooms(List<Interval> intervals) {
         intervals.sort(Comparator.comparingInt(o -> o.start));
-        PriorityQueue<Interval> rooms = new PriorityQueue<>(Comparator.comparingInt(o -> o.end));
-        rooms.add(intervals.get(0));
+        final PriorityQueue<Interval> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o.end));
 
-        for (int i = 1; i < intervals.size(); i++) {
-            Interval interval = intervals.get(i);
-            if (interval.start >= rooms.peek().end) rooms.poll();
-            rooms.offer(interval);
+        for(Interval i : intervals){
+            if(!pq.isEmpty() && i.start >= pq.peek().end) pq.poll();
+            pq.offer(i);
         }
 
-        return rooms.size();
+        return pq.size();
+    }
+
+    // Sweep Line
+    public int minMeetingRooms2(List<Interval> intervals) {
+        Map<Integer, Integer> map = new TreeMap<>();
+        for (Interval interval : intervals) {
+            map.put(interval.start, map.getOrDefault(interval.start, 0) + 1);
+            map.put(interval.end, map.getOrDefault(interval.end, 0) - 1);
+        }
+
+        int count = 0, max = 0;
+        for (Integer val : map.values()) max = Math.max(max, count = (count + val));
+
+        return max;
     }
 }
