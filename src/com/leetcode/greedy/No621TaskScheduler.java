@@ -34,8 +34,6 @@ public class No621TaskScheduler {
             }
         }
 
-        final PriorityQueue<Integer> pq = new PriorityQueue<>((i1, i2) -> i2 - i1);
-
         int idleSlots = (max - 1) * (n - (num - 1));
         int taskLeft = tasks.length - max * num;
         int idleLeft = Math.max(0, idleSlots - taskLeft);
