@@ -29,4 +29,7 @@ public class No835HammingDistance {
         return ((x ^ y) & 1) + hammingDistance4(x >> 1, y >> 1);
     }
 
+    public int hammingDistance5(int x, int y) {
+        return Integer.bitCount(x ^ y);
+    }
 }
