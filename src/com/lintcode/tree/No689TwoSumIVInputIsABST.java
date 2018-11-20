@@ -52,18 +52,18 @@ public class No689TwoSumIVInputIsABST {
     }
 
     private TreeNode successor(TreeNode root, TreeNode target){
-        TreeNode predecessor = null, p = root;
+        TreeNode successor = null, p = root;
         while(p!=null){
             if(p == target) break;
             if(target.val>p.val) p = p.right;
             else{
-                predecessor = p;
+                successor = p;
                 p = p.left;
             }
         }
 
         if(p == null) return null;
-        if(p.right == null) return predecessor;
+        if(p.right == null) return successor;
 
         p = p.right;
         while(p.left!=null) p=p.left;
