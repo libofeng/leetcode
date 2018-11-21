@@ -22,13 +22,9 @@ public class No780RemoveInvalidParentheses {
             if (R.size() > 0) continue;
 
             for (int i = 0; i < t.length(); i++) {
-                char c = t.charAt(i);
-                if (c != '(' && c != ')') continue;
-                String str = t.substring(0, i) + t.substring(i + 1);
-                if (!visited.contains(str)) {
-                    q.offer(str);
-                    visited.add(str);
-                }
+                if (t.charAt(i) != '(' && t.charAt(i) != ')') continue;
+                String next = t.substring(0, i) + t.substring(i + 1);
+                if (visited.add(next)) q.offer(next);
             }
         }
 
