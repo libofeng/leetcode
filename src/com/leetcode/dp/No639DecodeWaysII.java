@@ -15,6 +15,25 @@ public class No639DecodeWaysII {
         return (int) dp[dp.length - 1];
     }
 
+    public int numDecodings2(String s) {
+        if (s == null || s.isEmpty() || s.charAt(0) == '0') return 0;
+
+        return (int) helper(s, 0);
+    }
+
+    private long helper(String s, int start) {
+        if (start == s.length()) return 1;
+
+        long count = 0;
+        char c1 = s.charAt(start);
+        count += ways(c1) * helper(s, start + 1);
+        if (start + 1 < s.length()) {
+            char c2 = s.charAt(start + 1);
+            count += ways(c1, c2) * helper(s, start + 2);
+        }
+        return count % 1000000007;
+    }
+
     private int ways(char c) {
         if (c == '0') return 0;
         if (c == '*') return 9;
