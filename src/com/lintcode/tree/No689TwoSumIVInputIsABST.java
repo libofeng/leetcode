@@ -1,8 +1,6 @@
 package com.lintcode.tree;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class No689TwoSumIVInputIsABST {
     /*
@@ -39,63 +37,63 @@ public class No689TwoSumIVInputIsABST {
     // ---------------------------------------------
     // Time complexity: O(NH), Space complexity: O(1)
     public int[] twoSum2(TreeNode root, int n) {
-        if(root == null) return null;
+        if (root == null) return null;
 
         TreeNode left = min(root), right = max(root);
-        while(left != right){
-            if(left.val + right.val == n) return new int[]{left.val, right.val};
-            else if(left.val + right.val>n) right = predecessor(root, right);
+        while (left != right) {
+            if (left.val + right.val == n) return new int[]{left.val, right.val};
+            else if (left.val + right.val > n) right = predecessor(root, right);
             else left = successor(root, left);
         }
 
         return null;
     }
 
-    private TreeNode successor(TreeNode root, TreeNode target){
+    private TreeNode successor(TreeNode root, TreeNode target) {
         TreeNode successor = null, p = root;
-        while(p!=null){
-            if(p == target) break;
-            if(target.val>p.val) p = p.right;
-            else{
+        while (p != null) {
+            if (p == target) break;
+            if (target.val > p.val) p = p.right;
+            else {
                 successor = p;
                 p = p.left;
             }
         }
 
-        if(p == null) return null;
-        if(p.right == null) return successor;
+        if (p == null) return null;
+        if (p.right == null) return successor;
 
         p = p.right;
-        while(p.left!=null) p=p.left;
+        while (p.left != null) p = p.left;
         return p;
     }
 
-    private TreeNode predecessor(TreeNode root, TreeNode target){
+    private TreeNode predecessor(TreeNode root, TreeNode target) {
         TreeNode predecessor = null, p = root;
-        while(p!=null){
-            if(p == target) break;
-            if(target.val>p.val) {
+        while (p != null) {
+            if (p == target) break;
+            if (target.val > p.val) {
                 predecessor = p;
                 p = p.right;
             } else p = p.left;
         }
 
-        if(p == null) return null;
-        if(p.left == null) return predecessor;
+        if (p == null) return null;
+        if (p.left == null) return predecessor;
         p = p.left;
-        while(p.right!=null) p = p.right;
+        while (p.right != null) p = p.right;
 
         return p;
     }
 
-    private TreeNode max(TreeNode root){
-        while(root.right!=null) root = root.right;
+    private TreeNode max(TreeNode root) {
+        while (root.right != null) root = root.right;
 
         return root;
     }
 
-    private TreeNode min(TreeNode root){
-        while(root.left!=null) root = root.left;
+    private TreeNode min(TreeNode root) {
+        while (root.left != null) root = root.left;
 
         return root;
     }
@@ -178,5 +176,26 @@ public class No689TwoSumIVInputIsABST {
         inOrder(root.left, list);
         list.add(root);
         inOrder(root.right, list);
+    }
+
+    // ---------------------------------------------
+
+    // Time complexity: O(N + H), Space complexity: O(N)
+    public int[] twoSum5(TreeNode root, int n) {
+        Set<Integer> visited = new HashSet<>();
+        return inorder(root, visited, n);
+    }
+
+    private int[] inorder(TreeNode root, Set<Integer> visited, int sum) {
+        if (root == null) return null;
+
+        int[] R = inorder(root.left, visited, sum);
+        if (R != null) return R;
+
+        int n = sum - root.val;
+        if (visited.contains(n)) return new int[]{n, root.val};
+        visited.add(root.val);
+
+        return inorder(root.right, visited, sum);
     }
 }
