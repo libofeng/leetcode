@@ -6,19 +6,9 @@ import java.util.Map;
 import java.util.Random;
 
 public class No657InsertDeleteGetRandomO1 {
-    class Node {
-        int idx, val;
-        Node prev, next;
-
-        Node(int index, int value) {
-            idx = index;
-            val = value;
-        }
-    }
-
-    private Node head = new Node(-1, -1), tail = head;
-    ArrayList<Node> list = new ArrayList<>();
-    Map<Integer, Node> map = new HashMap<>();
+    private final Map<Integer, Integer> map = new HashMap<>();
+    private final ArrayList<Integer> list = new ArrayList<>();
+    private final Random rnd = new Random();
 
     public No657InsertDeleteGetRandomO1() {
 
@@ -31,13 +21,8 @@ public class No657InsertDeleteGetRandomO1 {
     public boolean insert(int val) {
         if (map.containsKey(val)) return false;
 
-        Node node = new Node(list.size(), val);
-        list.add(node);
-        map.put(val, node);
-
-        tail.next = node;
-        node.prev = tail;
-        tail = node;
+        map.put(val, list.size());
+        list.add(val);
 
         return true;
     }
@@ -49,22 +34,14 @@ public class No657InsertDeleteGetRandomO1 {
     public boolean remove(int val) {
         if (!map.containsKey(val)) return false;
 
-        Node node = map.get(val);
+        int idx = map.get(val), lastIdx = list.size() - 1;
         map.remove(val);
-
-        if (node == tail) {
-            tail = node.prev;
-        } else {
-            node.prev.next = node.next;
-            node.next.prev = node.prev;
+        if (idx < lastIdx) {
+            int lastVal = list.get(lastIdx);
+            list.set(idx, lastVal);
+            map.put(lastVal, idx);
         }
-        node.prev = null;
-        tail.next = null;
-
-        Node tailNode = list.get(list.size() - 1);
-        tailNode.idx = node.idx;
-        list.set(tailNode.idx, tailNode);
-        list.remove(list.size() - 1);
+        list.remove(lastIdx);
 
         return true;
     }
@@ -73,11 +50,9 @@ public class No657InsertDeleteGetRandomO1 {
      * @return: Get a random element from the set
      */
     public int getRandom() {
-        final Random random = new Random();
-        return list.get(random.nextInt(list.size())).val;
+        return list.get(rnd.nextInt(list.size()));
     }
 }
-
 /**
  * Your RandomizedSet object will be instantiated and called as such:
  * RandomizedSet obj = new RandomizedSet();
