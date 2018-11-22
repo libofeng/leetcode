@@ -5,11 +5,11 @@ import java.util.*;
 public class No651BinaryTreeVerticalOrderTraversal {
     class LevelTreeNode {
         TreeNode node;
-        int position;
+        int col;
 
-        public LevelTreeNode(TreeNode node, int position) {
+        public LevelTreeNode(TreeNode node, int col) {
             this.node = node;
-            this.position = position;
+            this.col = col;
         }
     }
 
@@ -22,25 +22,22 @@ public class No651BinaryTreeVerticalOrderTraversal {
         if (root == null) return R;
 
         final Queue<LevelTreeNode> q = new LinkedList<>();
-        final Map<Integer, List<Integer>> map = new HashMap<>();
+        final Map<Integer, List<Integer>> map = new TreeMap<>();
         q.offer(new LevelTreeNode(root, 0));
-        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
 
         while (!q.isEmpty()) {
             LevelTreeNode levelNode = q.poll();
             TreeNode node = levelNode.node;
-            int position = levelNode.position;
-            min = Math.min(min, position);
-            max = Math.max(max, position);
+            int col = levelNode.col;
 
-            map.putIfAbsent(position, new LinkedList<>());
-            map.get(position).add(node.val);
+            map.putIfAbsent(col, new LinkedList<>());
+            map.get(col).add(node.val);
 
-            if (node.left != null) q.offer(new LevelTreeNode(node.left, position - 1));
-            if (node.right != null) q.offer(new LevelTreeNode(node.right, position + 1));
+            if (node.left != null) q.offer(new LevelTreeNode(node.left, col - 1));
+            if (node.right != null) q.offer(new LevelTreeNode(node.right, col + 1));
         }
 
-        for (int i = min; i <= max; i++) R.add(map.get(i));
+        R.addAll(map.values());
         return R;
     }
 }
