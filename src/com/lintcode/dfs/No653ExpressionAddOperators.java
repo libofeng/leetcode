@@ -11,12 +11,7 @@ public class No653ExpressionAddOperators {
      */
     public List<String> addOperators(String num, int target) {
         final List<String> R = new LinkedList<>();
-
-        for (int i = 1; i <= num.length(); i++) {
-            long n = Long.parseLong(num.substring(0, i));
-            helper(num, target, R, i, n, n, num.substring(0, i));
-            if (num.charAt(0) == '0') break;
-        }
+        helper(num, target, R, 0, 0, 0, "");
 
         return R;
     }
@@ -29,11 +24,15 @@ public class No653ExpressionAddOperators {
 
         for (int i = start + 1; i <= num.length(); i++) {
             long n = Long.parseLong(num.substring(start, i));
+            if (start == 0) {
+                helper(num, target, R, i, n, n, num.substring(start, i));
+            } else {
+                helper(num, target, R, i, expression - n, -n, path + "-" + n);
+                helper(num, target, R, i, expression + n, n, path + "+" + n);
+                helper(num, target, R, i, expression - last + last * n, n * last, path + "*" + n);
+            }
 
-            helper(num, target, R, i, expression - n, -n, path + "-" + n);
-            helper(num, target, R, i, expression + n, n, path + "+" + n);
-            helper(num, target, R, i, expression - last + last * n, n * last, path + "*" + n);
-            if (num.charAt(start) == '0') break;
+            if (n == 0) break;
         }
     }
 }
