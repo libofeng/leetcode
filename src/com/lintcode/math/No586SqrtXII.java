@@ -24,13 +24,8 @@ public class No586SqrtXII {
     }
 
     public double sqrt2(double x) {
-        // write your code here
-        double epsilon = 1e-12;
-        double res = x;
-        while (Math.abs(res * res - x) > epsilon) {
-            res = (res + x / res) / 2;
-        }
-
+        double esp = 1e-12, res = x;
+        while (Math.abs(res * res - x) > esp) res = (res + x / res) / 2;
         return res;
     }
 }
