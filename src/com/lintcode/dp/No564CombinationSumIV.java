@@ -7,20 +7,19 @@ public class No564CombinationSumIV {
      * @return: An integer
      */
     public int backPackVI(int[] nums, int target) {
-        if (target == 0 || nums.length == 0) return 0;
-        return helper(nums, target, 0);
+        if (target == 0 || nums == null || nums.length == 0) return 0;
+        return helper(nums, target);
     }
 
-    private int helper(int[] nums, int target, int start) {
+    private int helper(int[] nums, int target) {
         if (target == 0) return 1;
-        if (target < 0 || start >= nums.length) return 0;
+        if (target < 0) return 0;
 
         int count = 0;
-        for (int i = start; i < nums.length; i++) {
-            if (i > start && nums[i] == nums[i - 1]) continue;
-            count += helper(nums, target - nums[i], start);
+        for (int i = 0; i < nums.length; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
+            count += helper(nums, target - nums[i]);
         }
-
         return count;
     }
 
