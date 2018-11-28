@@ -21,4 +21,17 @@ public class No141SqrtX {
         while (r * r > x) r = (r + x / r) / 2;
         return (int) r;
     }
+
+    public int sqrt3(int x) {
+        if (x <= 1) return x;
+        int l = 0, r = x;
+        while (l <= r) {
+            long mid = l + (r - l) / 2;
+            if (mid * mid == x) return (int) mid;
+
+            if (mid * mid < x) l = (int) (mid + 1);
+            else r = (int) (mid - 1);
+        }
+        return r;
+    }
 }
