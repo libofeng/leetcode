@@ -30,4 +30,43 @@ public class No223PalindromeLinkedList {
             return true;
         } else return false;
     }
+
+    // ----------------------------
+
+    public boolean isPalindrome2(ListNode head) {
+        if (head == null || head.next == null) return true;
+
+        ListNode slow = head, fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        ListNode left = head, right = slow.next;
+        slow.next = null;
+
+        right = reverse(right);
+
+        while (left != null && right != null) {
+            if (left.val != right.val) return false;
+            left = left.next;
+            right = right.next;
+        }
+
+        return true;
+    }
+
+
+    private ListNode reverse(ListNode head) {
+        final ListNode dummyHead = new ListNode(0);
+        while (head != null) {
+            ListNode node = head;
+            head = head.next;
+
+            node.next = dummyHead.next;
+            dummyHead.next = node;
+        }
+
+        return dummyHead.next;
+    }
 }
