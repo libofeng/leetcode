@@ -1,4 +1,4 @@
-package com.leetcode.graph.topological;
+package com.lintcode.topological;
 
 import java.util.Arrays;
 import java.util.PriorityQueue;
