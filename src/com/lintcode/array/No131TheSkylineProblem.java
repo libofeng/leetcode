@@ -125,4 +125,38 @@ public class No131TheSkylineProblem {
 
         return R;
     }
+
+
+    // copied from solution in leetcode, it will timeout since using PriorityQueue
+    public List<List<Integer>> buildingOutline3(int[][] buildings) {
+        final List<int[]> lines = new ArrayList<>();
+        for (int[] building : buildings) {
+            lines.add(new int[]{building[0], building[2]});
+            lines.add(new int[]{building[1], -building[2]});
+        }
+        lines.sort((a, b) -> a[0] == b[0] ? (b[1] - a[1]) : (a[0] - b[0]));
+
+        final PriorityQueue<Integer> pq = new PriorityQueue<>((i1, i2) -> i2 - i1);
+        List<List<Integer>> R = new ArrayList<>();
+        int pre = 0, start = 0;
+        for (int[] line : lines) {
+            int max = 0, x = line[0], h = line[1];
+            if (h > 0) {
+                pq.offer(line[1]);
+                max = pq.peek();
+            } else {
+                pq.remove(-h);
+                max = pq.isEmpty() ? 0 : pq.peek();
+            }
+
+            if (max != pre) {
+                if (pre > 0 && x != start) R.add(Arrays.asList(start, x, pre));
+
+                pre = max;
+                start = x;
+            }
+        }
+
+        return R;
+    }
 }
