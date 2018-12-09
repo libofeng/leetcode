@@ -7,14 +7,14 @@ public class No1181DiameterOfBinaryTree {
      */
     private int diameter = 0;
     public int diameterOfBinaryTree(TreeNode root) {
-        maxDepth(root);
+        height(root);
         return diameter;
     }
 
-    private int maxDepth(TreeNode root){
+    private int height(TreeNode root){
         if(root == null) return 0;
 
-        int left = maxDepth(root.left), right = maxDepth(root.right);
+        int left = height(root.left), right = height(root.right);
         diameter = Math.max(diameter,  left + right);
 
         return Math.max(left, right) + 1;
