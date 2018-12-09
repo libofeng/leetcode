@@ -8,6 +8,14 @@ public class No915InorderPredecessorInBST {
      * @see No689TwoSumIVInputIsABST
      */
     public TreeNode inorderPredecessor(TreeNode root, TreeNode p) {
+        if (root == null) return null;
+        if (p.val <= root.val) return inorderPredecessor(root.left, p);
+
+        TreeNode predecessor = inorderPredecessor(root.right, p);
+        return predecessor == null ? root : predecessor;
+    }
+
+    public TreeNode inorderPredecessor2(TreeNode root, TreeNode p) {
         TreeNode predecessor = null, current = root;
         while (current != null) {
             if (current.val == p.val) break;
