@@ -1,6 +1,8 @@
 package com.leetcode.array;
 
 import java.util.Arrays;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class No215KthLargestElementInAnArray {
 
@@ -38,5 +40,24 @@ public class No215KthLargestElementInAnArray {
         nums[end] = nums[pivot];
         nums[pivot] = temp;
         return end;
+    }
+
+    // https://github.com/interviewdiscussion/files/blob/master/Facebook_java%2Bpdf/215.%20Kth%20Largest%20Element%20in%20an%20Array.java
+    public int findKthLargest3(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || k < 1) {
+            return 0;
+        }
+        Queue<Integer> minHeap = new PriorityQueue<>();
+        for (int i : nums) {
+            if (minHeap.size() < k) {
+                minHeap.offer(i);
+                continue;
+            }
+            if (i > minHeap.peek()) {
+                minHeap.poll();
+                minHeap.offer(i);
+            }
+        }
+        return minHeap.poll();
     }
 }
