@@ -15,9 +15,8 @@ public class No178GraphValidTree {
     //BFS, Time complexity O(N), Space complexity O(N)
     public boolean validTree(int n, int[][] edges) {
         final Map<Integer, Set<Integer>> graph = new HashMap<>();
+        for (int i = 0; i < n; i++) graph.put(i, new HashSet<>());
         for (int[] edge : edges) {
-            graph.putIfAbsent(edge[0], new HashSet<>());
-            graph.putIfAbsent(edge[1], new HashSet<>());
             graph.get(edge[0]).add(edge[1]);
             graph.get(edge[1]).add(edge[0]);
         }
@@ -94,6 +93,19 @@ public class No178GraphValidTree {
         }
 
         return true;
+    }
+
+    public boolean validTree4(int n, int[][] edges) {
+        int[] root = new int[n];
+        for (int i = 0; i < n; i++) root[i] = i;
+
+        for (int[] edge : edges) {
+            int p = find(root, edge[0]), q = find(root, edge[1]);
+            if (p == q) return false;
+            root[p] = q;
+        }
+
+        return n == 1;
     }
 
     private int find(int[] root, int n) {
