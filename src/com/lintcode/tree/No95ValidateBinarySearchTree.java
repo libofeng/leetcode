@@ -15,4 +15,21 @@ public class No95ValidateBinarySearchTree {
         if (root.val >= hi || root.val <= lo) return false;
         return validate(root.left, lo, root.val) && validate(root.right, root.val, hi);
     }
+
+
+    public boolean isValidBST2(TreeNode root) {
+        return inorder(root);
+    }
+
+    private TreeNode prev;
+
+    private boolean inorder(TreeNode root) {
+        if (root == null) return true;
+        if (!inorder(root.left)) return false;
+
+        if (prev != null && prev.val >= root.val) return false;
+        prev = root;
+
+        return inorder(root.right);
+    }
 }
