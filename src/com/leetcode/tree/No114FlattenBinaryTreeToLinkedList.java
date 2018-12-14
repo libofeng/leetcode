@@ -55,4 +55,44 @@ public class No114FlattenBinaryTreeToLinkedList {
             root = next;
         }
     }
+
+
+    // preorder: recursion
+    TreeNode last;
+
+    public void flatten4(TreeNode root) {
+        preorder(root);
+    }
+
+    private void preorder(TreeNode root) {
+        if (root == null) return;
+
+        TreeNode left = root.left, right = root.right;
+        root.left = null;
+        if (last != null) last.right = root;
+        last = root;
+
+        preorder(left);
+        preorder(right);
+    }
+
+
+    // preorder: stack
+    public void flatten5(TreeNode root) {
+        if (root == null) return;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+
+        TreeNode last = null;
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            if (node.right != null) stack.push(node.right);
+            if (node.left != null) stack.push(node.left);
+
+            if (last != null) last.right = node;
+            node.left = null;
+            node.right = null;
+            last = node;
+        }
+    }
 }
