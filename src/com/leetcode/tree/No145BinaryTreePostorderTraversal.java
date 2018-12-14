@@ -49,4 +49,30 @@ public class No145BinaryTreePostorderTraversal {
 
         return R;
     }
+
+
+    public List<Integer> postorderTraversal3(TreeNode root) {
+        List<Integer> R = new LinkedList<>();
+        Stack<TreeNode> stack = new Stack<>();
+
+        TreeNode current = root, prev = null;
+        while (current != null || !stack.isEmpty()) {
+            while (current != null) {
+                stack.push(current);
+                current = current.left;
+            }
+
+            current = stack.pop();
+            if (current.right == null || prev == current.right) {
+                R.add(current.val);
+                prev = current;
+                current = null;
+            } else {
+                stack.push(current);
+                current = current.right;
+            }
+        }
+
+        return R;
+    }
 }
