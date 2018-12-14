@@ -41,6 +41,7 @@ public class No865SmallestSubtreeWithAllTheDeepestNodes {
         return p;
     }
 
+    // return the deepest depth that the subtree can reach
     private int depth(TreeNode root, int depth) {
         if (root == null) return depth;
         int l = depth(root.left, depth + 1), r = depth(root.right, depth + 1);
