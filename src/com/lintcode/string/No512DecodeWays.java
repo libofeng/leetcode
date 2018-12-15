@@ -6,20 +6,26 @@ public class No512DecodeWays {
      * @return: an integer, the number of ways decoding
      */
     public int numDecodings(String s) {
-        if (s.length() == 0) return 0;
+        if (s == null || s.isEmpty() || s.charAt(0) == '0') return 0;
 
-        int left1 = 1, left2 = s.charAt(0) == '0' ? 0 : 1;
-        for (int i = 2; i <= s.length(); i++) {
-            int count = 0;
-            if (Integer.parseInt(s.substring(i - 1, i)) != 0) count += left2;
+        int left1 = 1, left2 = 1;
+        for (int i = 1; i <= s.length(); i++) {
+            int count = left1 * ways(s.charAt(i - 1));
+            if (i > 1) count += left2 * ways(s.charAt(i - 2), s.charAt(i - 1));
 
-            int n = Integer.parseInt(s.substring(i - 2, i));
-            if (n >= 10 && n <= 26) count += left1;
-
-            left1 = left2;
-            left2 = count;
+            left2 = left1;
+            left1 = count;
         }
 
-        return left2;
+        return left1;
+    }
+
+    private int ways(char c) {
+        return c == '0' ? 0 : 1;
+    }
+
+    private int ways(char c1, char c2) {
+        int n = (c1 - '0') * 10 + (c2 - '0');
+        return n >= 10 && n <= 26 ? 1 : 0;
     }
 }
