@@ -1,7 +1,22 @@
 package com.leetcode.string;
 
 public class No10RegularExpressionMatching {
-    public boolean isMatch(String s, String p) {
+    // https://leetcode.com/articles/regular-expression-matching/
+    // https://www.cnblogs.com/yrbbest/p/4430699.html
+    public boolean isMatch(String text, String pattern) {
+        if (pattern.isEmpty()) return text.isEmpty();
+        boolean firstMatch = (!text.isEmpty() &&
+                (pattern.charAt(0) == text.charAt(0) || pattern.charAt(0) == '.'));
+
+        if (pattern.length() >= 2 && pattern.charAt(1) == '*') {
+            return (isMatch(text, pattern.substring(2)) ||
+                    (firstMatch && isMatch(text.substring(1), pattern)));
+        } else {
+            return firstMatch && isMatch(text.substring(1), pattern.substring(1));
+        }
+    }
+
+    public boolean isMatch2(String s, String p) {
         return isMatch(s, 0, p, 0);
     }
 
