@@ -4,38 +4,27 @@ import java.util.List;
 import java.util.Stack;
 
 public class No1116ExclusiveTimeOfFunctions {
-    class Log {
-        int id, time, nested;
-
-        Log(int id, int time) {
-            this.id = id;
-            this.time = time;
-        }
-    }
-
     /**
      * @param n:    a integer
      * @param logs: a list of integers
      * @return: return a list of integers
      */
     public int[] exclusiveTime(int n, List<String> logs) {
-        final Stack<Log> stack = new Stack<>();
-        final int[] output = new int[n];
+        Stack<int[]> stack = new Stack<>();
+        int[] R = new int[n];
 
-        for(String s : logs){
-            final String[] data = s.split(":");
-            int id = Integer.parseInt(data[0]), time = Integer.parseInt(data[2]);
-            Log log = new Log(id, time);
-            if("start".equals(data[1])) stack.push(log);
-            else{
-                Log end = log, start = stack.pop();
-
-                int interval = end.time - start.time + 1;
-                output[start.id] += interval - start.nested;
-                if(!stack.isEmpty()) stack.peek().nested += interval;
+        for (String log : logs) {
+            String[] values = log.split(":");
+            int id = Integer.parseInt(values[0]), time = Integer.parseInt(values[2]);
+            if ("start".equals(values[1])) stack.push(new int[]{id, time});
+            else {
+                int[] logStart = stack.pop();
+                int runTime = time - logStart[1] + 1;
+                R[id] += runTime;
+                if (!stack.isEmpty()) R[stack.peek()[0]] -= runTime;
             }
         }
 
-        return output;
+        return R;
     }
 }
