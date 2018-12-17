@@ -1,5 +1,6 @@
 package com.lintcode.array;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,29 +11,35 @@ public class No1083MaximumSumOf3NonOverlappingSubarrays {
      * @param k: an integer
      * @return: three non-overlapping subarrays with maximum sum
      */
-    List<Integer> maxList = null;
-    int maxSum = 0;
+    int max = 0;
+    int[] sums;
+    List<Integer> maxList;
+    final int G = 3;
 
     public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
-        final int[] sums = new int[nums.length + 1];
+        sums = new int[nums.length + 1];
         for (int i = 1; i < sums.length; i++) sums[i] = sums[i - 1] + nums[i - 1];
 
-        dfs(nums, k, sums, 0, 0, new LinkedList<>());
-        return new int[]{maxList.get(0), maxList.get(1), maxList.get(2)};
+        dfs(k, 0, 0, new LinkedList<>());
+
+        int[] R = new int[G];
+        for (int i = 0; i < G; i++) R[i] = maxList.get(i);
+        return R;
     }
 
-    private void dfs(int[] nums, int k, int[] sums, int start, int sum, LinkedList<Integer> list) {
-        if (list.size() == 3) {
-            if (sum > maxSum) {
-                maxList = new LinkedList<>(list);
-                maxSum = sum;
+    private void dfs(int k, int start, int sum, LinkedList<Integer> list) {
+        if (list.size() == G) {
+            if (sum > max) {
+                max = sum;
+                maxList = new ArrayList<>(list);
             }
+
             return;
         }
 
-        for (int i = start; i <= nums.length - k; i++) {
+        for (int i = start; i < sums.length - k; i++) {
             list.add(i);
-            dfs(nums, k, sums, i + k, sum + sums[i + k] - sums[i], list);
+            dfs(k, i + k, sum + (sums[i + k] - sums[i]), list);
             list.removeLast();
         }
     }
