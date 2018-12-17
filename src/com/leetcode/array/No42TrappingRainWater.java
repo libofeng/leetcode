@@ -39,4 +39,26 @@ public class No42TrappingRainWater {
 
         return R;
     }
+
+    public int trap3(int[] height) {
+        int len = height.length;
+        if (len <= 2) return 0;
+        int peakIndex = 0;
+        for (int i = 1; i < len; i++) if (height[i] > height[peakIndex]) peakIndex = i;
+
+        int water = 0;
+        int leftPeak = height[0];
+        for (int i = 1; i < peakIndex; i++) {
+            leftPeak = Math.max(leftPeak, height[i]);
+            water += Math.min(leftPeak, height[peakIndex]) - height[i];
+        }
+        int rightPeak = height[len - 1];
+        for (int i = len - 2; i > peakIndex; i--) {
+            rightPeak = Math.max(rightPeak, height[i]);
+            water += Math.min(rightPeak, height[peakIndex]) - height[i];
+        }
+
+
+        return water;
+    }
 }
