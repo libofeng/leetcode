@@ -103,6 +103,7 @@ public class No178GraphValidTree {
             int p = find(root, edge[0]), q = find(root, edge[1]);
             if (p == q) return false;
             root[p] = q;
+            n--;
         }
 
         return n == 1;
