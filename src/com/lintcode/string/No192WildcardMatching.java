@@ -7,37 +7,18 @@ public class No192WildcardMatching {
      * @return: is Match?
      */
     public boolean isMatch(String s, String p) {
-        final int[][] cache = new int[s.length()][p.length()];
-        return isMath(s, p, 0, 0, cache);
+        return isMatch(s, 0, p, 0);
     }
 
-    private boolean isMath(String s, String p, int i, int j, int[][] cache) {
-        if (i == s.length() && j == p.length()) return true;
-        if (i == s.length()) {
-            while (j < p.length()) if (p.charAt(j++) != '*') return false;
-            return true;
-        } else if (j == p.length()) return false;
+    private boolean isMatch(String s, int i, String p, int j) {
+        if (j == p.length()) return i == s.length();
+        if (i == s.length()) return j == p.length() || (p.charAt(j) == '*' && isMatch(s, i, p, j + 1));
 
-        if (cache[i][j] > 0) return cache[i][j] == 1;
-        boolean match = false;
-        if (s.charAt(i) == p.charAt(j)) match = isMath(s, p, i + 1, j + 1, cache);
-        else if ('?' == p.charAt(j)) match = isMath(s, p, i + 1, j + 1, cache);
-        else if ('*' == p.charAt(j))
-            match = isMath(s, p, i, j + 1, cache) || isMath(s, p, i + 1, j, cache) || isMath(s, p, i + 1, j + 1, cache);
-        cache[i][j] = match ? 1 : 2;
-        return match;
-    }
-
-    private boolean isMatch(char[] s, int i, char[] p, int j) {
-        final int m = s.length, n = p.length;
-        if (j == n) return m == i;
-        if (m == i) {
-            while (j < n) if (p[j++] != '*') return false;
-            return true;
+        if (p.charAt(j) == '*') {
+            return isMatch(s, i, p, j + 1) || isMatch(s, i + 1, p, j + 1) || isMatch(s, i + 1, p, j);
+        } else if (p.charAt(j) == '?' || s.charAt(i) == p.charAt(j)) {
+            return isMatch(s, i + 1, p, j + 1);
         }
-
-        if (s[i] == p[j] || p[j] == '?') return isMatch(s, i + 1, p, j + 1);
-        if (p[j] == '*') return isMatch(s, i, p, j + 1) || isMatch(s, i + 1, p, j + 1) || isMatch(s, i + 1, p, j);
 
         return false;
     }
@@ -59,5 +40,13 @@ public class No192WildcardMatching {
             }
         }
         return dp[p.length()][s.length()];
+    }
+
+    public static void main(String[] args) {
+        No192WildcardMatching solution = new No192WildcardMatching();
+        String s = "abbabaaabbabbaababbabbbbbabbbabbbabaaaaababababbbabababaabbababaabbbbbbaaaabababbbaabbbbaabbbbababababbaabbaababaabbbababababbbbaaabbbbbabaaaabbababbbbaababaabbababbbbbababbbabaaaaaaaabbbbbaabaaababaaaabb";
+        String p = "**aa*****ba*a*bb**aa*ab****a*aaaaaa***a*aaaa**bbabb*b*b**aaaaaaaaa*a********ba*bbb***a*ba*bb*bb**a*b*bb";
+        boolean matched = solution.isMatch(s, p);
+        System.out.println("matched = " + matched);
     }
 }
