@@ -14,11 +14,11 @@ public class No898LeftmostOne {
 
     public int getColumn2(int[][] arr) {
         int m = arr.length, n = m == 0 ? 0 : arr[0].length;
-        int x = 0, y = n - 1;
-        while (x < m && y >= 0) {
-            if (arr[x][y] == 1) y--;
-            else x++;
+        int i = 0, j = n - 1;
+        while (i < m && j >= 0) {
+            if (arr[i][j] == 1) j--;
+            else i++;
         }
-        return y + 1;
+        return j + 1;
     }
 }
