@@ -49,4 +49,33 @@ public class No8StringToIntegerAtoi {
 
         return minus ? -number : number;
     }
+
+
+    public int myAtoi2(String str) {
+        boolean signFound = false;
+        int sign = 1;
+        long num = 0;
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c == ' ') {
+                if (signFound) break;
+                else continue;
+            }
+
+            if (c == '-' || c == '+') {
+                if (signFound) break;
+                else sign = c == '-' ? -1 : 1;
+                signFound = true;
+            } else if (c >= '0' && c <= '9') {
+                signFound = true;
+
+                num = num * 10 + (c - '0') * sign;
+
+                if (num < Integer.MIN_VALUE) return Integer.MIN_VALUE;
+                if (num > Integer.MAX_VALUE) return Integer.MAX_VALUE;
+            } else break;
+        }
+
+        return (int) num;
+    }
 }
