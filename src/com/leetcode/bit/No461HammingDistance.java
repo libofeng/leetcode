@@ -15,7 +15,7 @@ public class No461HammingDistance {
 
     public int hammingDistance3(int x, int y) {
         int n = x ^ y, distance = 0;
-        for (int i = 0; i < 32; i++) if (((n >> 1) & 1) == 1) distance++;
+        for (int i = 0; i < 32; i++) distance += ((n >> i) & 1);
         return distance;
     }
 }
