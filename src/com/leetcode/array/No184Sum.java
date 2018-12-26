@@ -86,4 +86,43 @@ public class No184Sum {
 
         return R;
     }
+
+    public List<List<Integer>> fourSum4(int[] nums, int target) {
+        List<List<Integer>> R = new ArrayList<>();
+        if (nums.length < 4) return R;
+
+        Map<Integer, List<List<Integer>>> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                int sum = nums[i] + nums[j];
+                map.putIfAbsent(sum, new ArrayList<>());
+                map.get(sum).add(Arrays.asList(i, j));
+            }
+        }
+
+        Set<String> result = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                int gap = target - nums[i] - nums[j];
+                if (!map.containsKey(gap)) continue;
+                for (List<Integer> list : map.get(gap)) {
+                    Set<Integer> set = new TreeSet<>(list);
+                    set.add(i);
+                    set.add(j);
+
+                    if (set.size() < 4) continue;
+
+                    List<Integer> r = new ArrayList<>();
+                    for (int k : set) r.add(nums[k]);
+                    r.sort((a, b) -> a - b);
+
+                    String resultKey = r.toString();
+                    if (!result.contains(resultKey)) R.add(r);
+                    result.add(resultKey);
+                }
+            }
+        }
+
+        return R;
+    }
 }
