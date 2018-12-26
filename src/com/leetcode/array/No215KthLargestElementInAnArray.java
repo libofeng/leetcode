@@ -3,6 +3,7 @@ package com.leetcode.array;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 
 public class No215KthLargestElementInAnArray {
 
@@ -12,35 +13,41 @@ public class No215KthLargestElementInAnArray {
         return nums[nums.length - k];
     }
 
+    // ------------------------------------------------
     public int findKthLargest2(int[] nums, int k) {
-        int start = 0, end = nums.length - 1, index = nums.length - k;
+        return quickSelect(nums, 0, nums.length - 1, k);
+    }
 
-        while (start < end) {
-            int pivot = partition(nums, start, end);
-            if (pivot > index) end = pivot - 1;
-            else if (pivot < index) start = pivot + 1;
-            else return nums[pivot];
-        }
+    private int quickSelect(int[] nums, int start, int end, int k) {
+        int pIndex = partition(nums, start, end);
 
-        return nums[start];
+        int rightNumbers = end - pIndex + 1;
+        if (rightNumbers == k) return nums[pIndex];
+        else if (rightNumbers > k) return quickSelect(nums, pIndex + 1, end, k);
+        else return quickSelect(nums, start, pIndex - 1, k - rightNumbers);
     }
 
     private int partition(int[] nums, int start, int end) {
-        int pivot = start, temp;
-        while (start <= end) {
-            while (start <= end && nums[start] <= nums[pivot]) start++;
-            while (start <= end && nums[end] > nums[pivot]) end--;
-            if (start > end) break;
-            temp = nums[start];
-            nums[start] = nums[end];
-            nums[end] = temp;
-        }
+        Random rnd = new Random();
+        int pIndex = rnd.nextInt(end - start + 1) + start;
+        swap(nums, pIndex, end);
 
-        temp = nums[end];
-        nums[end] = nums[pivot];
-        nums[pivot] = temp;
-        return end;
+        int left = start, right = end - 1, pivot = nums[end];
+        while (left <= right) {
+            if (nums[right] > pivot) right--;
+            else swap(nums, left++, right);
+        }
+        swap(nums, left, end);
+        return left;
     }
+
+    private void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    }
+
+    // ------------------------------------------------
 
     // https://github.com/interviewdiscussion/files/blob/master/Facebook_java%2Bpdf/215.%20Kth%20Largest%20Element%20in%20an%20Array.java
     public int findKthLargest3(int[] nums, int k) {
