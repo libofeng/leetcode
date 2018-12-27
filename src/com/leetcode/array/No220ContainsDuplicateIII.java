@@ -4,18 +4,16 @@ import java.util.TreeSet;
 
 public class No220ContainsDuplicateIII {
     public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
-        if (k <= 0 || t < 0) return false;
+        if (nums.length < 2 || k <= 0 || t < 0) return false;
 
-        final TreeSet<Integer> set = new TreeSet<>();
+        final TreeSet<Long> set = new TreeSet<>();
         for (int i = 0; i < nums.length; i++) {
-            if (i > k) set.remove(nums[i - k - 1]);
-            Integer ceiling = set.ceiling(nums[i]);
-            Integer floor = set.floor(nums[i]);
+            long n = nums[i];
+            if (!set.add(n)) return true;
+            Long floor = set.floor(n + t), ceiling = set.ceiling(n - t);
+            if ((floor != null && floor > n) || (ceiling != null && ceiling < n)) return true;
 
-            if (ceiling != null && Math.abs((long) nums[i] - ceiling) <= t) return true;
-            if (floor != null && Math.abs((long) nums[i] - floor) <= t) return true;
-
-            set.add(nums[i]);
+            if (set.size() > k) set.remove((long) nums[i - k]);
         }
 
         return false;

@@ -10,25 +10,28 @@ public class No787CheapestFlightsWithinKStops {
 
     // http://www.cnblogs.com/grandyang/p/9109981.html
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
-        final Map<Integer, List<int[]>> graph = new HashMap<>();
-        for (int i = 0; i < n; i++) graph.put(i, new ArrayList<>());
+        if (src == dst) return 0;
+        List<List<int[]>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
         for (int[] flight : flights) {
             graph.get(flight[0]).add(new int[]{flight[1], flight[2]});
         }
 
+        if (graph.get(src).isEmpty()) return -1;
         Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{src, 0});
 
         int minPrice = Integer.MAX_VALUE;
-        q.offer(new int[]{src, 0});
         while (!q.isEmpty() && K-- >= 0) {
             int size = q.size();
             while (size-- > 0) {
                 int[] stop = q.poll();
-                for (int[] next : graph.get(stop[0])) {
-                    if (next[1] + stop[1] >= minPrice) continue;
+                for (int[] flight : graph.get(stop[0])) {
+                    int nextPrice = stop[1] + flight[1];
+                    if (nextPrice >= minPrice) continue;
 
-                    if (next[0] == dst) minPrice = Math.min(minPrice, next[1] + stop[1]);
-                    q.offer(new int[]{next[0], next[1] + stop[1]});
+                    if (flight[0] == dst) minPrice = nextPrice;
+                    else q.offer(new int[]{flight[0], nextPrice});
                 }
             }
         }
@@ -97,6 +100,89 @@ public class No787CheapestFlightsWithinKStops {
 
         return minPrice == Integer.MAX_VALUE ? -1 : minPrice;
     }
+
+    // Bellman-Ford
+    public int findCheapestPrice4(int n, int[][] flights, int src, int dst, int k) {
+        int INF = 0x3F3F3F3F;
+        int[] cost = new int[n];
+        Arrays.fill(cost, INF);
+        cost[src] = 0;
+        int ans = cost[dst];
+        for (int i = k; i >= 0; i--) {
+            int[] cur = new int[n];
+            Arrays.fill(cur, INF);
+            for (int[] flight : flights) {
+                cur[flight[1]] = Math.min(cur[flight[1]], cost[flight[0]] + flight[2]);
+            }
+            cost = cur;
+            ans = Math.min(ans, cost[dst]);
+        }
+        return ans == INF ? -1 : ans;
+    }
+
+    //    ----------------------
+    private class City implements Comparable<City> {
+        int id;
+        int costFromSrc;
+        int stopFromSrc;
+
+        public City(int id, int costFromSrc, int stopFromSrc) {
+            this.id = id;
+            this.costFromSrc = costFromSrc;
+            this.stopFromSrc = stopFromSrc;
+        }
+
+        public boolean equals(City c) {
+            if (c instanceof City)
+                return this.id == c.id;
+            return false;
+        }
+
+        public int compareTo(City c) {
+            return this.costFromSrc - c.costFromSrc;
+        }
+    }
+
+    // Dijkstra's
+    // https://blog.csdn.net/qq_26410101/article/details/80910474
+    public int findCheapestPrice5(int n, int[][] flights, int src, int dst, int K) {
+        int[][] srcToDst = new int[n][n];
+        for (int i = 0; i < flights.length; i++)
+            srcToDst[flights[i][0]][flights[i][1]] = flights[i][2];
+
+        PriorityQueue<City> minHeap = new PriorityQueue();
+        minHeap.offer(new City(src, 0, 0));
+
+        int[] cost = new int[n];
+        Arrays.fill(cost, Integer.MAX_VALUE);
+        cost[src] = 0;
+        int[] stop = new int[n];
+        Arrays.fill(stop, Integer.MAX_VALUE);
+        stop[src] = 0;
+
+        while (!minHeap.isEmpty()) {
+            City curCity = minHeap.poll();
+            if (curCity.id == dst) return curCity.costFromSrc;
+            if (curCity.stopFromSrc == K + 1) continue;
+            int[] nexts = srcToDst[curCity.id];
+            for (int i = 0; i < n; i++) {
+                if (nexts[i] != 0) {
+                    int newCost = curCity.costFromSrc + nexts[i];
+                    int newStop = curCity.stopFromSrc + 1;
+                    if (newCost < cost[i]) {
+                        minHeap.offer(new City(i, newCost, newStop));
+                        cost[i] = newCost;
+                    } else if (newStop < stop[i]) {
+                        minHeap.offer(new City(i, newCost, newStop));
+                        stop[i] = newStop;
+                    }
+                }
+            }
+        }
+
+        return cost[dst] == Integer.MAX_VALUE ? -1 : cost[dst];
+    }
+
 
     // todo: DP
 
