@@ -1,5 +1,6 @@
 package com.leetcode.tree;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -40,5 +41,27 @@ public class No199BinaryTreeRightSideView {
         }
 
         return R;
+    }
+
+    // ---------------------------
+
+    int maxDepth;
+
+    public List<Integer> rightSideView3(TreeNode root) {
+        List<Integer> list = new LinkedList<>();
+        dfs(root, list, 1);
+        return list;
+    }
+
+    private void dfs(TreeNode root, List<Integer> list, int depth) {
+        if (root == null) return;
+
+        if (depth > maxDepth) {
+            list.add(root.val);
+            maxDepth++;
+        }
+
+        dfs(root.right, list, depth + 1);
+        dfs(root.left, list, depth + 1);
     }
 }
