@@ -10,18 +10,12 @@ public class No290WordPattern {
         final String[] words = str.split(" ");
         if (pattern.length() != words.length) return false;
         for (int i = 0; i < pattern.length(); i++) {
-            final char c = pattern.charAt(i);
-            if (ab.containsKey(c)) {
-                if (!words[i].equals(ab.get(c))) return false;
-            } else {
-                ab.put(c, words[i]);
-            }
+            char p = pattern.charAt(i);
+            String w = words[i];
+            if (ab.containsKey(p)) if (!ab.get(p).equals(w)) return false;
+            if (ba.containsKey(w)) if (ba.get(w) != p) return false;
 
-            if (ba.containsKey(words[i])) {
-                if (!ba.get(words[i]).equals(c)) return false;
-            } else {
-                ba.put(words[i], c);
-            }
+            ab.put(p, w);
         }
 
         return true;
