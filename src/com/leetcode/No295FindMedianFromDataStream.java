@@ -5,6 +5,7 @@ import java.util.Queue;
 
 public class No295FindMedianFromDataStream {
     // https://github.com/interviewdiscussion/files/blob/master/Facebook_java%2Bpdf/295.%20Find%20Median%20from%20Data%20Stream.java
+    // https://blog.csdn.net/qq508618087/article/details/51014047
     private Queue<Long> small = new PriorityQueue<>(), large = new PriorityQueue<>();
 
     public void addNum(int num) {
