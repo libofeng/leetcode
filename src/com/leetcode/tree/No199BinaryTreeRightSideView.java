@@ -45,23 +45,22 @@ public class No199BinaryTreeRightSideView {
 
     // ---------------------------
 
-    int maxDepth;
+    int maxDepth = -1;
 
     public List<Integer> rightSideView3(TreeNode root) {
-        List<Integer> list = new LinkedList<>();
-        dfs(root, list, 1);
-        return list;
+        List<Integer> view = new LinkedList<>();
+        preorder(root, view, 0);
+        return view;
     }
 
-    private void dfs(TreeNode root, List<Integer> list, int depth) {
+    private void preorder(TreeNode root, List<Integer> view, int depth) {
         if (root == null) return;
-
         if (depth > maxDepth) {
-            list.add(root.val);
-            maxDepth++;
+            maxDepth = depth;
+            view.add(root.val);
         }
 
-        dfs(root.right, list, depth + 1);
-        dfs(root.left, list, depth + 1);
+        preorder(root.right, view, depth + 1);
+        preorder(root.left, view, depth + 1);
     }
 }
