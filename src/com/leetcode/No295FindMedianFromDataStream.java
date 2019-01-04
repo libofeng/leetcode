@@ -4,20 +4,39 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class No295FindMedianFromDataStream {
-    // https://github.com/interviewdiscussion/files/blob/master/Facebook_java%2Bpdf/295.%20Find%20Median%20from%20Data%20Stream.java
-    // https://blog.csdn.net/qq508618087/article/details/51014047
-    private Queue<Long> small = new PriorityQueue<>(), large = new PriorityQueue<>();
+    /**
+     * initialize your data structure here.
+     */
+
+    private PriorityQueue<Integer> left = new PriorityQueue<>();
+    private PriorityQueue<Integer> right = new PriorityQueue<>();
+
+    public No295FindMedianFromDataStream() {
+
+    }
 
     public void addNum(int num) {
-        large.add((long) num);
-        small.add(-large.poll());//add O(n)
-        if (large.size() < small.size())
-            large.add(-small.poll());
+        right.offer(num);
+        left.add(-right.poll());
+        if (left.size() > right.size()) right.offer(-left.poll());
     }
 
     public double findMedian() {
-        return large.size() > small.size()
-                ? large.peek()//O(1)
-                : (large.peek() - small.peek()) / 2.0;
+        if (right.size() == left.size()) return (right.peek() - left.peek()) / 2.0D;
+        else return right.peek();
+    }
+
+    public static void main(String[] args) {
+        No295FindMedianFromDataStream solution = new No295FindMedianFromDataStream();
+        solution.addNum(1);
+        System.out.println("solution.findMedian() = " + solution.findMedian());
+        solution.addNum(2);
+        System.out.println("solution.findMedian() = " + solution.findMedian());
+        solution.addNum(3);
+        System.out.println("solution.findMedian() = " + solution.findMedian());
+        solution.addNum(4);
+        System.out.println("solution.findMedian() = " + solution.findMedian());
+        solution.addNum(5);
+        System.out.println("solution.findMedian() = " + solution.findMedian());
     }
 }
