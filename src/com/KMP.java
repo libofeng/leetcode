@@ -1,13 +1,13 @@
 package com;
 
 public class KMP {
+    // 此方法得到的是最长公共前缀后缀数组，而不真正意义上的Next数组
     private int[] next(String pattern) {
         final int[] next = new int[pattern.length()];
 
         for (int i = 1, j = 0; i < pattern.length(); i++) {
             while (j > 0 && pattern.charAt(j) != pattern.charAt(i)) j = next[j - 1];
-            if (pattern.charAt(j) == pattern.charAt(i)) j++;
-            next[i] = j;
+            next[i] = pattern.charAt(j) == pattern.charAt(i) ? ++j : j;
         }
 
         return next;
@@ -19,7 +19,7 @@ public class KMP {
         for (int i = 0, j = 0; i < text.length(); i++) {
             while (j > 0 && text.charAt(i) != pattern.charAt(j)) j = next[j - 1];
             if (text.charAt(i) == pattern.charAt(j)) j++;
-            if (j == pattern.length()) return i - j + 1;
+            if (j == pattern.length()) return i + 1 - j;
         }
 
         return -1;
