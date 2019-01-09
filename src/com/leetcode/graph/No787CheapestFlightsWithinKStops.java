@@ -40,100 +40,106 @@ public class No787CheapestFlightsWithinKStops {
     }
 
     public int findCheapestPrice2(int n, int[][] flights, int src, int dst, int K) {
+        if (src == dst) return 0;
         final Map<Integer, List<int[]>> graph = new HashMap<>();
         for (int i = 0; i < n; i++) graph.put(i, new ArrayList<>());
-        for (int[] flight : flights) {
-            graph.get(flight[0]).add(new int[]{flight[1], flight[2]});
-        }
+        for (int[] f : flights) graph.get(f[0]).add(new int[]{f[1], f[2]});
 
-        final boolean[] visited = new boolean[n];
-        visited[src] = true;
-        dfs(graph, visited, new int[]{src, 0}, dst, K);
-        return minPrice == Integer.MAX_VALUE ? -1 : minPrice;
+        final Stack<int[]> stack = new Stack<>();
+        stack.push(new int[]{src, 0, 0});
+        final boolean[] visiting = new boolean[n];
+
+        dfs(graph, visiting, dst, src, 0, K);
+
+        return minCost == Integer.MAX_VALUE ? -1 : minCost;
     }
 
-    private int minPrice = Integer.MAX_VALUE;
+    private int minCost = Integer.MAX_VALUE;
 
-    private void dfs(Map<Integer, List<int[]>> graph, boolean[] visited, int[] src, int dst, int k) {
-        if (k < 0) return;
+    private void dfs(Map<Integer, List<int[]>> graph, boolean[] visting, int dst, int city, int cost, int k) {
+        if (visting[city] || cost >= minCost || k < 0) return;
 
-        for (int[] next : graph.get(src[0])) {
-            if (next[1] + src[1] >= minPrice) continue;
-            if (visited[next[0]]) continue;
-
-            if (next[0] == dst) minPrice = Math.min(minPrice, next[1] + src[1]);
-            visited[next[0]] = true;
-            dfs(graph, visited, new int[]{next[0], next[1] + src[1]}, dst, k - 1);
-            visited[next[0]] = false;
+        visting[city] = true;
+        for (int[] next : graph.get(city)) {
+            int nextCity = next[0], nextCost = cost + next[1];
+            if (dst == nextCity) minCost = Math.min(minCost, nextCost);
+            else dfs(graph, visting, dst, nextCity, nextCost, k - 1);
         }
+        visting[city] = false;
     }
 
     public int findCheapestPrice3(int n, int[][] flights, int src, int dst, int K) {
-        final Map<Integer, List<int[]>> graph = new HashMap<>();
-        for (int i = 0; i < n; i++) graph.put(i, new ArrayList<>());
-        for (int[] flight : flights) {
-            graph.get(flight[0]).add(new int[]{flight[1], flight[2]});
-        }
+        if (src == dst) return 0;
+        final List<List<int[]>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
+        for (int[] f : flights) graph.get(f[0]).add(new int[]{f[1], f[2]});
 
+        final boolean[] visiting = new boolean[n];
         final Stack<int[]> stack = new Stack<>();
-        Map<Integer, Integer> min = new HashMap<>();
-        min.put(src, 0);
         stack.push(new int[]{src, 0, 0});
 
-        int minPrice = Integer.MAX_VALUE;
+        int minCost = Integer.MAX_VALUE;
         while (!stack.isEmpty()) {
-            int[] prev = stack.pop();
-
-            for (int[] next : graph.get(prev[0])) {
-                if (next[0] == dst) {
-                    minPrice = Math.min(minPrice, next[1] + prev[1]);
-                    continue;
-                }
-                if (prev[2] == K) continue;
-                if (min.containsKey(next[0]) && min.get(next[0]) <= next[1] + prev[1]) continue;
-                min.put(next[0], next[1] + prev[1]);
-
-                stack.push(new int[]{next[0], next[1] + prev[1], prev[2] + 1});
+            int[] flight = stack.peek();
+            int city = flight[0], cost = flight[1], stops = flight[2];
+            if (visiting[city]) {
+                stack.pop();
+                visiting[city] = false;
+                continue;
             }
 
+            visiting[city] = true;
+            for (int[] f : graph.get(city)) {
+                int nextCity = f[0], price = f[1], nextCost = cost + price;
+                if (nextCity == dst) {
+                    minCost = Math.min(minCost, nextCost);
+                    continue;
+                } else if (visiting[nextCity] || stops >= K || nextCost >= minCost) continue;
+
+                stack.push(new int[]{nextCity, nextCost, stops + 1});
+            }
         }
 
-        return minPrice == Integer.MAX_VALUE ? -1 : minPrice;
+        return minCost == Integer.MAX_VALUE ? -1 : minCost;
     }
 
     // Bellman-Ford
-    public int findCheapestPrice4(int n, int[][] flights, int src, int dst, int k) {
-        int INF = 0x3F3F3F3F;
+
+    // BF runs V-1 iterations since that's the longest possible path from src to dest - one that uses every vertex.
+    // In this problem, since the longest path is given as K+1, you only need to run it that many iterations.
+
+    // See https://en.wikipedia.org/wiki/Bellman–Ford_algorithm
+    //        "After i repetitions of for loop... if there is a path from s to u with at most i edges,
+    //        then Distance(u) is at most the length of the shortest path from s to u with at most i edges."
+    public int findCheapestPrice4(int n, int[][] flights, int src, int dst, int K) {
+        final int INF = 1000007;
         int[] cost = new int[n];
         Arrays.fill(cost, INF);
         cost[src] = 0;
-        int ans = cost[dst];
-        for (int i = k; i >= 0; i--) {
-            int[] cur = new int[n];
-            Arrays.fill(cur, INF);
-            for (int[] flight : flights) {
-                cur[flight[1]] = Math.min(cur[flight[1]], cost[flight[0]] + flight[2]);
-            }
-            cost = cur;
-            ans = Math.min(ans, cost[dst]);
+
+        int minCost = INF;
+        for (int i = 0; i <= K; i++) {
+            int[] current = new int[n];
+            Arrays.fill(current, INF);
+            for (int[] f : flights) current[f[1]] = Math.min(current[f[1]], cost[f[0]] + f[2]);
+            cost = current;
+            minCost = Math.min(minCost, cost[dst]);
         }
-        return ans == INF ? -1 : ans;
+
+        return minCost == INF ? -1 : minCost;
     }
 
     // Bellman Ford 2
     public int findCheapestPrice5(int n, int[][] flights, int src, int dst, int K) {
         int max = (int) 1e9 + 7;
         int[][] cost = new int[n][n];
-        int min = max;
-        for (int i = 0; i < cost.length; i++)
-            for (int j = 0; j < cost.length; j++)
-                cost[i][j] = max;
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++) cost[i][j] = max;
+
         cost[src][0] = 0;
         for (int i = 0; i < n; i++) {
             for (int[] flight : flights) {
-                int from = flight[0];
-                int to = flight[1];
-                int w = flight[2];
+                int from = flight[0], to = flight[1], w = flight[2];
                 for (int k = 1; k < n; k++) {
                     if (cost[from][k - 1] + w < cost[to][k])
                         cost[to][k] = cost[from][k - 1] + w;
@@ -141,9 +147,9 @@ public class No787CheapestFlightsWithinKStops {
             }
         }
 
+        int min = max;
         for (int i = 0; i <= K + 1; i++) {
-            if (i < cost[dst].length)
-                min = Math.min(min, cost[dst][i]);
+            if (i < cost[dst].length) min = Math.min(min, cost[dst][i]);
         }
         return min == max ? -1 : min;
     }
@@ -151,23 +157,17 @@ public class No787CheapestFlightsWithinKStops {
     //    ----------------------
     private class City implements Comparable<City> {
         int id;
-        int costFromSrc;
-        int stopFromSrc;
+        int cost;
+        int stops;
 
-        public City(int id, int costFromSrc, int stopFromSrc) {
+        public City(int id, int cost, int stops) {
             this.id = id;
-            this.costFromSrc = costFromSrc;
-            this.stopFromSrc = stopFromSrc;
-        }
-
-        public boolean equals(City c) {
-            if (c instanceof City)
-                return this.id == c.id;
-            return false;
+            this.cost = cost;
+            this.stops = stops;
         }
 
         public int compareTo(City c) {
-            return this.costFromSrc - c.costFromSrc;
+            return this.cost - c.cost;
         }
     }
 
@@ -178,7 +178,7 @@ public class No787CheapestFlightsWithinKStops {
         for (int i = 0; i < flights.length; i++)
             srcToDst[flights[i][0]][flights[i][1]] = flights[i][2];
 
-        PriorityQueue<City> minHeap = new PriorityQueue();
+        PriorityQueue<City> minHeap = new PriorityQueue<>();
         minHeap.offer(new City(src, 0, 0));
 
         int[] cost = new int[n];
@@ -190,13 +190,13 @@ public class No787CheapestFlightsWithinKStops {
 
         while (!minHeap.isEmpty()) {
             City curCity = minHeap.poll();
-            if (curCity.id == dst) return curCity.costFromSrc;
-            if (curCity.stopFromSrc == K + 1) continue;
+            if (curCity.id == dst) return curCity.cost;
+            if (curCity.stops == K + 1) continue;
             int[] nexts = srcToDst[curCity.id];
             for (int i = 0; i < n; i++) {
                 if (nexts[i] != 0) {
-                    int newCost = curCity.costFromSrc + nexts[i];
-                    int newStop = curCity.stopFromSrc + 1;
+                    int newCost = curCity.cost + nexts[i];
+                    int newStop = curCity.stops + 1;
                     if (newCost < cost[i]) {
                         minHeap.offer(new City(i, newCost, newStop));
                         cost[i] = newCost;
@@ -214,30 +214,26 @@ public class No787CheapestFlightsWithinKStops {
     // Dijkstra's 2
     public int findCheapestPrice7(int n, int[][] flights, int src, int dst, int K) {
         if (src == dst) return 0;
-        List<List<int[]>> graph = new ArrayList<>();
-        for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
-        for (int[] flight : flights) {
-            graph.get(flight[0]).add(new int[]{flight[1], flight[2]});
-        }
 
-        if (graph.get(src).isEmpty()) return -1;
-        Comparator<int[]> comparator = new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                return o1[1] - o2[1];
+        final List<List<int[]>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
+        for (int[] f : flights) graph.get(f[0]).add(new int[]{f[1], f[2]});
+
+        final Comparator<int[]> comparator = new Comparator<int[]>() {
+            public int compare(int[] a, int[] b) {
+                return a[1] - b[1];
             }
         };
-        // https://stackoverflow.com/questions/34585444/java-lambdas-20-times-slower-than-anonymous-classes
-        PriorityQueue<int[]> pq = new PriorityQueue<>(comparator);
+
+        final PriorityQueue<int[]> pq = new PriorityQueue<>(comparator);
         pq.offer(new int[]{src, 0, 0});
-
         while (!pq.isEmpty()) {
-            int[] current = pq.poll();
-            int id = current[0], price = current[1], stops = current[2];
-            if (id == dst) return price;
-
+            int[] f = pq.poll();
+            int city = f[0], cost = f[1], stops = f[2];
+            if (city == dst) return cost;
             if (stops > K) continue;
-            for (int[] next : graph.get(id)) pq.offer(new int[]{next[0], price + next[1], stops + 1});
+
+            for (int[] next : graph.get(city)) pq.offer(new int[]{next[0], cost + next[1], stops + 1});
         }
 
         return -1;
@@ -266,7 +262,15 @@ public class No787CheapestFlightsWithinKStops {
         System.out.println("min = " + min);
 
         No787CheapestFlightsWithinKStops solution2 = new No787CheapestFlightsWithinKStops();
-        int min2 = solution2.findCheapestPrice4(4, new int[][]{{0, 1, 100}, {1, 2, 100},{2, 3, 100}, {0, 3, 500}}, 0, 3, 1);
+        int min2 = solution2.findCheapestPrice4(4, new int[][]{{0, 1, 100}, {1, 2, 100}, {2, 3, 100}, {0, 3, 500}}, 0, 3, 1);
         System.out.println("min2 = " + min2);
+
+        No787CheapestFlightsWithinKStops solution3 = new No787CheapestFlightsWithinKStops();
+        int min3 = solution3.findCheapestPrice3(7, new int[][]{{0, 1, 3}, {0, 2, 1}, {2, 6, 2}, {6, 3, 1}, {1, 3, 2}, {3, 5, 5}, {3, 4, 1}, {4, 5, 1}}, 0, 5, 3);
+        System.out.println("min3 = " + min3);
+
+        No787CheapestFlightsWithinKStops solution31 = new No787CheapestFlightsWithinKStops();
+        int min31 = solution31.findCheapestPrice(7, new int[][]{{0, 1, 3}, {0, 2, 1}, {2, 6, 2}, {6, 3, 1}, {1, 3, 2}, {3, 5, 5}, {3, 4, 1}, {4, 5, 1}}, 0, 5, 3);
+        System.out.println("min31 = " + min31);
     }
 }
