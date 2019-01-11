@@ -214,7 +214,6 @@ public class No787CheapestFlightsWithinKStops {
     // Dijkstra's 2
     public int findCheapestPrice7(int n, int[][] flights, int src, int dst, int K) {
         if (src == dst) return 0;
-
         final List<List<int[]>> graph = new ArrayList<>();
         for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
         for (int[] f : flights) graph.get(f[0]).add(new int[]{f[1], f[2]});
@@ -227,13 +226,16 @@ public class No787CheapestFlightsWithinKStops {
 
         final PriorityQueue<int[]> pq = new PriorityQueue<>(comparator);
         pq.offer(new int[]{src, 0, 0});
+
+        final boolean[] visited = new boolean[n];
         while (!pq.isEmpty()) {
-            int[] f = pq.poll();
-            int city = f[0], cost = f[1], stops = f[2];
-            if (city == dst) return cost;
+            int[] flight = pq.poll();
+            int city = flight[0], cost = flight[1], stops = flight[2];
+            if (dst == city) return cost;
             if (stops > K) continue;
 
-            for (int[] next : graph.get(city)) pq.offer(new int[]{next[0], cost + next[1], stops + 1});
+            visited[city] = true;
+            for (int[] f : graph.get(city)) if (!visited[f[0]]) pq.offer(new int[]{f[0], f[1] + cost, stops + 1});
         }
 
         return -1;
