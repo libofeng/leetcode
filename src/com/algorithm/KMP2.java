@@ -1,4 +1,4 @@
-package com;
+package com.algorithm;
 
 public class KMP2 {
     private int[] next(String pattern) {

@@ -1,4 +1,4 @@
-package com;
+package com.algorithm;
 
 public class Prime {
     private boolean isPrime(int n) {

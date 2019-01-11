@@ -1,4 +1,4 @@
-package com;
+package com.algorithm;
 
 public class KMP {
     // 此方法得到的是最长公共前缀后缀数组，而不真正意义上的Next数组
@@ -6,8 +6,8 @@ public class KMP {
         final int[] next = new int[pattern.length()];
 
         for (int i = 1, j = 0; i < pattern.length(); i++) {
-            while (j > 0 && pattern.charAt(j) != pattern.charAt(i)) j = next[j - 1];
-            next[i] = pattern.charAt(j) == pattern.charAt(i) ? ++j : j;
+            while (j > 0 && pattern.charAt(i) != pattern.charAt(j)) j = next[j - 1];
+            next[i] = pattern.charAt(i) == pattern.charAt(j) ? ++j : j;
         }
 
         return next;
@@ -18,8 +18,7 @@ public class KMP {
 
         for (int i = 0, j = 0; i < text.length(); i++) {
             while (j > 0 && text.charAt(i) != pattern.charAt(j)) j = next[j - 1];
-            if (text.charAt(i) == pattern.charAt(j)) j++;
-            if (j == pattern.length()) return i + 1 - j;
+            if (text.charAt(i) == pattern.charAt(j) && ++j == pattern.length()) return i + 1 - j;
         }
 
         return -1;
@@ -27,7 +26,7 @@ public class KMP {
 
     public static void main(String[] args) {
         KMP kmp = new KMP();
-        String text = "abababc", pattern = "abcd";
+        String text = "abababc", pattern = "abc";
         int index = kmp.index(text, pattern);
 
         System.out.println("index = " + index);

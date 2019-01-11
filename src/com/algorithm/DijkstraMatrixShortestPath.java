@@ -1,4 +1,4 @@
-package com;
+package com.algorithm;
 
 public class DijkstraMatrixShortestPath {
     private static int N = 1000;
