@@ -9,29 +9,28 @@ public class No827MakingALargeIsland {
 
     public int largestIsland(int[][] grid) {
         final int m = grid.length, n = grid[0].length;
-        final Map<Integer, Integer> size = new HashMap<>();
+        final Map<Integer, Integer> islandSize = new HashMap<>();
 
-        int gid = 1, maxSize = 0, seaCells = 0;
+        int gid = 1, maxSize = 1, totalSize = m * n;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 1) {
-                    int groupSize = dfsMarkGroup(grid, ++gid, i, j);
-                    size.put(gid, groupSize);
-                    maxSize = Math.max(maxSize, groupSize);
-                } else seaCells++;
+                    int size = dfsMarkGroup(grid, ++gid, i, j);
+                    if (size >= totalSize - 1) return totalSize;
+
+                    maxSize = Math.max(maxSize, size);
+                    islandSize.put(gid, size);
+                }
             }
         }
 
-        if (seaCells == 0) return maxSize;
-
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                int newSize = 1;
                 if (grid[i][j] == 0) {
-                    Set<Integer> gids = getSurroundingIsland(grid, i, j);
-                    for (int id : gids) newSize += size.get(id);
+                    int newSize = 1;
+                    for (int id : getSurroundingIsland(grid, i, j)) newSize += islandSize.get(id);
+                    maxSize = Math.max(maxSize, newSize);
                 }
-                maxSize = Math.max(maxSize, newSize);
             }
         }
 
