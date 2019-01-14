@@ -1,7 +1,9 @@
 package com.leetcode.array;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class No315CountOfSmallerNumbersAfterSelf {
     class Node {
@@ -46,13 +48,13 @@ public class No315CountOfSmallerNumbersAfterSelf {
     public List<Integer> countSmaller3(int[] nums) {
         final int n = nums.length;
         final Integer[] result = new Integer[nums.length];
-        if(nums.length == 0) return Arrays.asList(result);
+        if (nums.length == 0) return Arrays.asList(result);
 
         int[] copy = nums.clone();
         Arrays.sort(copy);
 
         final int[] BIT = new int[n + 1];
-        for(int i = n - 1;i >= 0; i--){
+        for (int i = n - 1; i >= 0; i--) {
             int index = findIndex(copy, nums[i]);
             result[i] = query(BIT, index);
             update(BIT, index);
@@ -61,25 +63,43 @@ public class No315CountOfSmallerNumbersAfterSelf {
         return Arrays.asList(result);
     }
 
-    private int findIndex(int[] nums, int num){
+    public List<Integer> countSmaller4(int[] nums) {
+        final Integer[] result = new Integer[nums.length];
+        final int[] BIT = new int[nums.length + 1];
+        final Map<Integer, Integer> map = new HashMap<>();
+
+        final int[] sorted = nums.clone();
+        Arrays.sort(sorted);
+        for (int i = sorted.length - 1; i >= 0; i--) map.put(sorted[i], i);
+
+        for (int i = nums.length - 1; i >= 0; i--) {
+            int idx = map.get(nums[i]);
+            result[i] = query(BIT, idx);
+            update(BIT, idx);
+        }
+
+        return Arrays.asList(result);
+    }
+
+    private int findIndex(int[] nums, int num) {
         int lo = 0, hi = nums.length - 1;
-        while(lo<hi){
+        while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
 
-            if(num <= nums[mid]) hi = mid;
+            if (num <= nums[mid]) hi = mid;
             else lo = mid + 1;
         }
 
         return lo;
     }
 
-    private void update(int[] BIT, int index){
-        for(int i = index + 1; i<BIT.length; i += (i & -i)) BIT[i] += 1;
+    private void update(int[] BIT, int index) {
+        for (int i = index + 1; i < BIT.length; i += (i & -i)) BIT[i] += 1;
     }
 
-    private int query(int[] BIT, int index){
+    private int query(int[] BIT, int index) {
         int count = 0;
-        for(int i = index; i>0;i -= (i & -i)) count += BIT[i];
+        for (int i = index; i > 0; i -= (i & -i)) count += BIT[i];
 
         return count;
     }
