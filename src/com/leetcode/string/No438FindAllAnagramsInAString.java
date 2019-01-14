@@ -56,5 +56,24 @@ public class No438FindAllAnagramsInAString {
 
         return R;
     }
+
+    public List<Integer> findAnagrams3(String s, String p) {
+        List<Integer> list = new ArrayList<>();
+        if (s.length() < p.length()) return list;
+
+        int[] count = new int[26];
+
+        int diff = p.length(), start = 0;
+        for (int i = 0; i < p.length(); i++) count[p.charAt(i) - 'a']++;
+        for (int i = 0; i < p.length() - 1; i++) if (count[s.charAt(i) - 'a']-- > 0) diff--;
+
+        for (int i = p.length() - 1; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (count[c - 'a']-- > 0 && --diff == 0) list.add(start);
+            if (count[s.charAt(start++) - 'a']++ >= 0) diff++;
+        }
+
+        return list;
+    }
 }
 
