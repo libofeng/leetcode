@@ -4,26 +4,25 @@ import java.util.*;
 
 public class No301RemoveInvalidParentheses {
     public List<String> removeInvalidParentheses(String s) {
-        final List<String> list = new ArrayList<>();
+        final List<String> result = new ArrayList<>();
         final Set<String> set = new HashSet<>();
         final Queue<String> q = new LinkedList<>();
-
         q.offer(s);
+
         while (!q.isEmpty()) {
-            String sub = q.poll();
-            if (isValid(sub)) list.add(sub);
-            if (!list.isEmpty()) continue;
+            String str = q.poll();
+            if (isValid(str)) result.add(str);
+            if (result.size() > 0) continue;
 
-            for (int i = 0; i < sub.length(); i++) {
-                if (sub.charAt(i) != '(' && sub.charAt(i) != ')') continue;
-                if (i > 0 && sub.charAt(i) == sub.charAt(i - 1)) continue;
+            for (int i = 0; i < str.length(); i++) {
+                if (str.charAt(i) != '(' && str.charAt(i) != ')') continue;
 
-                String next = sub.substring(0, i) + sub.substring(i + 1);
-                if (!set.add(next)) q.offer(next);
+                String next = str.substring(0, i) + str.substring(i + 1);
+                if (set.add(next)) q.offer(next);
             }
         }
 
-        return list;
+        return result;
     }
 
     public List<String> removeInvalidParentheses2(String s) {
@@ -69,5 +68,12 @@ public class No301RemoveInvalidParentheses {
         }
 
         return left == 0;
+    }
+
+    public static void main(String[] args) {
+        No301RemoveInvalidParentheses solution = new No301RemoveInvalidParentheses();
+        List<String> list = solution.removeInvalidParentheses(")(");
+
+        System.out.println("list = " + list);
     }
 }
