@@ -63,4 +63,51 @@ public class No224BasicCalculator {
 
         return result;
     }
+
+    private int p = 0;
+
+    public int calculate3(String s) {
+        s = s.trim();
+        Stack<Integer> stack = new Stack<>();
+
+        int result = nextNum(s), sign = 1;
+        while (p < s.length()) {
+            char c = s.charAt(p);
+            if (Character.isDigit(c)) result += sign * nextNum(s);
+            else {
+                p++;
+
+                if (c == '(') {
+                    stack.push(result);
+                    stack.push(sign);
+
+                    result = 0;
+                    sign = 1;
+                } else if (c == ')') {
+                    sign = stack.pop();
+                    result *= sign;
+                    result += stack.pop();
+                } else if (c == '-') sign = -1;
+                else if (c == '+') sign = 1;
+            }
+        }
+
+        return result;
+    }
+
+    private int nextNum(String s) {
+        int n = 0;
+
+        while (p < s.length() && s.charAt(p) == ' ') p++;
+        while (p < s.length() && Character.isDigit(s.charAt(p))) n = n * 10 + (s.charAt(p++) - '0');
+        while (p < s.length() && s.charAt(p) == ' ') p++;
+
+        return n;
+    }
+
+    public static void main(String[] args) {
+        No224BasicCalculator solution = new No224BasicCalculator();
+        int result = solution.calculate3(" 2-1 + 2 ");
+        System.out.println("result = " + result);
+    }
 }
