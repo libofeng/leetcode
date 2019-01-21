@@ -39,4 +39,52 @@ public class No227BasicCalculatorII {
 
         return sum;
     }
+
+    //------------------------------------
+
+
+    private int p = 0;
+
+    public int calculate2(String s) {
+        s = s.trim();
+        int last = nextNum(s), result = last;
+        while (p < s.length()) {
+            char c = s.charAt(p++);
+
+            switch (c) {
+                case '+':
+                    last = nextNum(s);
+                    result += last;
+
+                    break;
+                case '-':
+                    last = -nextNum(s);
+                    result += last;
+                    break;
+                case '*':
+                    result -= last;
+                    last *= nextNum(s);
+                    result += last;
+                    break;
+                case '/':
+                    result -= last;
+                    last /= nextNum(s);
+                    result += last;
+                    break;
+                default:
+            }
+        }
+
+        return last;
+    }
+
+    private int nextNum(String s) {
+        int n = 0;
+
+        while (p < s.length() && s.charAt(p) == ' ') p++;
+        while (p < s.length() && Character.isDigit(s.charAt(p))) n = n * 10 + (s.charAt(p++) - '0');
+        while (p < s.length() && s.charAt(p) == ' ') p++;
+
+        return n;
+    }
 }
