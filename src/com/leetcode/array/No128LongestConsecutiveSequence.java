@@ -7,37 +7,30 @@ import java.util.Set;
 public class No128LongestConsecutiveSequence {
 
     public int longestConsecutive(int[] nums) {
-        if (nums.length <= 1) return nums.length;
-
+        if (nums.length < 2) return nums.length;
         Arrays.sort(nums);
+
         int maxLen = 1, len = 1;
         for (int i = 1; i < nums.length; i++) {
             if (nums[i] == nums[i - 1]) continue;
-            if (nums[i] != nums[i - 1] + 1) len = 0;
-
-            len++;
-            maxLen = Math.max(len, maxLen);
+            len = nums[i] == nums[i - 1] + 1 ? (len + 1) : 1;
+            maxLen = Math.max(maxLen, len);
         }
 
         return maxLen;
     }
 
     public int longestConsecutive2(int[] nums) {
-        if (nums.length <= 1) return nums.length;
-
         Set<Integer> set = new HashSet<>();
         for (int n : nums) set.add(n);
 
         int maxLen = 0;
-        for (int n : nums) {
-            if (!set.contains(n)) continue;
+        for (int i = 0; i < nums.length; i++) {
+            int lo = nums[i], hi = nums[i] + 1;
+            while (set.remove(lo)) lo--;
+            while (set.remove(hi)) hi++;
 
-            set.remove(n);
-            int min = n, max = n;
-            while (set.contains(min - 1)) set.remove(--min);
-            while (set.contains(max + 1)) set.remove(++max);
-
-            maxLen = Math.max(maxLen, (max - min + 1));
+            maxLen = Math.max(maxLen, hi - lo - 1);
         }
 
         return maxLen;
