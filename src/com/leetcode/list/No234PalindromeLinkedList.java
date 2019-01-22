@@ -37,24 +37,42 @@ public class No234PalindromeLinkedList {
 
     public boolean isPalindrome2(ListNode head) {
         if (head == null || head.next == null) return true;
-        ListNode fast = head, slow = head;
-        while (fast.next != null && fast.next.next != null) {
-            fast = fast.next.next;
-            slow = slow.next;
+        final Stack<ListNode> stack = new Stack<>();
+
+        ListNode p = head;
+        while (p != null) {
+            stack.push(p);
+            p = p.next;
         }
 
-        Stack<ListNode> stack = new Stack<>();
-        ListNode right = slow.next, tail = fast.next == null ? fast : fast.next;
-        while (right != null) {
-            stack.push(right);
-            right = right.next;
-        }
-
+        p = head;
         while (!stack.isEmpty()) {
-            if (stack.pop().val != head.val) return false;
-            head = head.next;
+            ListNode node = stack.pop();
+            if (p == node) return true;
+            if (node.val != p.val) return false;
+
+            p = p.next;
         }
 
+        return true;
+    }
+
+    // -------------------------------------
+
+    private ListNode forward;
+
+    public boolean isPalindrome3(ListNode head) {
+        forward = head;
+
+        return dfs(head);
+    }
+
+    private boolean dfs(ListNode head) {
+        if (head == null) return true;
+        if (!dfs(head.next)) return false;
+
+        if (head.val != forward.val) return false;
+        forward = forward.next;
         return true;
     }
 }
