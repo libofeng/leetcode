@@ -1,6 +1,6 @@
 package com.lintcode.math;
 
-public class No1350ExcelSheetColumnTitle {
+public class No168ExcelSheetColumnTitle {
 
     /**
      * @param n: a integer
