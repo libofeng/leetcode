@@ -2,26 +2,26 @@ package com.leetcode.string;
 
 public class No67AddBinary {
     public String addBinary(String a, String b) {
-        StringBuilder builder = new StringBuilder();
-        int carry = 0, ai = a.length(), bi = b.length(), len = Math.max(ai, bi);
+        final int BASE = 2;
 
-        while (len-- > 0) {
-            int na = 0, nb = 0;
-            if (ai > 0) {
-                na = a.charAt(ai - 1) - '0';
-                ai--;
-            }
-            if (bi > 0) {
-                nb = b.charAt(bi - 1) - '0';
-                bi--;
-            }
+        int carry = 0;
+        StringBuilder sb = new StringBuilder();
+        for (int i = a.length() - 1, j = b.length() - 1; i >= 0 || j >= 0; i--, j--) {
+            int n1 = i < 0 ? 0 : (a.charAt(i) - '0');
+            int n2 = j < 0 ? 0 : (b.charAt(j) - '0');
 
-            int n = na + nb + carry;
-            carry = n / 2;
-            builder.append(n % 2);
+            int n = n1 + n2 + carry;
+            sb.append(n % BASE);
+            carry /= BASE;
         }
-        if (carry > 0) builder.append(carry);
+        if (carry > 0) sb.append(1);
 
-        return builder.reverse().toString();
+        return sb.reverse().toString();
+    }
+
+    public static void main(String[] args) {
+        No67AddBinary solution = new No67AddBinary();
+        String result = solution.addBinary("11", "1");
+        System.out.println("result = " + result);
     }
 }
