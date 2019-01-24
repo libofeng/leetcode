@@ -3,23 +3,20 @@ package com.leetcode.list;
 public class No24SwapNodesInPairs {
     public ListNode swapPairs(ListNode head) {
         if (head == null || head.next == null) return head;
-        ListNode dummy = new ListNode(0), current = dummy;
 
-        while (head != null) {
-            if (head.next == null) {
-                current.next = head;
-                break;
-            } else {
-                ListNode node = head, next = head.next;
-                head = next.next;
+        ListNode dummy = new ListNode(0), p = dummy;
+        dummy.next = head;
+        while (p.next != null && p.next.next != null) {
+            ListNode first = p.next, second = p.next.next;
 
-                node.next = null;
-                next.next = node;
-                current.next = next;
-                current = node;
-            }
+            p.next = second;
+            first.next = second.next;
+            second.next = first;
+            p = first;
         }
 
-        return dummy.next;
+        head = dummy.next;
+        dummy.next = null;
+        return head;
     }
 }
