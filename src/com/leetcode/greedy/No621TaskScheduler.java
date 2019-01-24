@@ -21,6 +21,16 @@ public class No621TaskScheduler {
     }
 
     // https://leetcode.com/problems/task-scheduler/discuss/104496/concise-java-solution-on-time-o26-space
+
+    //
+    // Right answer is 9, the above solution will take Math.max(tasks.length, (c[25] - 1) * (n + 1) + 25 - i), which will give tasks.length = 9.
+    // Example arrangement is :
+    // Step1: A _ _ A _ _ A
+    // Step2: A B _ A B _ A
+    // Step3: A B C A B C A
+    // Step4: A B C D A B C D A
+    // Which is 9.
+
     public int leastInterval2(char[] tasks, int n) {
         final int[] count = new int[26];
         for (char c : tasks) count[c - 'A']++;
@@ -61,5 +71,14 @@ public class No621TaskScheduler {
         }
 
         return totalSlots;
+    }
+
+    public static void main(String[] args) {
+        char[] tasks = "AAABBCCDDEE".toCharArray();
+        No621TaskScheduler solution = new No621TaskScheduler();
+        int len = solution.leastInterval2(tasks, 2);
+        System.out.println("len = " + len);
+        len = solution.leastInterval3(tasks, 2);
+        System.out.println("len = " + len);
     }
 }
