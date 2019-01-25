@@ -1,5 +1,7 @@
 package com.leetcode.string;
 
+import java.util.Arrays;
+
 public class No242ValidAnagram {
     public boolean isAnagram(String s, String t) {
         if (s.length() != t.length()) return false;
@@ -13,5 +15,16 @@ public class No242ValidAnagram {
         for (int i = 0; i < count.length; i++) if (count[i] != 0) return false;
 
         return true;
+    }
+
+    public boolean isAnagram2(String s, String t) {
+        if (s.length() != t.length()) return false;
+        char[] schars = s.toCharArray();
+        Arrays.sort(schars);
+
+        char[] tchars = t.toCharArray();
+        Arrays.sort(tchars);
+
+        return Arrays.equals(schars, tchars);
     }
 }
