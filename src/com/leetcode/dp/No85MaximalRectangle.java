@@ -7,62 +7,52 @@ public class No85MaximalRectangle {
 
     // brute force
     public int maximalRectangle(char[][] matrix) {
-        if (matrix.length == 0 || matrix[0].length == 0) return 0;
-        final int m = matrix.length, n = matrix[0].length;
+        final int m = matrix.length, n = m == 0 ? 0 : matrix[0].length;
+
         int maxArea = 0;
         for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) maxArea = Math.max(maxArea, findMaxArea(matrix, i, j));
+            for (int j = 0; j < n; j++) maxArea = Math.max(maxArea, findMax(matrix, i, j));
         }
 
         return maxArea;
     }
 
-    private int findMaxArea(char[][] matrix, int row, int col) {
-        int maxArea = 0;
+    private int findMax(char[][] matrix, int row, int col) {
+        int maxArea = 0, maxCol = matrix[0].length;
 
-        int minWidth = Integer.MAX_VALUE;
-        for (int i = row; i < matrix.length && matrix[i][col] == '1'; i++) {
-            int j = col;
-            while (j < matrix[0].length && matrix[i][j] == '1') j++;
-            minWidth = Math.min(minWidth, j - col);
-
-            maxArea = Math.max((i - row + 1) * minWidth, maxArea);
+        for (int i = row; i < matrix.length; i++) {
+            for (int j = col; j < maxCol; j++) if (matrix[i][j] == '0') maxCol = j;
+            maxArea = Math.max(maxArea, (i - row + 1) * (maxCol - col));
         }
+
         return maxArea;
     }
 
 
     // use Stack like max area in Histogram
     public int maximalRectangle2(char[][] matrix) {
-        if (matrix.length == 0 || matrix[0].length == 0) return 0;
-        final int m = matrix.length, n = matrix[0].length;
-
-        final int[][] heights = new int[m][n + 1];
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (matrix[i][j] == '1') heights[i][j] = i == 0 ? 1 : heights[i - 1][j] + 1;
-            }
-        }
+        final int m = matrix.length, n = m == 0 ? 0 : matrix[0].length;
 
         int maxArea = 0;
-        for (int[] h : heights) maxArea = Math.max(findMaxArea(h), maxArea);
+        int[] heights = new int[n + 1];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) heights[j] = matrix[i][j] == '1' ? (heights[j] + 1) : 0;
+            maxArea = Math.max(maxArea, findMax(heights));
+        }
 
         return maxArea;
     }
 
-
-    private int findMaxArea(int[] heights) {
+    private int findMax(int[] heights) {
         int maxArea = 0;
         final Stack<Integer> stack = new Stack<>();
 
         for (int i = 0; i < heights.length; ) {
-            if (stack.isEmpty() || heights[stack.peek()] <= heights[i]) {
-                stack.push(i++);
-                continue;
+            if (stack.isEmpty() || heights[stack.peek()] <= heights[i]) stack.push(i++);
+            else {
+                int h = heights[stack.pop()];
+                maxArea = Math.max(maxArea, h * (stack.isEmpty() ? i : (i - stack.peek() - 1)));
             }
-
-            int h = heights[stack.pop()];
-            maxArea = Math.max(maxArea, h * (stack.isEmpty() ? i : (i - stack.peek() - 1)));
         }
 
         return maxArea;
