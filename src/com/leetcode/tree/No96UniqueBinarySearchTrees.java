@@ -1,7 +1,16 @@
 package com.leetcode.tree;
 
 public class No96UniqueBinarySearchTrees {
+
     public int numTrees(int n) {
+        if (n <= 1) return 1;
+
+        int count = 0;
+        for (int i = 1; i <= n; i++) count += numTrees(i - 1) * numTrees(n - i);
+        return count;
+    }
+
+    public int numTrees2(int n) {
         int[] f = new int[n + 1];
         f[0] = 1;
         f[1] = 1;
