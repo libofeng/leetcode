@@ -1,26 +1,20 @@
 package com.leetcode.math;
 
 public class No982TriplesWithBitwiseANDEqualToZero {
+    // https://leetcode.com/problems/triples-with-bitwise-and-equal-to-zero/discuss/226721/Java-DP-O(3-*-216-*-n)-time-O(n)-space
     public int countTriplets(int[] A) {
-        int[] f = new int[1 << 16];
-        for (int v : A) f[v]++;
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 1 << 16; j++) {
-                if (j << ~i >= 0) {
-                    f[j] += f[j | 1 << i];
+        int N = 1 << 16;
+        int[] dp = new int[N];
+        dp[N - 1] = 1;
+        for (int i = 0; i < 3; i++) {
+            int[] temp = new int[N];
+            for (int k = 0; k < N; k++) {
+                for (int a : A) {
+                    temp[k & a] += dp[k];
                 }
             }
+            dp = temp;
         }
-        for (int i = 0; i < 1 << 16; i++) {
-            f[i] = f[i] * f[i] * f[i];
-        }
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 1 << 16; j++) {
-                if (j << ~i >= 0) {
-                    f[j] -= f[j | 1 << i];
-                }
-            }
-        }
-        return f[0];
+        return dp[0];
     }
 }
