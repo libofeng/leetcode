@@ -1,8 +1,5 @@
 package com.leetcode.contest.contest123;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class No992SubarraysWithKDifferentIntegers {
     // https://leetcode.com/problems/subarrays-with-k-different-integers/discuss/234482/JavaC%2B%2BPython-Sliding-Window
 
@@ -12,16 +9,10 @@ public class No992SubarraysWithKDifferentIntegers {
 
     private int atMostK(int[] A, int K) {
         int i = 0, res = 0;
-        Map<Integer, Integer> count = new HashMap<>();
+        int[] count = new int[A.length + 1];
         for (int j = 0; j < A.length; ++j) {
-            if (count.getOrDefault(A[j], 0) == 0) K--;
-            count.put(A[j], count.getOrDefault(A[j], 0) + 1);
-
-            while (K < 0) {
-                count.put(A[i], count.get(A[i]) - 1);
-                if (count.get(A[i]) == 0) K++;
-                i++;
-            }
+            if (count[A[j]]++ == 0) K--;
+            while (K < 0) if (--count[A[i++]] == 0) K++;
             res += j - i + 1;
         }
         return res;
