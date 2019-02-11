@@ -1,43 +1,39 @@
 package com.leetcode.array;
 
+import java.util.Stack;
+
 public class No42TrappingRainWater {
+    // https://www.cnblogs.com/grandyang/p/4402392.html
+    // DP
     public int trap(int[] height) {
-        if (height == null || height.length <= 2) return 0;
+        if (height.length <= 2) return 0;
+
         int[] maxL = new int[height.length], maxR = new int[height.length];
 
-        for (int i = 1; i < height.length; i++) {
-            maxL[i] = Math.max(height[i - 1], maxL[i - 1]);
-        }
+        maxL[0] = height[0];
+        for (int i = 1; i < maxL.length; i++) maxL[i] = height[i] > maxL[i - 1] ? height[i] : maxL[i - 1];
 
-        for (int i = height.length - 2; i >= 0; i--) {
-            maxR[i] = Math.max(height[i + 1], maxR[i + 1]);
-        }
+        maxR[maxR.length - 1] = height[height.length - 1];
+        for (int j = maxR.length - 2; j >= 0; j--) maxR[j] = height[j] > maxR[j + 1] ? height[j] : maxR[j + 1];
 
-        int R = 0;
-        for (int i = 1; i < height.length - 1; i++) {
-            int h = Math.min(maxL[i], maxR[i]) - height[i];
-            if (h > 0) R += h;
-        }
+        int water = 0;
+        for (int i = 0; i < height.length; i++) water += Math.min(maxL[i], maxR[i]) - height[i];
 
-        return R;
+        return water;
     }
 
+    // 2 pointers
     public int trap2(int[] height) {
-        if (height == null || height.length <= 2) return 0;
+        if (height.length <= 2) return 0;
 
-        int l = 0, r = height.length - 1, R = 0;
-        while (l < r) {
-            int min = Math.min(height[l], height[r]);
-            if (height[l] == min) {
-                l++;
-                while (l < r && height[l] < min) R += min - height[l++];
-            } else {
-                r--;
-                while (l < r && height[r] < min) R += min - height[r--];
-            }
+        int left = 0, right = height.length - 1, water = 0;
+        while (left < right) {
+            int min = Math.min(height[left], height[right]);
+            if (min == height[left]) while (++left < right && height[left] < min) water += min - height[left];
+            else while (left < --right && height[right] < min) water += min - height[right];
         }
 
-        return R;
+        return water;
     }
 
     public int trap3(int[] height) {
@@ -58,6 +54,24 @@ public class No42TrappingRainWater {
             water += Math.min(rightPeak, height[peakIndex]) - height[i];
         }
 
+
+        return water;
+    }
+
+    // stack
+    public int trap4(int[] height) {
+        if (height.length <= 2) return 0;
+
+        int water = 0;
+        final Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < height.length; ) {
+            if (stack.isEmpty() || height[i] <= height[stack.peek()]) stack.push(i++);
+            else {
+                int h = height[stack.pop()];
+                if (stack.isEmpty()) continue;
+                water += (Math.min(height[i], height[stack.peek()]) - h) * (i - stack.peek() - 1);
+            }
+        }
 
         return water;
     }
