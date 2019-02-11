@@ -21,13 +21,14 @@ public class No14LongestCommonPrefix {
     public String longestCommonPrefix2(String[] strs) {
         if (strs.length == 0) return "";
 
-        for (int j = 0; j < strs[0].length(); ++j) {
-            for (int i = 1; i < strs.length; ++i) {
-                if (j == strs[i].length() || strs[i].charAt(j) != strs[0].charAt(j)) {
-                    return strs[0].substring(0, j);
-                }
+        String s = strs[0];
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = 1; j < strs.length; j++) {
+                String str = strs[j];
+                if (i >= str.length() || str.charAt(i) != s.charAt(i)) return s.substring(0, i);
             }
         }
-        return strs[0];
+
+        return s;
     }
 }
