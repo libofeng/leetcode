@@ -1,28 +1,25 @@
 package com.leetcode.string;
 
 public class No5LongestPalindromicSubstring {
-    int maxLen = 1, start = 0;
+    private int start = -1, end = 0;
 
     public String longestPalindrome(String s) {
-        final int len = s.length();
-        if (len <= 1) return s;
-
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < s.length(); i++) {
             expand(s, i, i);
             expand(s, i, i + 1);
         }
-
-        return s.substring(start, start + maxLen);
+        return s.substring(start + 1, end);
     }
 
-    private void expand(String s, int i1, int i2) {
-        while (i1 >= 0 && i2 < s.length() && s.charAt(i1) == s.charAt(i2)) {
-            if (i2 - i1 + 1 > maxLen) {
-                maxLen = i2 - i1 + 1;
-                start = i1;
-            }
-            i1--;
-            i2++;
+    private void expand(String s, int lo, int hi) {
+        while (lo >= 0 && hi < s.length() && s.charAt(lo) == s.charAt(hi)) {
+            lo--;
+            hi++;
+        }
+
+        if (hi - lo > end - start) {
+            start = lo;
+            end = hi;
         }
     }
 
