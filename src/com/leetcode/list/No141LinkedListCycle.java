@@ -5,10 +5,9 @@ import java.util.Set;
 
 public class No141LinkedListCycle {
     public boolean hasCycle(ListNode head) {
-        Set<ListNode> set = new HashSet<>();
+        final Set<ListNode> set = new HashSet<>();
         while (head != null) {
-            if (set.contains(head)) return true;
-            set.add(head);
+            if (!set.add(head)) return true;
             head = head.next;
         }
 
