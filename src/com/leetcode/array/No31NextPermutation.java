@@ -2,38 +2,27 @@ package com.leetcode.array;
 
 public class No31NextPermutation {
     public void nextPermutation(int[] nums) {
-        int partitionIndex = -1;
-        for (int i = nums.length - 2; i >= 0; i--) {
-            if (nums[i] < nums[i + 1]) {
-                partitionIndex = i;
-                break;
-            }
-        }
-
-        if (partitionIndex < 0) {
-            reverse(nums, 0, nums.length - 1);
+        final int n = nums.length;
+        int dropIndex = -1;
+        for(int i = n-2;i>=0 && dropIndex<0;i--) if(nums[i]<nums[i+1]) dropIndex = i;
+        if(dropIndex==-1){
+            reverse(nums, 0, n-1);
             return;
         }
 
-        int exchangeIndex = 0;
-        for (int i = nums.length - 1; i > partitionIndex; i--) {
-            if (nums[i] > nums[partitionIndex]) {
-                exchangeIndex = i;
-                break;
-            }
-        }
-
-        swap(nums, partitionIndex, exchangeIndex);
-        reverse(nums, partitionIndex + 1, nums.length - 1);
+        int exchangeIndex = -1;
+        for(int i = n-1;i>dropIndex && exchangeIndex<0;i--) if(nums[i]>nums[dropIndex]) exchangeIndex = i;
+        swap(nums, dropIndex, exchangeIndex);
+        reverse(nums, dropIndex+1, n-1);
     }
 
-    private void swap(int[] nums, int i, int j) {
-        int temp = nums[i];
+    private void swap(int[] nums, int i, int j){
+        int tmp = nums[i];
         nums[i] = nums[j];
-        nums[j] = temp;
+        nums[j] = tmp;
     }
 
-    private void reverse(int[] nums, int low, int high) {
-        while (low < high) swap(nums, low++, high--);
+    private void reverse(int[] nums, int i, int j){
+        while(i<j) swap(nums, i++, j--);
     }
 }
