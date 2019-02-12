@@ -34,9 +34,26 @@ public class No206ReverseLinkedList {
     public ListNode reverseList3(ListNode head) {
         if (head == null || head.next == null) return head;
 
-        ListNode tail = head.next, newHead = reverseList(head.next);
+        ListNode tail = head.next, newHead = reverseList3(head.next);
         head.next = null;
         tail.next = head;
+
+        return newHead;
+    }
+
+
+    private ListNode tail;
+
+    public ListNode reverseList4(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode newHead = reverseList4(head.next);
+
+        if (tail == null) tail = newHead;
+
+        tail.next = head;
+        tail = head;
+        tail.next = null;
 
         return newHead;
     }
