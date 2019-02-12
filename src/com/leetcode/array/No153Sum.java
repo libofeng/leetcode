@@ -38,35 +38,27 @@ public class No153Sum {
     }
 
     public List<List<Integer>> threeSum2(int[] nums) {
-        final List<List<Integer>> R = new ArrayList<>();
+        Arrays.sort(nums); // O(NLongN);
 
-        Arrays.sort(nums);
+        final List<List<Integer>> result = new ArrayList<>();
         for (int i = 0; i < nums.length; i++) {
-            if (i > 0 && nums[i] == nums[i - 1]) continue;
+            if (i > 0 && nums[i] == nums[i - 1]) continue; // avoid duplications
 
-            int low = i + 1, high = nums.length - 1, target = -nums[i];
-            while (low < high) {
-                if (nums[low] + nums[high] == target) {
-                    List<Integer> r = new ArrayList<>();
-                    r.add(nums[i]);
-                    r.add(nums[low]);
-                    r.add(nums[high]);
+            // 2 pointers
+            int lo = i + 1, hi = nums.length - 1;
+            while (lo < hi) {
+                int sum = nums[i] + nums[lo] + nums[hi];
 
-                    R.add(r);
-                    low++;
-                    high--;
-                    while (low < high && nums[high] == nums[high + 1]) high--;
-                    while (low < high && nums[low] == nums[low - 1]) low++;
-                } else if (nums[low] + nums[high] > target) {
-                    high--;
-                    while (low < high && nums[high] == nums[high + 1]) high--;
-                } else {
-                    low++;
-                    while (low < high && nums[low] == nums[low - 1]) low++;
-                }
+                if (sum == 0) {
+                    result.add(Arrays.asList(nums[i], nums[lo++], nums[hi--]));
+
+                    while (lo < hi && nums[lo - 1] == nums[lo]) lo++;
+                    while (lo < hi && nums[hi + 1] == nums[hi]) hi--;
+                } else if (sum < 0) lo++;
+                else hi--;
             }
         }
 
-        return R;
+        return result;
     }
 }
