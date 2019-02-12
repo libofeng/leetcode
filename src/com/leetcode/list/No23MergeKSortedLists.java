@@ -15,6 +15,7 @@ public class No23MergeKSortedLists {
         return list;
     }
 
+    // Time: O(N), Space: O(N)
     private ListNode merge(ListNode l1, ListNode l2) {
         if (l1 == null || l2 == null) return l1 == null ? l2 : l1;
 
@@ -26,7 +27,7 @@ public class No23MergeKSortedLists {
 
 
     // -------------------------
-    // O(LogK * K * N)
+    // O(LogK * K * N), Space: O(K)
     public ListNode mergeKLists2(ListNode[] lists) {
         final PriorityQueue<ListNode> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.val));
         for (ListNode list : lists) if (list != null) pq.offer(list);
@@ -54,7 +55,7 @@ public class No23MergeKSortedLists {
     }
 
     // ------------------------- Divide and Conquer
-    // O(LogK * K * N)
+    // Time: O(LogK * K * N), Space: O(K * (N + LogK)) OR O(K * LogK)
     public ListNode mergeKLists3(ListNode[] lists) {
         if (lists.length == 0) return null;
         if (lists.length == 1) return lists[0];
@@ -64,7 +65,7 @@ public class No23MergeKSortedLists {
         System.arraycopy(lists, 0, lists1, 0, k1);
         System.arraycopy(lists, k1, lists2, 0, k2);
 
-        // O(KN)
+        // Time:O(KN), Space: O(KN), it can be O(1) if we change it to iteration
         return merge(mergeKLists3(lists1), mergeKLists3(lists2));
     }
 }
