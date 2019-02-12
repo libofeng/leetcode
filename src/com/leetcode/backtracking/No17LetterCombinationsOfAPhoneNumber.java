@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Queue;
 
 public class No17LetterCombinationsOfAPhoneNumber {
+    // Time: 4^N, Space: 4^N
     public List<String> letterCombinations(String digits) {
         final String[] buttons = new String[]{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
         List<String> list = new LinkedList<>();
