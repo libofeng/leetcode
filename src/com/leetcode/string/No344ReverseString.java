@@ -1,10 +1,14 @@
 package com.leetcode.string;
 
 public class No344ReverseString {
-    public String reverseString(String s) {
-        char[] chars = new char[s.length()];
-        for (int i = 0, j = s.length() - 1; j >= 0; i++, j--) chars[j] = s.charAt(i);
+    public void reverseString(char[] s) {
+        int lo = 0, hi = s.length - 1;
+        while (lo < hi) swap(s, lo++, hi--);
+    }
 
-        return new String(chars);
+    private void swap(char[] s, int i, int j) {
+        char tmp = s[i];
+        s[i] = s[j];
+        s[j] = tmp;
     }
 }
