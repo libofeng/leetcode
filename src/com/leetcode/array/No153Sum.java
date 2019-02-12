@@ -6,35 +6,31 @@ import java.util.List;
 
 public class No153Sum {
     public List<List<Integer>> threeSum(int[] nums) {
-        final List<List<Integer>> R = new ArrayList<>();
+        Arrays.sort(nums); // O(NLongN);
 
-        Arrays.sort(nums);
-        for (int i = 0; i < nums.length; i++) {
-            if (i > 0 && nums[i] == nums[i - 1]) continue;
+        final List<List<Integer>> result = new ArrayList<>();
+        for(int i = 0; i<nums.length;i++){
+            if(i>0 && nums[i] == nums[i-1]) continue; // avoid duplications
 
-            for (int j = i + 1; j < nums.length; j++) {
-                if (j > i + 1 && nums[j] == nums[j - 1]) continue;
+            for(int j = i+1;j<nums.length;j++){
+                if(j>i+1 && nums[j] == nums[j-1]) continue;
 
-                int target = -nums[i] - nums[j], low = j + 1, high = nums.length - 1;
-                while (low <= high) {
-                    int mid = low + (high - low) / 2;
-
-                    if (nums[mid] == target) {
-                        List<Integer> r = new ArrayList<>();
-                        r.add(nums[i]);
-                        r.add(nums[j]);
-                        r.add(nums[mid]);
-
-                        R.add(r);
+                int lo = j + 1, hi = nums.length - 1;
+                int target = 0 - nums[i] - nums[j];
+                while(lo <= hi){
+                    int mid = lo + (hi - lo) / 2;
+                    if(target == nums[mid]) {
+                        result.add(Arrays.asList(nums[i], nums[j], nums[mid]));
                         break;
                     }
-                    if (nums[mid] > target) high = mid - 1;
-                    else low = mid + 1;
+
+                    if(target > nums[mid]) lo = mid + 1;
+                    else hi = mid - 1;
                 }
             }
         }
 
-        return R;
+        return result;
     }
 
     public List<List<Integer>> threeSum2(int[] nums) {
