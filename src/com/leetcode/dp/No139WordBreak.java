@@ -4,6 +4,7 @@ import java.util.*;
 
 public class No139WordBreak {
 
+    // TLE
     public boolean wordBreak(String s, List<String> wordDict) {
         if (s.isEmpty()) return true;
 
@@ -13,7 +14,7 @@ public class No139WordBreak {
 
 
     Map<String, Boolean> cache = new HashMap<>();
-
+    // AC
     public boolean wordBreak2(String s, List<String> wordDict) {
         if (s.isEmpty()) return true;
         if (cache.containsKey(s)) return cache.get(s);
