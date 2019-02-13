@@ -16,21 +16,19 @@ public class No151ReverseWordsInAString {
 
 
     public String reverseWords2(String s) {
-        s = s.trim();
         StringBuilder sb = new StringBuilder();
 
-        int end = s.length();
-        for (int i = s.length() - 1; i >= 0; ) {
-            if (s.charAt(i) == ' ') {
-                sb.append(s.substring(i + 1, end)).append(" ");
+        int right = s.length() - 1;
+        while (right >= 0) {
+            while (right >= 0 && s.charAt(right) == ' ') right--;
 
-                i--;
-                while (i >= 0 && s.charAt(i) == ' ') i--;
-                end = i + 1;
-            } else i--;
+            int left = right;
+            while (left >= 0 && s.charAt(left) != ' ') left--;
+
+            if (right > left) sb.append(s.substring(left + 1, right + 1)).append(" ");
+            right = left;
         }
-        sb.append(s.substring(0, end)).append(" ");
-        sb.deleteCharAt(sb.length() - 1);
+        if (sb.length() > 0) sb.deleteCharAt(sb.length() - 1);
 
         return sb.toString();
     }
