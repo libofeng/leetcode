@@ -1,23 +1,21 @@
 package com.leetcode.tree;
 
 public class No124BinaryTreeMaximumPathSum {
-    int maxLen = Integer.MIN_VALUE;
-
+    int maxSum = Integer.MIN_VALUE;
     public int maxPathSum(TreeNode root) {
-        postOrder(root);
-
-        return maxLen;
+        if(root == null) return 0;
+        postorder(root);
+        return maxSum;
     }
 
-    private int postOrder(TreeNode root) {
-        if (root == null) return 0;
-        int l = postOrder(root.left), r = postOrder(root.right);
-        int max = root.val;
-        if (l > 0) max += l;
-        if (r > 0) max += r;
-        maxLen = Math.max(maxLen, max);
+    private int postorder(TreeNode node){
+        if(node == null) return 0;
 
-        return l > 0 || r > 0 ? root.val + Math.max(l, r) : root.val;
+        int left = postorder(node.left), right = postorder(node.right), sum = node.val;
+        if(left>0) sum += left;
+        if(right>0) sum += right;
+        maxSum = Math.max(maxSum, sum);
+
+        return Math.max(node.val, Math.max(left, right) + node.val);
     }
-
 }
