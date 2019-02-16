@@ -4,30 +4,32 @@ import java.util.*;
 
 public class No127WordLadder {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        final Set<String> dict = new HashSet<>(wordList);
+        final Set<String> set = new HashSet<>(wordList);
         final Queue<String> q = new LinkedList<>();
-        q.add(beginWord);
+        if (!set.contains(endWord)) return 0;
 
-        int len = 0;
+        q.offer(beginWord);
+        set.remove(beginWord);
+
+        int level = 0;
         while (!q.isEmpty()) {
             int size = q.size();
-            len++;
-            for (int i = 0; i < size; i++) {
+            level++;
+            while (size-- > 0) {
                 String word = q.poll();
-                if (word.equals(endWord)) return len;
-                char[] wordChars = word.toCharArray();
-                for (int j = 0; j < wordChars.length; j++) {
-                    char oldC = wordChars[j];
+                if (word.equals(endWord)) return level;
+
+                char[] chars = word.toCharArray();
+                for (int i = 0; i < chars.length; i++) {
+                    char oldC = chars[i];
                     for (char c = 'a'; c <= 'z'; c++) {
-                        if (c == oldC) continue;
-                        wordChars[j] = c;
-                        String nextWord = new String(wordChars);
-                        if (dict.contains(nextWord)) {
-                            q.offer(nextWord);
-                            dict.remove(nextWord);
-                        }
+                        if (oldC == c) continue;
+                        chars[i] = c;
+
+                        String next = new String(chars);
+                        if (set.remove(next)) q.offer(next);
                     }
-                    wordChars[j] = oldC;
+                    chars[i] = oldC;
                 }
             }
         }
