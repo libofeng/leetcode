@@ -41,11 +41,55 @@ public class No227BasicCalculatorII {
     }
 
     //------------------------------------
+    public int calculate2(String s) {
+        int result = 0, num = 0;
+        char operator = '+';
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == ' ') continue;
+
+            if (Character.isDigit(c)) num = num * 10 + (c - '0');
+            else {
+                result = calc(result, num, operator);
+                num = 0;
+
+                operator = c;
+            }
+        }
+        result = calc(result, num, operator);
+
+        return result;
+    }
+
+    private int last = 0;
+
+    private int calc(int result, int num, char operator) {
+        switch (operator) {
+            case '-':
+                result += -num;
+                last = -num;
+                break;
+            case '*':
+                result += -last + last * num;
+                last = last * num;
+                break;
+            case '/':
+                result += -last + last / num;
+                last = last / num;
+                break;
+            default:
+                result += num;
+                last = num;
+        }
+        return result;
+    }
+    //------------------------------------
 
 
     private int p = 0;
 
-    public int calculate2(String s) {
+    public int calculate3(String s) {
         s = s.trim();
         int last = nextNum(s), result = last;
         while (p < s.length()) {
@@ -86,5 +130,11 @@ public class No227BasicCalculatorII {
         while (p < s.length() && s.charAt(p) == ' ') p++;
 
         return n;
+    }
+
+    public static void main(String[] args) {
+        No227BasicCalculatorII solution = new No227BasicCalculatorII();
+        int result = solution.calculate2(" 3/2 ");
+        System.out.println("result = " + result);
     }
 }
