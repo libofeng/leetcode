@@ -48,6 +48,7 @@ public class No403FrogJump {
         return dp[dp.length - 1].size() > 0;
     }
 
+    // dp[i][k]: at position i, what steps' of jump is allowed
     public boolean canCross3(int[] stones) {
         final int N = stones.length;
         final boolean[][] dp = new boolean[N][N + 1];
