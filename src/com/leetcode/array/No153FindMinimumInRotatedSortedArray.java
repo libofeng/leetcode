@@ -2,16 +2,15 @@ package com.leetcode.array;
 
 public class No153FindMinimumInRotatedSortedArray {
     public int findMin(int[] nums) {
-        int l = 0, r = nums.length - 1;
-        if (nums[l] < nums[r]) return nums[l];
+        int lo = 0, hi = nums.length - 1;
+        while (lo < hi) {
+            if (nums[lo] < nums[hi]) return nums[lo];
+            int mid = lo + (hi - lo) / 2;
 
-        while (l < r - 1) {
-            int mid = l + (r - l) / 2;
-
-            if (nums[mid] > nums[l]) l = mid;
-            else r = mid;
+            if (nums[mid] < nums[lo]) hi = mid;
+            else lo = mid + 1;
         }
 
-        return Math.min(nums[l], nums[r]);
+        return nums[lo];
     }
 }
