@@ -10,7 +10,7 @@ public class No341FlattenNestedListIterator implements Iterator<Integer> {
     private Deque<NestedInteger> dq = new LinkedList<>();
 
     public No341FlattenNestedListIterator(List<NestedInteger> nestedList) {
-        for (NestedInteger ni : nestedList) dq.offer(ni);
+        dq.addAll(nestedList);
     }
 
     private void flatten() {

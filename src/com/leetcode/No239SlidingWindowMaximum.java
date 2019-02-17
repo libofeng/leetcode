@@ -25,6 +25,10 @@ public class No239SlidingWindowMaximum {
         return R;
     }
 
+    // similar to the solution 1:
+    // use a deque(in order to manipulate the 2 ends) to maintain at most k elements' index in the queue
+    // before offering a number index, if the numbers in the queue are smaller, remove them.
+
     public int[] maxSlidingWindow2(int[] nums, int k) {
         if (k == 0 || nums.length < k) return new int[0];
 
