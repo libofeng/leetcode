@@ -11,61 +11,59 @@ public class No787CheapestFlightsWithinKStops {
     // http://www.cnblogs.com/grandyang/p/9109981.html
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
         if (src == dst) return 0;
-        List<List<int[]>> graph = new ArrayList<>();
+        final List<List<int[]>> graph = new ArrayList<>();
         for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
-        for (int[] flight : flights) {
-            graph.get(flight[0]).add(new int[]{flight[1], flight[2]});
-        }
-
+        for (int[] flight : flights) graph.get(flight[0]).add(new int[]{flight[1], flight[2]});
         if (graph.get(src).isEmpty()) return -1;
-        Queue<int[]> q = new LinkedList<>();
+
+        final Queue<int[]> q = new LinkedList<>();
         q.offer(new int[]{src, 0});
 
-        int minPrice = Integer.MAX_VALUE;
+        int minCost = Integer.MAX_VALUE;
         while (!q.isEmpty() && K-- >= 0) {
             int size = q.size();
             while (size-- > 0) {
                 int[] stop = q.poll();
-                for (int[] flight : graph.get(stop[0])) {
-                    int nextPrice = stop[1] + flight[1];
-                    if (nextPrice >= minPrice) continue;
+                int city = stop[0], cost = stop[1];
 
-                    if (flight[0] == dst) minPrice = nextPrice;
-                    else q.offer(new int[]{flight[0], nextPrice});
+                for (int[] next : graph.get(city)) {
+                    int nextCity = next[0], price = next[1], nextCost = cost + price;
+                    if (nextCost >= minCost) continue;
+
+                    if (dst == nextCity) minCost = nextCost;
+                    else q.offer(new int[]{nextCity, nextCost});
                 }
             }
         }
-
-        return minPrice == Integer.MAX_VALUE ? -1 : minPrice;
-    }
-
-    public int findCheapestPrice2(int n, int[][] flights, int src, int dst, int K) {
-        if (src == dst) return 0;
-        final Map<Integer, List<int[]>> graph = new HashMap<>();
-        for (int i = 0; i < n; i++) graph.put(i, new ArrayList<>());
-        for (int[] f : flights) graph.get(f[0]).add(new int[]{f[1], f[2]});
-
-        final Stack<int[]> stack = new Stack<>();
-        stack.push(new int[]{src, 0, 0});
-        final boolean[] visiting = new boolean[n];
-
-        dfs(graph, visiting, dst, src, 0, K);
 
         return minCost == Integer.MAX_VALUE ? -1 : minCost;
     }
 
     private int minCost = Integer.MAX_VALUE;
 
-    private void dfs(Map<Integer, List<int[]>> graph, boolean[] visting, int dst, int city, int cost, int k) {
-        if (visting[city] || cost >= minCost || k < 0) return;
+    public int findCheapestPrice2(int n, int[][] flights, int src, int dst, int K) {
+        if (src == dst) return 0;
+        final List<List<int[]>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
+        for (int[] flight : flights) graph.get(flight[0]).add(new int[]{flight[1], flight[2]});
+        if (graph.get(src).isEmpty()) return -1;
 
-        visting[city] = true;
-        for (int[] next : graph.get(city)) {
-            int nextCity = next[0], nextCost = cost + next[1];
+        dfs(graph, src, 0, dst, K, new boolean[n]);
+
+        return minCost == Integer.MAX_VALUE ? -1 : minCost;
+    }
+
+    private void dfs(List<List<int[]>> graph, int city, int cost, int dst, int k, boolean[] visiting) {
+        if (k < 0 || visiting[city] || cost >= minCost) return;
+
+        visiting[city] = true;
+        for (int[] flight : graph.get(city)) {
+            int nextCity = flight[0], nextCost = cost + flight[1];
+
             if (dst == nextCity) minCost = Math.min(minCost, nextCost);
-            else dfs(graph, visting, dst, nextCity, nextCost, k - 1);
+            else dfs(graph, nextCity, nextCost, dst, k - 1, visiting);
         }
-        visting[city] = false;
+        visiting[city] = false;
     }
 
     public int findCheapestPrice3(int n, int[][] flights, int src, int dst, int K) {
