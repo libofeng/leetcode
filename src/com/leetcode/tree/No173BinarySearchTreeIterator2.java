@@ -7,33 +7,7 @@ public class No173BinarySearchTreeIterator2 {
         this.root = root;
 
         next = root;
-        while (next != null && next.left != null) next = next.left;
-    }
-
-    /**
-     * @return whether we have a next smallest number
-     */
-    public boolean hasNext() {
-        return next != null;
-    }
-
-    private TreeNode successor(TreeNode p) {
-        TreeNode successor = null, current = root;
-        while (current != null) {
-            if (p.val == current.val) break;
-            if (p.val < current.val) {
-                successor = current;
-                current = current.left;
-            } else current = current.right;
-        }
-
-        if (current == null) return null;
-        if (current.right == null) return successor;
-
-        current = current.right;
-        while (current.left != null) current = current.left;
-
-        return current;
+        if (next != null) while (next.left != null) next = next.left;
     }
 
     /**
@@ -42,10 +16,35 @@ public class No173BinarySearchTreeIterator2 {
     public int next() {
         if (!hasNext()) return -1;
 
-        int val = next.val;
-        next = successor(next);
+        TreeNode node = next;
+        next = successor();
+        return node.val;
+    }
 
-        return val;
+    private TreeNode successor() {
+        TreeNode current = root, node = next, successor = null;
+        if (node.right != null) {
+            node = node.right;
+            while (node.left != null) node = node.left;
+            return node;
+        }
+
+        while (current != null) {
+            if (node.val == current.val) break;
+            if (node.val < current.val) {
+                successor = current;
+                current = current.left;
+            } else current = current.right;
+        }
+
+        return current == null ? null : successor;
+    }
+
+    /**
+     * @return whether we have a next smallest number
+     */
+    public boolean hasNext() {
+        return next != null;
     }
 }
 
