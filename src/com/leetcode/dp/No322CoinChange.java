@@ -1,6 +1,9 @@
 package com.leetcode.dp;
 
 public class No322CoinChange {
+    // can not use greedy algorithm: coins:[1,3,4], amount:6
+    // greedy: 4, 1, 1
+    // correct: 3,
     public int coinChange(int[] coins, int amount) {
         int m = amount, n = coins.length;
         int[][] dp = new int[m + 1][n + 1];
