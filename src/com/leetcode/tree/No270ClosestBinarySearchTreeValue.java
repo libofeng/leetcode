@@ -1,15 +1,41 @@
 package com.leetcode.tree;
 
 public class No270ClosestBinarySearchTreeValue {
+
     public int closestValue(TreeNode root, double target) {
-        return helper(root, target, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        TreeNode lowerNode = lower(root, target), higherNode = higher(root, target);
+        if (lowerNode == null) return higherNode.val;
+        if (higherNode == null) return lowerNode.val;
+        return target - lowerNode.val < higherNode.val - target ? lowerNode.val : higherNode.val;
     }
 
-    private int helper(TreeNode root, double target, int min, int max) {
-        if (root == null) return Math.abs(min - target) < Math.abs(max - target) ? min : max;
-        if (root.val == target) return root.val;
+    private TreeNode lower(TreeNode root, double target) {
+        if (root == null || root.val == target) return root;
+        if (target < root.val) return lower(root.left, target);
+        TreeNode lowerNode = lower(root.right, target);
+        return lowerNode == null ? root : lowerNode;
+    }
 
-        return target < root.val ? helper(root.left, target, min, root.val) : helper(root.left, target, root.val, max);
+
+    private TreeNode higher(TreeNode root, double target) {
+        if (root == null || root.val == target) return root;
+        if (target > root.val) return higher(root.right, target);
+        TreeNode higherNode = higher(root.left, target);
+        return higherNode == null ? root : higherNode;
+    }
+
+    // https://www.cnblogs.com/grandyang/p/5237170.html
+    public int closestValue2(TreeNode root, double target) {
+        return helper(root, target).val;
+    }
+
+    private TreeNode helper(TreeNode root, double target) {
+        if (root == null || root.val == target) return root;
+        TreeNode a = root, t = target < a.val ? root.left : root.right;
+        if (t == null) return root;
+        TreeNode b = helper(t, target);
+
+        return Math.abs(a.val - target) < Math.abs(b.val - target) ? a : b;
     }
 
 
