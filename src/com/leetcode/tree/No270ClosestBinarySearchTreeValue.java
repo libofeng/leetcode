@@ -38,6 +38,25 @@ public class No270ClosestBinarySearchTreeValue {
         return Math.abs(a.val - target) < Math.abs(b.val - target) ? a : b;
     }
 
+    public int closestValue3(TreeNode root, double target) {
+        double diff = Double.MAX_VALUE;
+        int val = root.val;
+
+        while (root != null) {
+            if (diff > Math.abs(root.val - target)) {
+                val = root.val;
+                diff = Math.abs(root.val - target);
+            }
+            if (root.val > target) {
+                root = root.left;
+            } else {
+                root = root.right;
+            }
+        }
+
+        return val;
+    }
+
 
     public static void main(String[] args) {
         TreeNode root = new TreeNode(5);
