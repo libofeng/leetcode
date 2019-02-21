@@ -1,6 +1,6 @@
 package com.leetcode.math;
 
-public class No722BasicCalculatorIII {
+public class No772BasicCalculatorIII {
     private int p = 0;
 
     public int calculate(String s) {
