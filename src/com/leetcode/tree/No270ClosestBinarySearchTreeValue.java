@@ -26,32 +26,45 @@ public class No270ClosestBinarySearchTreeValue {
 
     // https://www.cnblogs.com/grandyang/p/5237170.html
     public int closestValue2(TreeNode root, double target) {
-        return helper(root, target).val;
+        return dfs(root, target).val;
     }
 
-    private TreeNode helper(TreeNode root, double target) {
+    private TreeNode dfs(TreeNode root, double target) {
         if (root == null || root.val == target) return root;
-        TreeNode a = root, t = target < a.val ? root.left : root.right;
-        if (t == null) return root;
-        TreeNode b = helper(t, target);
 
-        return Math.abs(a.val - target) < Math.abs(b.val - target) ? a : b;
+        TreeNode next = target < root.val ? root.left : root.right;
+        if (next == null) return root;
+
+        next = dfs(next, target);
+        return Math.abs(root.val - target) < Math.abs(next.val - target) ? root : next;
     }
 
     public int closestValue3(TreeNode root, double target) {
+        if (target == root.val) return root.val;
+
+        int a = root.val;
+        TreeNode next = target < root.val ? root.left : root.right;
+        if (next == null) return a;
+
+        int b = closestValue3(next, target);
+        return Math.abs(target - a) < Math.abs(target - b) ? a : b;
+    }
+
+    public int closestValue4(TreeNode root, double target) {
         double diff = Double.MAX_VALUE;
         int val = root.val;
 
-        while (root != null) {
-            if (diff > Math.abs(root.val - target)) {
-                val = root.val;
-                diff = Math.abs(root.val - target);
+        TreeNode current = root;
+        while (current != null) {
+            if (target == current.val) return current.val;
+
+            if (Math.abs(current.val - target) < diff) {
+                diff = Math.abs(current.val - target);
+                val = current.val;
             }
-            if (root.val > target) {
-                root = root.left;
-            } else {
-                root = root.right;
-            }
+
+            if (target < current.val) current = current.left;
+            else current = current.right;
         }
 
         return val;
