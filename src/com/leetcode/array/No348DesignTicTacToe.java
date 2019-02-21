@@ -3,8 +3,8 @@ package com.leetcode.array;
 public class No348DesignTicTacToe {
     private int[][] rows;
     private int[][] cols;
-    private int[] diag = new int[2];
-    private int[] adiag = new int[2];
+    private int[] diagonal = new int[2];
+    private int[] reverseDiagonal = new int[2];
     private int size;
 
     /**
@@ -28,18 +28,12 @@ public class No348DesignTicTacToe {
      * 2: Player 2 wins.
      */
     public int move(int row, int col, int player) {
-        rows[row][player - 1]++;
-        if (rows[row][player - 1] == size) return player;
-        cols[col][player - 1]++;
-        if (cols[col][player - 1] == size) return player;
-        if (row == col) {
-            diag[player - 1]++;
-            if (diag[player - 1] == size) return player;
-        }
-        if (row + col == size - 1) {
-            adiag[player - 1]++;
-            if (adiag[player - 1] == size) return player;
-        }
+        if (++rows[row][player - 1] == size) return player;
+        if (++cols[col][player - 1] == size) return player;
+
+        if (row == col && ++diagonal[player - 1] == size) return player;
+        if (row + col == size - 1 && reverseDiagonal[player - 1] == size) return player;
+
         return 0;
     }
 }
