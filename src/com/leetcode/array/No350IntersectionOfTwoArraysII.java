@@ -40,4 +40,45 @@ public class No350IntersectionOfTwoArraysII {
 
         return result;
     }
+
+    public int[] intersect3(int[] nums1, int[] nums2) {
+        if (nums1.length > nums2.length) return intersect3(nums2, nums1);
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+
+        final List<Integer> list = new ArrayList<>();
+        int lastIndex = -1;
+        for (int i = 0; i < nums1.length; i++) {
+            int n = nums1[i];
+            int index = i > 0 && n == nums1[i - 1] ? findIndex(nums2, n, lastIndex + 1) : findIndex(nums2, n, 0);
+            if (index >= 0) {
+                list.add(n);
+                lastIndex = index;
+            }
+        }
+
+        final int[] result = new int[list.size()];
+        int index = 0;
+        for (int n : list) result[index++] = n;
+        return result;
+    }
+
+    private int findIndex(int[] nums, int target, int start) {
+        int lo = start, hi = nums.length - 1;
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+            if (target <= nums[mid]) hi = mid;
+            else lo = mid + 1;
+        }
+
+        return lo >= start && lo < nums.length && nums[lo] == target ? lo : -1;
+    }
+
+    public static void main(String[] args) {
+        int[] nums1 = new int[]{43, 85, 49, 2, 83, 2, 39, 99, 15, 70, 39, 27, 71, 3, 88, 5, 19, 5, 68, 34, 7, 41, 84, 2, 13, 85, 12, 54, 7, 9, 13, 19, 92};
+        int[] nums2 = new int[]{10, 8, 53, 63, 58, 83, 26, 10, 58, 3, 61, 56, 55, 38, 81, 29, 69, 55, 86, 23, 91, 44, 9, 98, 41, 48, 41, 16, 42, 72, 6, 4, 2, 81, 42, 84, 4, 13};
+        No350IntersectionOfTwoArraysII solution = new No350IntersectionOfTwoArraysII();
+        int[] result = solution.intersect3(nums1, nums2);
+        System.out.println("result = " + result);
+    }
 }
