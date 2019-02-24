@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class MergeKArrayIterator {
-    class Pair {
+    class ListPointer {
         public int[] array;
         public int index;
 
-        public Pair(int[] array, int index) {
+        public ListPointer(int[] array, int index) {
             this.array = array;
             this.index = index;
         }
     }
 
-    private PriorityQueue<Pair> pq;
+    private PriorityQueue<ListPointer> pq;
 
     public MergeKArrayIterator(ArrayList<int[]> arraylists) {
         pq = new PriorityQueue<>((a, b) -> a.array[a.index] - b.array[b.index]);
-        for (int[] list : arraylists) pq.offer(new Pair(list, 0));
+        for (int[] list : arraylists) if (list.length > 0) pq.offer(new ListPointer(list, 0));
     }
 
     public boolean hasNext() {
@@ -28,7 +28,7 @@ public class MergeKArrayIterator {
     public Integer next() {
         if (!hasNext()) return null;
 
-        Pair pair = pq.poll();
+        ListPointer pair = pq.poll();
         if (++pair.index < pair.array.length) pq.offer(pair);
         return pair.array[pair.index - 1];
     }
