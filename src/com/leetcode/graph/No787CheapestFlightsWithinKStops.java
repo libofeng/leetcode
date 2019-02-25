@@ -54,13 +54,14 @@ public class No787CheapestFlightsWithinKStops {
     }
 
     private void dfs(List<List<int[]>> graph, int city, int cost, int dst, int k, boolean[] visiting) {
-        if (k < 0 || visiting[city] || cost >= minCost) return;
+        if (k < 0 || visiting[city]) return;
 
         visiting[city] = true;
-        for (int[] flight : graph.get(city)) {
-            int nextCity = flight[0], nextCost = cost + flight[1];
+        for (int[] f : graph.get(city)) {
+            int nextCity = f[0], nextCost = cost + f[1];
+            if (nextCost >= minCost) continue;
 
-            if (dst == nextCity) minCost = Math.min(minCost, nextCost);
+            if (dst == nextCity) minCost = nextCost;
             else dfs(graph, nextCity, nextCost, dst, k - 1, visiting);
         }
         visiting[city] = false;
