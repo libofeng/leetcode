@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class SolutionEngineerPhoneInterview {
+public class KClosestShop {
 
     class ShopDistance {
         int id, x, y;
@@ -55,7 +55,7 @@ public class SolutionEngineerPhoneInterview {
     }
 
     public static void main(String[] args) {
-        SolutionEngineerPhoneInterview solution = new SolutionEngineerPhoneInterview();
+        KClosestShop solution = new KClosestShop();
         List<Integer> list = solution.findKClosestShops(new int[][]{{1, 1}, {1, 2}, {7, 8}, {4, 5}}, new int[]{0, 0}, 3);
         System.out.println("list = " + list);
     }
