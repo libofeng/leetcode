@@ -8,17 +8,16 @@ public class MergeKArrayIterator {
         public int[] array;
         public int index;
 
-        public ListPointer(int[] array, int index) {
+        public ListPointer(int[] array) {
             this.array = array;
-            this.index = index;
         }
     }
 
     private PriorityQueue<ListPointer> pq;
 
     public MergeKArrayIterator(ArrayList<int[]> arraylists) {
-        pq = new PriorityQueue<>((a, b) -> a.array[a.index] - b.array[b.index]);
-        for (int[] list : arraylists) if (list.length > 0) pq.offer(new ListPointer(list, 0));
+        pq = new PriorityQueue<>();
+        for (int[] list : arraylists) if (list.length > 0) pq.offer(new ListPointer(list));
     }
 
     public boolean hasNext() {
@@ -28,8 +27,9 @@ public class MergeKArrayIterator {
     public Integer next() {
         if (!hasNext()) return null;
 
-        ListPointer pair = pq.poll();
-        if (++pair.index < pair.array.length) pq.offer(pair);
-        return pair.array[pair.index - 1];
+        ListPointer pointer = pq.poll();
+        int val = pointer.array[pointer.index++];
+        if(pointer.index<pointer.array.length) pq.offer(pointer);
+        return val;
     }
 }
