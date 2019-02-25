@@ -5,20 +5,21 @@ import java.util.Stack;
 
 public class OutputValidParentheses {
     public String outputValidParentheses(String s) {
-        final LinkedList<Integer> validIndex = new LinkedList<>();
-        final Stack<Integer> stack = new Stack<>();
+        final Stack<Character> stack = new Stack<>();
+        final LinkedList<Character> list = new LinkedList<>();
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (Character.isLetterOrDigit(c)) validIndex.addLast(i);
-            else if (c == '(') stack.push(i);
-            else if (!stack.isEmpty()) {
-                validIndex.addFirst(stack.pop());
-                validIndex.addLast(i);
-            }
+            if (c == '(') stack.push(c);
+            else if (c == ')') {
+                if (!stack.isEmpty()) {
+                    list.addFirst(stack.pop());
+                    list.addLast(c);
+                }
+            } else list.addLast(c);
         }
 
-        StringBuilder sb = new StringBuilder();
-        for (int i : validIndex) sb.append(s.charAt(i));
+        final StringBuilder sb = new StringBuilder();
+        for (char c : list) sb.append(c);
         return sb.toString();
     }
 
