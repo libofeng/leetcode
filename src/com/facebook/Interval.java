@@ -12,4 +12,10 @@ public class Interval {
     public String toString() {
         return "[" + start + ", " + end + "]";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        Interval that = (Interval) o;
+        return this.start == that.start && this.end == that.end;
+    }
 }
