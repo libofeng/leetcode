@@ -5,6 +5,7 @@ import java.util.List;
 
 public class FindIntersections {
 
+    // No. 986 Interval List Intersections
     public List<Interval> intersection(Interval[] A, Interval[] B) {
         final List<Interval> result = new ArrayList<>();
         final int lenA = A.length, lenB = B.length;
