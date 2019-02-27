@@ -4,82 +4,66 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class No146LRUCache {
-    private int capacity;
-    private Node head;
-    private Node tail;
-    private Map<Integer, Node> map;
+    class Cache {
+        int key, value;
+        Cache prev, next;
 
-    class Node {
-        Node prev, next;
-        int key, val;
-
-        Node(int key, int val) {
-            this.key = key;
-            this.val = val;
+        Cache(int k, int v) {
+            key = k;
+            value = v;
         }
     }
 
+    private Map<Integer, Cache> map = new HashMap<>();
+    private Cache head = new Cache(0, 0), tail = new Cache(0, 0);
+    private int capacity;
+
     public No146LRUCache(int capacity) {
         this.capacity = capacity;
-        map = new HashMap<>();
+
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    private void removeCache(Cache cache) {
+        map.remove(cache.key);
+
+        cache.next.prev = cache.prev;
+        cache.prev.next = cache.next;
+        cache.next = null;
+        cache.prev = null;
+    }
+
+    private void addCache(Cache cache) {
+        while (map.size() >= capacity) removeCache(tail.prev);
+        map.put(cache.key, cache);
+
+        cache.next = head.next;
+        cache.prev = head;
+
+        cache.next.prev = cache;
+        cache.prev.next = cache;
     }
 
     public int get(int key) {
         if (!map.containsKey(key)) return -1;
 
-        Node node = map.get(key);
-        remove(node);
-        setHead(node);
+        Cache cache = map.get(key);
+        removeCache(cache);
+        addCache(cache);
 
-        return node.val;
+        return cache.value;
     }
 
     public void put(int key, int value) {
-        Node node = map.get(key);
-        if (node == null) {
-            node = new Node(key, value);
-            map.put(key, node);
+        Cache cache;
+        if (map.containsKey(key)) {
+            cache = map.get(key);
+            cache.value = value;
 
-            if (map.size() > capacity) {
-                map.remove(tail.key);
-                remove(tail);
-            }
-        } else {
-            node.val = value;
-            remove(node);
-        }
+            removeCache(cache);
+        } else cache = new Cache(key, value);
 
-        setHead(node);
-    }
-
-    private void remove(Node node) {
-        if (node == head && node == tail) {
-            head = null;
-            tail = null;
-        } else if (node == head) {
-            head = node.next;
-            node.next.prev = null;
-        } else if (node == tail) {
-            tail = node.prev;
-            node.prev.next = null;
-            node.prev = null;
-        } else {
-            node.prev.next = node.next;
-            node.next.prev = node.prev;
-        }
-
-        node.next = null;
-        node.prev = null;
-    }
-
-    private void setHead(Node node) {
-        if (tail == null) {
-            tail = node;
-        } else {
-            node.next = head;
-            head.prev = node;
-        }
-
-        head = node;
+        addCache(cache);
     }
 }
