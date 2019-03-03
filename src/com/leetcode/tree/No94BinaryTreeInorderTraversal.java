@@ -38,4 +38,32 @@ public class No94BinaryTreeInorderTraversal {
 
         return R;
     }
+
+    // Morris
+    public List<Integer> inorderTraversal3(TreeNode root) {
+        final List<Integer> result = new LinkedList<>();
+
+        TreeNode current = root;
+        while (current != null) {
+            if (current.left == null) {
+                result.add(current.val);
+                current = current.right;
+            } else {
+                TreeNode rightMost = current.left;
+                while (rightMost.right != null && rightMost.right != current) rightMost = rightMost.right;
+
+                if (rightMost.right == null) {
+                    rightMost.right = current;
+                    current = current.left;
+                } else {
+                    rightMost.right = null;
+                    result.add(current.val);
+
+                    current = current.right;
+                }
+            }
+        }
+
+        return result;
+    }
 }
