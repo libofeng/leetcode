@@ -68,4 +68,19 @@ public class No23MergeKSortedLists {
         // Time:O(KN), Space: O(KN), it can be O(1) if we change it to iteration
         return merge(mergeKLists3(lists1), mergeKLists3(lists2));
     }
+
+    // ------------------------- Divide and Conquer
+    public ListNode mergeKLists4(ListNode[] lists) {
+        return mergeKLists(lists, 0, lists.length - 1);
+    }
+
+    private ListNode mergeKLists(ListNode[] lists, int start, int end) {
+        if (start > end) return null;
+        if (start == end) return lists[start];
+
+        int mid = start + (end - start) / 2;
+        ListNode a = mergeKLists(lists, start, mid), b = mergeKLists(lists, mid + 1, end);
+
+        return merge(a, b);
+    }
 }
