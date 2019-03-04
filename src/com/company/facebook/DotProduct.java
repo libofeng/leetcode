@@ -1,4 +1,4 @@
-package com.facebook;
+package com.company.facebook;
 
 import java.util.Arrays;
 

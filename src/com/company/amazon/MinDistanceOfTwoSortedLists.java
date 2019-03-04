@@ -1,4 +1,4 @@
-package com.amazon;
+package com.company.amazon;
 
 public class MinDistanceOfTwoSortedLists {
     private int findMinDistance(ListNode l1, ListNode l2) {

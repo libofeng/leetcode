@@ -1,4 +1,4 @@
-package com.facebook;
+package com.company.facebook;
 
 public class Interval {
     int start, end;

@@ -1,4 +1,4 @@
-package com.amazon;
+package com.company.amazon;
 
 public class MinDistanceOfTwoSortedArrays {
     private int findMinDistance(int[] a1, int[] a2) {

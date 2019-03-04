@@ -1,4 +1,4 @@
-package com.facebook;
+package com.company.facebook;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;

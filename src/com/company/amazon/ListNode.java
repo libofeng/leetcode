@@ -1,4 +1,4 @@
-package com.amazon;
+package com.company.amazon;
 
 class ListNode {
     int val;

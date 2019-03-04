@@ -1,4 +1,4 @@
-package com.amazon;
+package com.company.amazon;
 
 import com.leetcode.tree.No101SymmetricTree;
 

@@ -1,4 +1,4 @@
-package com.facebook;
+package com.company.facebook;
 
 public class ValidateEncryption {
     public boolean validate(String text, String encrypted) {
