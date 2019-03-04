@@ -1,7 +1,18 @@
 package com.leetcode.list;
 
 public class No24SwapNodesInPairs {
+
     public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode first = head, second = head.next;
+        first.next = swapPairs(second.next);
+        second.next = first;
+
+        return second;
+    }
+
+    public ListNode swapPairs2(ListNode head) {
         if (head == null || head.next == null) return head;
 
         ListNode dummy = new ListNode(0), p = dummy;
