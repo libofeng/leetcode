@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class No244ShortestWordDistance {
+public class No244ShortestWordDistanceII {
     // https://www.cnblogs.com/lightwindy/p/9736294.html
     // https://www.cnblogs.com/immiao0319/p/9374874.html
 
     private Map<String, List<Integer>> indexList = new HashMap<>();
 
     // Space complexity: O(N)
-    public No244ShortestWordDistance(String[] words) {
+    public No244ShortestWordDistanceII(String[] words) {
         for (int i = 0; i < words.length; i++) {
             String w = words[i];
             indexList.putIfAbsent(w, new ArrayList<>());
@@ -39,7 +39,7 @@ public class No244ShortestWordDistance {
 
     public static void main(String[] args) {
         final String[] words = {"practice", "makes", "perfect", "coding", "makes"};
-        No244ShortestWordDistance solution = new No244ShortestWordDistance(words);
+        No244ShortestWordDistanceII solution = new No244ShortestWordDistanceII(words);
         int d = solution.shortestDistance("coding", "practice");
         System.out.println("passed=" + (d == 3));
 
