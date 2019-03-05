@@ -1,5 +1,7 @@
 package com.company.facebook;
 
-public class OpenTheLock {
-    // todo: TBD
+import com.leetcode.graph.No752OpenTheLock;
+
+public class OpenTheLock extends No752OpenTheLock {
+
 }
