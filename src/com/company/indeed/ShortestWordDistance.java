@@ -1,4 +1,6 @@
 package com.company.indeed;
 
-public class ShortestWordDistance {
+import com.leetcode.array.No243ShortestWordDistance;
+
+public class ShortestWordDistance extends No243ShortestWordDistance {
 }
