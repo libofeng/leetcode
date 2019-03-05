@@ -18,15 +18,8 @@ public class FindIntersections {
             if (A[i].end < B[j].end) i++;
             else if (A[i].end > B[j].end) j++;
             else {
-                if (i == lenA - 1 || j == lenB - 1) {
-                    if (i == lenA - 1) j++;
-                    else i++;
-                } else if (A[i + 1].start < B[j + 1].start) i++;
-                else if (A[i + 1].start > B[j + 1].start) j++;
-                else {
-                    i++;
-                    j++;
-                }
+                i++;
+                j++;
             }
         }
 
