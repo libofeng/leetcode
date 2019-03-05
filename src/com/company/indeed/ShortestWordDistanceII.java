@@ -1,5 +1,9 @@
 package com.company.indeed;
 
-public class ShortestWordDistanceII {
-    // todo: TBD
+import com.leetcode.array.No244ShortestWordDistance;
+
+public class ShortestWordDistanceII extends No244ShortestWordDistance {
+    public ShortestWordDistanceII(String[] words) {
+        super(words);
+    }
 }
