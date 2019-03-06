@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 public class No212WordSearchII {
+    // Very important, read this article.
+    // https://leetcode.com/problems/word-search-ii/discuss/59780/Java-15ms-Easiest-Solution-(100.00)
     public List<String> findWords(char[][] board, String[] words) {
         final Set<String> R = new HashSet<>();
         final int m = board.length, n = board[0].length;
