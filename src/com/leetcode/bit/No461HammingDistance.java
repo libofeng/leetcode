@@ -18,4 +18,10 @@ public class No461HammingDistance {
         for (int i = 0; i < 32; i++) distance += ((n >> i) & 1);
         return distance;
     }
+
+    public int hammingDistance4(int x, int y) {
+        int d = 0;
+        for(int i = 0;i<32;i++) d += ((x>>i) & 1) ^ ((y>>i) & 1);
+        return d;
+    }
 }
