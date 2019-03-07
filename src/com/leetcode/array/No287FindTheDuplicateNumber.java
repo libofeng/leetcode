@@ -28,6 +28,8 @@ public class No287FindTheDuplicateNumber {
     }
 
     // https://leetcode.com/problems/find-the-duplicate-number/discuss/72844/Two-Solutions-(with-explanation)%3A-O(nlog(n))-and-O(n)-time-O(1)-space-without-changing-the-input-array
+    // Pigeonhole Principle
+    // N LogN
     public static int findDuplicate4(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
 
