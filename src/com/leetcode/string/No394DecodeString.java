@@ -1,30 +1,26 @@
 package com.leetcode.string;
 
 public class No394DecodeString {
-    private int p;
+    private int p = 0;
+
     public String decodeString(String s) {
-        StringBuilder sb = new StringBuilder();
+        int num = 0;
+        final StringBuilder sb = new StringBuilder();
+        while (p < s.length()) {
+            char c = s.charAt(p++);
 
-        while(p<s.length()){
-            char c = s.charAt(p);
-
-            if(Character.isDigit(c)) {
-                int n = nextNum(s);
-                p++;
-                String str = decodeString(s);
-                for(int i = 0;i<n;i++) sb.append(str);
-            }else if(c == ']') {
-                p++;
+            if (c == '[') {
+                String decoded = decodeString(s);
+                for (int i = 0; i < num; i++) sb.append(decoded);
+                num = 0;
+            } else if (c == ']') {
                 return sb.toString();
-            }else sb.append(s.charAt(p++));
+            } else if (Character.isDigit(c)) {
+                num = 10 * num + (c - '0');
+            } else sb.append(c);
         }
 
         return sb.toString();
     }
 
-    private int nextNum(String s){
-        int n = 0;
-        while(p<s.length() && Character.isDigit(s.charAt(p))) n = n*10 + (s.charAt(p++) - '0');
-        return n;
-    }
 }
