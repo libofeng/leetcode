@@ -1,47 +1,44 @@
 package com.leetcode.dfs;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 public class No51NQueens {
     public List<List<String>> solveNQueens(int n) {
-        final List<List<String>> R = new LinkedList<>();
-        final int[] C = new int[n];
+        final List<List<String>> result = new ArrayList<>();
+        final int[] queenColumn = new int[n];
 
-        dfs(0, C, R);
+        dfs(n, queenColumn, result, 0);
 
-        return R;
+        return result;
     }
 
-    private void dfs(int row, int[] C, List<List<String>> R) {
-        final int N = C.length;
-        if (row == N) {
-            final List<String> solution = new LinkedList<>();
-
-            for (int i = 0; i < N; i++) {
-                final char[] chars = new char[N];
-                Arrays.fill(chars, '.');
-                for (int j = 0; j < N; j++) if (C[j] == i) chars[j] = 'Q';
-                solution.add(new String(chars));
+    private void dfs(int n, int[] queenColumn, List<List<String>> result, int row) {
+        if (row == n) {
+            List<String> solution = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                char[] line = new char[n];
+                Arrays.fill(line, '.');
+                line[queenColumn[i]] = 'Q';
+                solution.add(new String(line));
             }
+            result.add(solution);
 
-            R.add(solution);
             return;
         }
 
-        for (int j = 0; j < N; j++) {
-            if (!isValid(C, row, j)) continue;
-
-            C[row] = j;
-            dfs(row + 1, C, R);
+        for (int col = 0; col < n; col++) {
+            if (!isValid(n, queenColumn, row, col)) continue;
+            queenColumn[row] = col;
+            dfs(n, queenColumn, result, row + 1);
         }
     }
 
-    private boolean isValid(int[] C, int row, int col) {
+    private boolean isValid(int n, int[] queenColumn, int row, int col) {
         for (int i = 0; i < row; i++) {
-            if (C[i] == col) return false;
-            if (Math.abs(row - i) == Math.abs(col - C[i])) return false;
+            if (queenColumn[i] == col) return false; // the same column
+            if (Math.abs(row - i) == Math.abs(col - queenColumn[i])) return false; // the same diagonal
         }
 
         return true;
