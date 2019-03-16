@@ -3,6 +3,8 @@ package com.company.indeed;
 import java.util.Stack;
 
 public class StackWithMin {
+
+    // similar to No155MinStack
     private static final Stack<Integer> stack = new Stack<>(), min = new Stack<>();
 
     void push(int val) {
