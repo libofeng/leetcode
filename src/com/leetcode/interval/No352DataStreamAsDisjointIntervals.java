@@ -17,6 +17,7 @@ public class No352DataStreamAsDisjointIntervals {
     public void addNum(int val) {
         if (map.containsKey(val)) return;
 
+        // pay attention to the Map.floorKey(val) and Map.ceilingKey(val)
         Integer lo = map.lowerKey(val), hi = map.higherKey(val);
 
         if (lo != null && hi != null && map.get(lo).end + 1 == val && hi == val + 1) {
