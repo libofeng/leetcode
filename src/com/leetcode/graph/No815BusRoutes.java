@@ -6,22 +6,22 @@ import java.util.*;
 
 public class No815BusRoutes {
     public int numBusesToDestination(int[][] routes, int S, int T) {
-        final Map<Integer, List<Integer>> stopBusMap = new HashMap<>();
+        if (S == T) return 0;
 
+        final Map<Integer, List<Integer>> stopBusMap = new HashMap<>();
         for (int i = 0; i < routes.length; i++) {
             for (int stop : routes[i]) {
                 stopBusMap.putIfAbsent(stop, new ArrayList<>());
                 stopBusMap.get(stop).add(i);
             }
         }
-
         if (!stopBusMap.containsKey(S) || !stopBusMap.containsKey(T)) return -1;
 
-        boolean[] visited = new boolean[routes.length];
-        Queue<Integer> q = new LinkedList<>();
+        final Queue<Integer> q = new LinkedList<>();
+        final boolean[] visited = new boolean[routes.length];
         q.offer(S);
 
-        int level = 1;
+        int buses = 1;
         while (!q.isEmpty()) {
             int size = q.size();
             while (size-- > 0) {
@@ -30,20 +30,20 @@ public class No815BusRoutes {
                     if (visited[bus]) continue;
                     visited[bus] = true;
 
-                    for (int s : routes[bus]) {
-                        if (s == T) return level;
-                        q.offer(s);
+                    for (int busStop : routes[bus]) {
+                        if (busStop == T) return buses;
+                        q.offer(busStop);
                     }
                 }
             }
-            level++;
+            buses++;
         }
 
         return -1;
     }
 
     public int numBusesToDestination2(int[][] routes, int S, int T) {
-        if (S==T) return 0;
+        if (S == T) return 0;
         int N = routes.length;
 
         List<List<Integer>> graph = new ArrayList();
@@ -58,7 +58,7 @@ public class No815BusRoutes {
         // Build the graph.  Two buses are connected if
         // they share at least one bus stop.
         for (int i = 0; i < N; ++i)
-            for (int j = i+1; j < N; ++j)
+            for (int j = i + 1; j < N; ++j)
                 if (intersect(routes[i], routes[j])) {
                     graph.get(i).add(j);
                     graph.get(j).add(i);
@@ -80,11 +80,11 @@ public class No815BusRoutes {
         while (!queue.isEmpty()) {
             Point info = queue.poll();
             int node = info.x, depth = info.y;
-            if (targets.contains(node)) return depth+1;
-            for (Integer nei: graph.get(node)) {
+            if (targets.contains(node)) return depth + 1;
+            for (Integer nei : graph.get(node)) {
                 if (!seen.contains(nei)) {
                     seen.add(nei);
-                    queue.offer(new Point(nei, depth+1));
+                    queue.offer(new Point(nei, depth + 1));
                 }
             }
         }
@@ -96,7 +96,8 @@ public class No815BusRoutes {
         int i = 0, j = 0;
         while (i < A.length && j < B.length) {
             if (A[i] == B[j]) return true;
-            if (A[i] < B[j]) i++; else j++;
+            if (A[i] < B[j]) i++;
+            else j++;
         }
         return false;
     }
