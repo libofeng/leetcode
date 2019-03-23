@@ -5,8 +5,7 @@ public class No69SqrtX {
         if (x == 0) return 0;
 
         long i = x;
-        while (i > x / i) i = (i + x / i) / 2;
-
+        while (i - x / i > 0) i = (i + x / i) / 2;
         return (int) i;
     }
 
