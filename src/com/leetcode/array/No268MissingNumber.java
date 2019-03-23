@@ -19,4 +19,30 @@ public class No268MissingNumber {
     public int missingNumber3(int[] nums) {
         return 0;
     }
+
+
+    public int missingNumber4(int[] nums) {
+        final int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            int index = Math.abs(nums[i]);
+            if ((i == 0 && index == 0) || index >= n) continue;
+
+            if (nums[i] == 0) {
+                nums[0] = -nums[0];
+                nums[i] = n;
+            } else if (nums[index] == 0) {
+                nums[0] = -nums[0];
+                nums[index] = -n;
+            } else nums[index] = -Math.abs(nums[index]);
+        }
+
+        for (int i = 0; i < n; i++) if (nums[i] > 0) return i;
+        return n;
+    }
+
+    public static void main(String[] args) {
+        final No268MissingNumber solution = new No268MissingNumber();
+        int n = solution.missingNumber4(new int[]{0});
+        System.out.println("n = " + n);
+    }
 }
