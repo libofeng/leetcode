@@ -43,35 +43,35 @@ public class No350IntersectionOfTwoArraysII {
 
     public int[] intersect3(int[] nums1, int[] nums2) {
         if (nums1.length > nums2.length) return intersect3(nums2, nums1);
+
+        final List<Integer> list = new ArrayList<>();
         Arrays.sort(nums1);
         Arrays.sort(nums2);
 
-        final List<Integer> list = new ArrayList<>();
         int lastIndex = -1;
-        for (int i = 0; i < nums1.length; i++) {
-            int n = nums1[i];
-            int index = i > 0 && n == nums1[i - 1] ? findIndex(nums2, n, lastIndex + 1) : findIndex(nums2, n, 0);
-            if (index >= 0) {
-                list.add(n);
-                lastIndex = index;
-            }
+        // Note: make sure lastIndex is less than the max index.
+        for (int i = 0; i < nums1.length && lastIndex < nums2.length - 1; i++) {
+            int index = findIndex(nums2, lastIndex + 1, nums1[i]);
+            if (index == -1) continue;
+
+            lastIndex = index;
+            list.add(nums1[i]);
         }
 
-        final int[] result = new int[list.size()];
-        int index = 0;
-        for (int n : list) result[index++] = n;
+        int[] result = new int[list.size()];
+        for (int k = 0; k < result.length; k++) result[k] = list.get(k);
         return result;
     }
 
-    private int findIndex(int[] nums, int target, int start) {
+    private int findIndex(int[] nums, int start, int target) {
         int lo = start, hi = nums.length - 1;
         while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
-            if (target <= nums[mid]) hi = mid;
-            else lo = mid + 1;
+            if (target > nums[mid]) lo = mid + 1;
+            else hi = mid;
         }
 
-        return lo >= start && lo < nums.length && nums[lo] == target ? lo : -1;
+        return nums[lo] == target ? lo : -1;
     }
 
     public static void main(String[] args) {
