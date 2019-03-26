@@ -17,4 +17,28 @@ public class No28ImplementStrStr {
 
         return -1;
     }
+
+    // ------------- KMP ---------------
+
+    private int[] next(String pattern) {
+        final int[] next = new int[pattern.length()];
+        for (int i = 1, j = 0; i < next.length; i++) {
+            while (j > 0 && pattern.charAt(i) != pattern.charAt(j)) j = next[j - 1];
+            next[i] = pattern.charAt(i) == pattern.charAt(j) ? ++j : j;
+        }
+
+        return next;
+    }
+
+    public int strStr2(String haystack, String needle) {
+        if (needle.length() == 0) return 0;
+        final int[] next = next(needle);
+
+        for (int i = 0, j = 0; i < haystack.length(); i++) {
+            while (j > 0 && haystack.charAt(i) != needle.charAt(j)) j = next[j - 1];
+            if (haystack.charAt(i) == needle.charAt(j) && ++j == needle.length()) return i + 1 - j;
+        }
+
+        return -1;
+    }
 }
