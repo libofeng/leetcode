@@ -5,24 +5,29 @@ import java.util.List;
 
 public class No113PathSumII {
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
-        final List<List<Integer>> R = new ArrayList<>();
-        helper(root, sum, R, new ArrayList<>());
-
-        return R;
+        final List<List<Integer>> result = new ArrayList<>();
+        preorder(root, result, new ArrayList<>(), sum);
+        return result;
     }
 
-    private void helper(TreeNode root, int sum, List<List<Integer>> R, List<Integer> list) {
+    private void preorder(TreeNode root, List<List<Integer>> result, List<Integer> path, int sum) {
         if (root == null) return;
-        if (root.left == null && root.right == null && root.val == sum) {
-            List<Integer> r = new ArrayList<>(list);
-            r.add(root.val);
-            R.add(r);
+
+        path.add(root.val);
+        sum -= root.val;
+
+        if (root.left == null && root.right == null) {
+            if (sum == 0) {
+                result.add(new ArrayList<>(path));
+            }
+
+            path.remove(path.size() - 1);
             return;
         }
 
-        list.add(root.val);
-        helper(root.left, sum - root.val, R, list);
-        helper(root.right, sum - root.val, R, list);
-        list.remove(list.size() - 1);
+        preorder(root.left, result, path, sum);
+        preorder(root.right, result, path, sum);
+
+        path.remove(path.size() - 1);
     }
 }
