@@ -5,7 +5,7 @@ public class No111MinimumDepthOfBinaryTree {
         if (root == null) return 0;
         int left = minDepth(root.left), right = minDepth(root.right);
 
-        if (left == 0 || right == 0) return (left == 0 ? right : left) + 1;
+        if (left == 0 || right == 0) return left + right + 1;
         return Math.min(left, right) + 1;
     }
 }
