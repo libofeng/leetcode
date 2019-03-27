@@ -13,10 +13,7 @@ public class No329LongestIncreasingPathInAMatrix {
 
         int maxLen = 0;
         for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                int val = matrix[i][j] - 1;
-                maxLen = Math.max(maxLen, dfs(matrix, cache, i, j, val));
-            }
+            for (int j = 0; j < n; j++) maxLen = Math.max(maxLen, dfs(matrix, cache, i, j, matrix[i][j] - 1));
         }
 
         return maxLen;
@@ -28,10 +25,9 @@ public class No329LongestIncreasingPathInAMatrix {
         if (cache[x][y] > 0) return cache[x][y];
 
         val = matrix[x][y];
-        for (int[] dir : dirs) {
-            cache[x][y] = Math.max(cache[x][y], dfs(matrix, cache, x + dir[0], y + dir[1], val));
-        }
-        cache[x][y]++;
+        int len = 0;
+        for (int[] dir : dirs) len = Math.max(len, dfs(matrix, cache, x + dir[0], y + dir[1], val));
+        cache[x][y] = len + 1;
 
         return cache[x][y];
     }
