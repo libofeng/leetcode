@@ -8,44 +8,46 @@ import java.util.Map;
 public class No315CountOfSmallerNumbersAfterSelf {
     class Node {
         Node left, right;
-        int val, totalCount, count;
-        // count: total elements eq val
-        // totalCount: total elements in the left subtree(including duplication)
+        int val, valCount, leftNodeCount;
+        // valCount: total elements eq val
+        // leftNodeCount: total elements in the left subtree(including duplication)
+
 
         Node(int v) {
             val = v;
-            count = 1;
+            valCount = 1;
         }
     }
 
-
+    // Time: Log(N), Space: O(N)
     public List<Integer> countSmaller(int[] nums) {
-        Integer[] result = new Integer[nums.length];
-
+        final Integer[] result = new Integer[nums.length];
         Node root = null;
-        for (int i = nums.length - 1; i >= 0; i--) root = insert(root, nums[i], result, i, 0);
+        for (int i = nums.length - 1; i >= 0; i--) root = insert(root, result, nums[i], i, 0);
+
         return Arrays.asList(result);
     }
 
-    private Node insert(Node node, int val, Integer[] result, int i, int preTotal) {
+    private Node insert(Node node, Integer[] result, int val, int i, int smallerCount) {
         if (node == null) {
             node = new Node(val);
-            result[i] = preTotal;
+            result[i] = smallerCount;
         } else if (node.val == val) {
-            node.count++;
-            result[i] = preTotal + node.totalCount;
+            node.valCount++;
+            result[i] = smallerCount + node.leftNodeCount;
         } else if (node.val > val) {
-            node.totalCount++;
-            node.left = insert(node.left, val, result, i, preTotal);
+            node.leftNodeCount++;
+            node.left = insert(node.left, result, val, i, smallerCount);
         } else {
-            node.right = insert(node.right, val, result, i, preTotal + node.count + node.totalCount);
+            node.right = insert(node.right, result, val, i, smallerCount + node.valCount + node.leftNodeCount);
         }
+
         return node;
     }
 
     // BIT
-
-    public List<Integer> countSmaller3(int[] nums) {
+    // Time: O(N*LogN) Space: O(N)
+    public List<Integer> countSmaller2(int[] nums) {
         final int n = nums.length;
         final Integer[] result = new Integer[nums.length];
         if (nums.length == 0) return Arrays.asList(result);
@@ -63,7 +65,7 @@ public class No315CountOfSmallerNumbersAfterSelf {
         return Arrays.asList(result);
     }
 
-    public List<Integer> countSmaller4(int[] nums) {
+    public List<Integer> countSmaller3(int[] nums) {
         final Integer[] result = new Integer[nums.length];
         final int[] BIT = new int[nums.length + 1];
         final Map<Integer, Integer> map = new HashMap<>();
