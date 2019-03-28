@@ -6,23 +6,23 @@ import java.util.List;
 
 public class No118PascalsTriangle {
     public List<List<Integer>> generate(int numRows) {
-        List<List<Integer>> triangle = new ArrayList<>();
-        if (numRows == 0) return triangle;
+        final List<List<Integer>> result = new ArrayList<>();
 
-        triangle.add(Arrays.asList(1));
-        for (int i = 1; i < numRows; i++) {
-            List<Integer> prevRow = triangle.get(i - 1), row = new ArrayList<>();
-            for (int j = 0; j <= i; j++) {
-                int val = getPrevValue(prevRow, j - 1) + getPrevValue(prevRow, j);
-                row.add(val);
-            }
-            triangle.add(row);
+        for (int i = 0; i < numRows; i++) {
+            List<Integer> row = new ArrayList<>();
+            for (int j = 0; j <= i; j++) row.add(getCell(result, i, j));
+            result.add(row);
         }
 
-        return triangle;
+        return result;
     }
 
-    private int getPrevValue(List<Integer> row, int i) {
-        return i < 0 || i >= row.size() ? 0 : row.get(i);
+    private int getCell(List<List<Integer>> triangle, int row, int col) {
+        if (row == 0) return 1;
+        List<Integer> prev = triangle.get(row - 1);
+        if (col - 1 < 0) return prev.get(col);
+        if (col >= prev.size()) return prev.get(col - 1);
+
+        return prev.get(col - 1) + prev.get(col);
     }
 }
