@@ -3,6 +3,10 @@ package com.leetcode.string;
 import java.util.Stack;
 
 public class No71SimplifyPath {
+    // pay attention to the edge cases:
+    // 1. /a/b/./../../c
+    // 2. /../
+    // 3. /
     public String simplifyPath(String path) {
         String[] paths = path.split("/");
         Stack<String> stack = new Stack<>();
