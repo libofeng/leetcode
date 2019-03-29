@@ -28,4 +28,10 @@ public class No279PerfectSquares {
 
         return dp[n];
     }
+
+    public static void main(String[] args) {
+        No279PerfectSquares solution = new No279PerfectSquares();
+        int num = solution.numSquares(12);
+        System.out.println("num = " + num);
+    }
 }
