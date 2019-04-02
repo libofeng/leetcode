@@ -18,6 +18,7 @@ public class No518CoinChange2 {
     // This is NOT the answer
 
     // permutation: try the solution use all coins for an amount
+    // understand the solution like this: for every amount(i), we care about the coin's order
     public int change2(int amount, int[] coins) {
         if (coins == null || coins.length == 0) return amount == 0 ? 1 : 0;
 
