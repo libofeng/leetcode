@@ -21,6 +21,13 @@ public class No190ReverseBits {
         return num;
     }
 
+    public int reverseBits22(int n) {
+        int num = 0;
+        for (int i = 0; i < 32; i++) num |= ((n >> i) & 1) << (31 - i);
+
+        return num;
+    }
+
     // How to optimize if this function is called multiple times? We can divide an int into 4 bytes, and reverse each byte then combine into an int. For each byte, we can use cache to improve performance.
 
     // cache
