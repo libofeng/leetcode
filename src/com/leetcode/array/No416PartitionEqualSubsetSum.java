@@ -30,6 +30,7 @@ public class No416PartitionEqualSubsetSum {
         sum /= 2;
         boolean[] dp = new boolean[sum + 1];
         dp[0] = true;
+        // pay attention to the order
         for (int n : nums) for (int j = sum; j > 0; j--) if (j >= n) dp[j] = dp[j] || dp[j - n];
 
         return dp[sum];
