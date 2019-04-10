@@ -36,4 +36,33 @@ public class No214ShortestPalindrome {
         while (l < r) if (s.charAt(l++) != s.charAt(r--)) return false;
         return true;
     }
+
+    // O(N^2)
+    // TLE
+    public String shortestPalindrome3(String s) {
+        final int n = s.length();
+        final boolean[][] dp = new boolean[n][n];
+
+        int maxI = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j >= 0; j--) {
+                if (s.charAt(i) == s.charAt(j) && (i - j <= 1 || dp[j + 1][i - 1])) {
+                    dp[j][i] = true;
+                    if (j == 0) maxI = i;
+                }
+            }
+        }
+
+        final StringBuilder sb = new StringBuilder();
+        for (int i = n - 1; i > maxI; i--) sb.append(s.charAt(i));
+        sb.append(s);
+
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        No214ShortestPalindrome solution = new No214ShortestPalindrome();
+        String p = solution.shortestPalindrome3("aacecaaa");
+        System.out.println("p = " + p + ", matched? " + "aaacecaaa".equals(p));
+    }
 }
