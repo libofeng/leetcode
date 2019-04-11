@@ -1,6 +1,6 @@
 package com.leetcode.tree;
 
-public class No307RangeSumQueryMutableTrie {
+public class No307RangeSumQueryMutableSegmentTree {
     class Node {
         int start, end, sum;
         Node left, right;
@@ -13,7 +13,7 @@ public class No307RangeSumQueryMutableTrie {
 
     private Node root;
 
-    public No307RangeSumQueryMutableTrie(int[] nums) {
+    public No307RangeSumQueryMutableSegmentTree(int[] nums) {
         root = build(nums, 0, nums.length - 1);
     }
 
