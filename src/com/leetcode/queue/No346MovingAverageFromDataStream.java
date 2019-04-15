@@ -8,7 +8,7 @@ public class No346MovingAverageFromDataStream {
     Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.
 
     For example,
-    MovingAverage m = new MovingAverage(3);
+    MovingAverage3 m = new MovingAverage3(3);
     m.next(1) = 1
     m.next(10) = (1 + 10) / 2
     m.next(3) = (1 + 10 + 3) / 3
@@ -40,7 +40,7 @@ public class No346MovingAverageFromDataStream {
 }
 
 /**
- * Your MovingAverage object will be instantiated and called as such:
- * MovingAverage obj = new MovingAverage(size);
+ * Your MovingAverage3 object will be instantiated and called as such:
+ * MovingAverage3 obj = new MovingAverage3(size);
  * double param_1 = obj.next(val);
  */
