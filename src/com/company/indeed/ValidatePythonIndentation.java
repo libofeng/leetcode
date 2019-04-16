@@ -20,25 +20,14 @@ public class ValidatePythonIndentation {
             int level = getIndent(line);
             //先检查是不是第一行
             if (stack.isEmpty()) {
-                if (level != 0) {
-                    System.out.println(line);
-                    return false;
-                }
+                if (level != 0) return false;
             }
             //再检查上一行是不是control statement
             else if (stack.peek().charAt(stack.peek().length() - 1) == ':') {
-                if (getIndent(stack.peek()) + 1 != level) {
-                    System.out.println(line);
-                    return false;
-                }
+                if (getIndent(stack.peek()) + 1 != level) return false;
             } else {
-                while (!stack.isEmpty() && getIndent(stack.peek()) > level) {
-                    stack.pop();
-                }
-                if (getIndent(stack.peek()) != level) {
-                    System.out.println(line);
-                    return false;
-                }
+                while (!stack.isEmpty() && getIndent(stack.peek()) > level) stack.pop();
+                if (getIndent(stack.peek()) != level) return false;
             }
             stack.push(line);
         }
@@ -74,30 +63,38 @@ public class ValidatePythonIndentation {
 /*============= Following Code Credit to Zhu Siyao ===============*/
 class ValidatePythonIndentation2 {
     public static boolean valid_python_indentation(List<String> inputs) {
-        Stack<Integer> stack = new Stack<>();
-        for (int i = 0; i < inputs.size(); i++) {
-            String str = inputs.get(i);
-            String abbr = getAbbr(str);
-            int level = str.length() - abbr.length();
+        if (inputs.isEmpty()) return true;
+        int level = getIndent(inputs.get(0));
+        if (level != 0) return false;
 
-            if (i != 0 && inputs.get(i - 1).charAt(inputs.get(i - 1).length() - 1) == ':') {
+        final Stack<Integer> stack = new Stack<>();
+        stack.push(level);
+        for (int i = 1; i < inputs.size(); i++) {
+            if (stack.isEmpty()) return false;
+            String str = inputs.get(i);
+            level = getIndent(str);
+
+            if (isControl(inputs.get(i - 1))) {
                 if (level <= stack.peek()) return false;
             } else {
                 while (!stack.isEmpty() && level < stack.peek()) stack.pop();
                 if (!stack.isEmpty() && level != stack.peek()) return false;
-
             }
+
             stack.push(level);
-            System.out.println(level);
         }
 
         return true;
-
     }
 
-    private static String getAbbr(String str) {
-        String result = str.trim();
-        return result;
+    private static boolean isControl(String str) {
+        return str.charAt(str.length() - 1) == ':';
+    }
+
+    private static int getIndent(String str) {
+        int count = 0, i = 0;
+        while (i < str.length() && str.charAt(i++) == ' ') count++;
+        return count;
     }
 
     public static void main(String[] args) {
