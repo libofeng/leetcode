@@ -10,10 +10,15 @@ public class No137SingleNumberII {
         return nums[nums.length - 1];
     }
 
+    // https://cloud.tencent.com/developer/article/1131945
     public int singleNumber2(int[] nums) {
-        int ones = 0, twos = 0;
-        for (int n : nums) twos = (twos ^ n) & ~(ones = (ones ^ n) & ~twos);
-        return ones;
+        int a = 0, b = 0;
+        for (int n : nums) {
+            b = (b ^ n) & ~a;
+            a = (a ^ n) & ~b;
+        }
+
+        return b;
     }
 
     public int singleNumber3(int[] nums) {
