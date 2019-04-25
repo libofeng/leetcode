@@ -16,6 +16,7 @@ public class No248StrobogrammaticNumberIII {
             if ((w.length() == low.length() && w.compareTo(low) < 0)
                     || (w.length() == high.length() && w.compareTo(high) > 0)) return;
 
+            if (w.length() == 1) total++;
             if (w.length() > 1 && w.charAt(0) != '0') total++;
         }
 
@@ -31,5 +32,9 @@ public class No248StrobogrammaticNumberIII {
         No248StrobogrammaticNumberIII solution = new No248StrobogrammaticNumberIII();
         int total = solution.strobogrammaticInRange("50", "100");
         System.out.println("total = " + total);
+
+        No248StrobogrammaticNumberIII solution2 = new No248StrobogrammaticNumberIII();
+        int total2 = solution2.strobogrammaticInRange("0", "10");
+        System.out.println("total2 = " + total2);
     }
 }
