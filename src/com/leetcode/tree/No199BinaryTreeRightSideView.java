@@ -44,23 +44,18 @@ public class No199BinaryTreeRightSideView {
     }
 
     // ---------------------------
-
-    int maxDepth = -1;
-
     public List<Integer> rightSideView3(TreeNode root) {
-        List<Integer> view = new LinkedList<>();
-        preorder(root, view, 0);
-        return view;
+        final List<Integer> result = new ArrayList<>();
+
+        dfs(root, 0, result);
+        return result;
     }
 
-    private void preorder(TreeNode root, List<Integer> view, int depth) {
+    private void dfs(TreeNode root, int depth, List<Integer> result) {
         if (root == null) return;
-        if (depth > maxDepth) {
-            maxDepth = depth;
-            view.add(root.val);
-        }
+        if (depth == result.size()) result.add(root.val);
 
-        preorder(root.right, view, depth + 1);
-        preorder(root.left, view, depth + 1);
+        dfs(root.right, depth + 1, result);
+        dfs(root.left, depth + 1, result);
     }
 }
