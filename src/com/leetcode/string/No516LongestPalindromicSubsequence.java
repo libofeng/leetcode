@@ -1,19 +1,23 @@
 package com.leetcode.string;
 
 public class No516LongestPalindromicSubsequence {
+    // TLE, even improved to use a memorized solution
     public int longestPalindromeSubseq(String s) {
         final int n = s.length();
         if (n <= 1) return n;
 
         if (s.charAt(0) == s.charAt(n - 1)) {
+            // O(N)
             return 2 + longestPalindromeSubseq(s.substring(1, n - 1));
         }
 
+        // O(2^N)
         int r1 = longestPalindromeSubseq(s.substring(0, n - 1));
         int r2 = longestPalindromeSubseq(s.substring(1));
         return Math.max(r1, r2);
     }
 
+    // O(N^2)
     public int longestPalindromeSubseq2(String s) {
         final int n = s.length();
         if (n <= 1) return n;
