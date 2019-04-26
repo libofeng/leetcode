@@ -23,4 +23,33 @@ public class No640OneEditDistance {
 
         return true;
     }
+
+    // is the same idea as the solution above
+    public boolean isOneEditDistance2(String s, String t) {
+        if (Math.abs(s.length() - t.length()) > 1) return false;
+        if (s.equals(t)) return false;
+
+        if (s.length() == t.length()) {
+            for (int i = 0; i < s.length(); i++) {
+                if (s.charAt(i) != t.charAt(i)) {
+                    return s.substring(i + 1).equals(t.substring(i + 1));
+                }
+            }
+
+            return false;
+        } else {
+            int minLen = Math.min(s.length(), t.length());
+            for (int i = 0; i < minLen; i++) {
+                if (s.charAt(i) != t.charAt(i)) {
+                    if (s.length() < t.length()) {
+                        return s.substring(i).equals(t.substring(i + 1));
+                    } else {
+                        return s.substring(i + 1).equals(t.substring(i));
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
 }
