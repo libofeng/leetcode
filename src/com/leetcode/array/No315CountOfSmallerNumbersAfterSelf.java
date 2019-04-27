@@ -72,11 +72,11 @@ public class No315CountOfSmallerNumbersAfterSelf {
 
         final int[] sorted = nums.clone();
         Arrays.sort(sorted);
-        for (int i = sorted.length - 1; i >= 0; i--) map.put(sorted[i], i);
+        for (int i = sorted.length - 1; i >= 0; i--) map.put(sorted[i], i); // backward, avoid duplication
 
         for (int i = nums.length - 1; i >= 0; i--) {
             int idx = map.get(nums[i]);
-            result[i] = query(BIT, idx);
+            result[i] = query(BIT, idx - 1); // should not include itself
             update(BIT, idx);
         }
 
@@ -101,7 +101,7 @@ public class No315CountOfSmallerNumbersAfterSelf {
 
     private int query(int[] BIT, int index) {
         int count = 0;
-        for (int i = index; i > 0; i -= (i & -i)) count += BIT[i];
+        for (int i = index + 1; i > 0; i -= (i & -i)) count += BIT[i];
 
         return count;
     }
