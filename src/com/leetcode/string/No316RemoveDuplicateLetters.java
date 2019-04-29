@@ -24,6 +24,8 @@ public class No316RemoveDuplicateLetters {
         for (int i = 0; i < s.length(); i++) counter[s.charAt(i) - 'a']++;
         int index = 0;
         for (int i = 0; i < s.length(); i++) {
+            // we should not use "s.charAt(i) <= s.charAt(index)", otherwise we will have the answer in wrong order
+            // eg: abcacb, the wrong result will be acb, it should be abc
             if (s.charAt(i) < s.charAt(index)) index = i;
             if (counter[s.charAt(i) - 'a']-- == 1) break;
         }
