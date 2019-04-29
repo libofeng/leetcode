@@ -33,6 +33,7 @@ public class No316RemoveDuplicateLetters {
         return c + removeDuplicateLetters2(s.substring(index + 1).replaceAll(c + "", ""));
     }
 
+    // maintain a monotonically increasing stack, remove bigger characters(which is not the last one) from stack
     public String removeDuplicateLetters3(String s) {
         if (s.length() <= 1) return s;
 
