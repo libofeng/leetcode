@@ -1,33 +1,29 @@
 package com.leetcode.interval;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 public class No56MergeIntervals {
     public List<Interval> merge(List<Interval> intervals) {
-        if (intervals.isEmpty()) return intervals;
+        if (intervals.size() <= 1) return intervals;
+        intervals.sort((a, b) -> a.start - b.start);
 
-        final Comparator<Interval> comparator = new Comparator<Interval>() {
-            public int compare(Interval a, Interval b) {
-                return a.start - b.start;
-            }
-        };
-        intervals.sort(comparator);
+        final List<Interval> result = new ArrayList<>();
+        final Iterator<Interval> iterator = intervals.iterator();
 
-        List<Interval> list = new ArrayList<>();
-        Interval current = intervals.get(0);
-        for (int i = 1; i < intervals.size(); i++) {
-            Interval interval = intervals.get(i);
+        Interval current = iterator.next();
+        while (iterator.hasNext()) {
+            Interval next = iterator.next();
 
-            if (interval.start <= current.end) current.end = Math.max(current.end, interval.end);
+            if (next.start <= current.end) current.end = Math.max(current.end, next.end);
             else {
-                list.add(current);
-                current = interval;
+                result.add(current);
+                current = next;
             }
         }
-        list.add(current);
+        result.add(current);
 
-        return list;
+        return result;
     }
 }
