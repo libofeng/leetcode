@@ -1,7 +1,6 @@
 package com.leetcode.interval;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class CoverInterval {
@@ -20,9 +19,8 @@ public class CoverInterval {
     int coverInterval(List<Interval> intervals, Interval target) {
         intervals.sort((a, b) -> a.start == b.start ? (b.end - a.end) : (a.start - b.start));
 
-        int maxEnd = target.start, count = 0, i = 0;
+        int maxEnd = target.start, nextMaxEnd = maxEnd, count = 0, i = 0;
         while (i < intervals.size() && maxEnd < target.end) {
-            int nextMaxEnd = 0;
             while (i < intervals.size() && intervals.get(i).start <= maxEnd) {
                 nextMaxEnd = Math.max(nextMaxEnd, intervals.get(i++).end);
             }
