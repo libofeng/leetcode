@@ -44,4 +44,25 @@ public class No986IntervalListIntersections {
 //            list[k] = res.get(k);
 //        }
 //        return list;
+
+    public int[][] intervalIntersection(int[][] A, int[][] B) {
+        final List<int[]> list = new ArrayList<>();
+        int i = 0, j = 0;
+        while (i < A.length && j < B.length) {
+            int[] a = A[i], b = B[j];
+
+            int[] ab = intersection(a, b);
+            if (ab != null) list.add(ab);
+
+            if (a[0] < b[0]) i++;
+            else j++;
+        }
+
+        return list.toArray(new int[list.size()][2]);
+    }
+
+    private int[] intersection(int[] a, int[] b) {
+        if (a[1] < b[0] || a[0] > b[1]) return null;
+        return new int[]{Math.max(a[0], b[0]), Math.min(a[1], b[1])};
+    }
 }
