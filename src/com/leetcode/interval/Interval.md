@@ -32,6 +32,7 @@ public class Interval {
 * `352`	Data Stream as Disjoint Intervals
 * `435`	Non-overlapping Intervals
 * `436`	Find Right Interval
+* `452`	Minimum Number of Arrows to Burst Balloons
 * `616`	Add Bold Tag in String
 * `636`	Exclusive Time of Functions
 * `699`	Falling Squares
@@ -355,7 +356,47 @@ public class SummaryRanges {
 > 时间复杂度：O(NLogN) 空间复杂度：O(N)
 
 
-### 616.Add Bold Tag in String
+### 452. Minimum Number of Arrows to Burst Balloons
+
+> There are a number of spherical balloons spread in two-dimensional space. For each balloon, provided input is the start and end coordinates of the horizontal diameter. Since it's horizontal, y-coordinates don't matter and hence the x-coordinates of start and end of the diameter suffice. Start is always smaller than end. There will be at most 10^4 balloons.
+
+> An arrow can be shot up exactly vertically from different points along the x-axis. A balloon with xstart and xend bursts by an arrow shot at x if xstart ≤ x ≤ xend. There is no limit to the number of arrows that can be shot. An arrow once shot keeps travelling up infinitely. The problem is to find the minimum number of arrows that must be shot to burst all balloons.
+
+这道题属于Interval的交集，因而解题策略是排序+贪心算法。
+
+> 排序 + 贪心算法
+
+```
+    public int findMinArrowShots(int[][] points) {
+        Arrays.sort(points, (a, b) -> a[0] - b[0]);
+        if (points.length <= 1) return points.length;
+
+        int[] intersection = points[0];
+        int count = 1;
+        for (int i = 1; i < points.length; i++) {
+            int[] next = points[i];
+
+            intersection = intersection(intersection, next);
+            if (intersection == null) {
+                count++;
+                intersection = next;
+            }
+        }
+
+        return count;
+    }
+
+    private int[] intersection(int[] a, int[] b) {
+        if (a[1] < b[0] || a[0] > b[1]) return null;
+
+        return new int[]{Math.max(a[0], b[0]), Math.min(a[1], b[1])};
+    }
+```
+
+> 时间复杂度：O(NLogN) 空间复杂度：O(1)
+
+
+### 616. Add Bold Tag in String
 
 > Given a string s and a list of strings dict, you need to add a closed pair of bold tag <b> and </b> to wrap the substrings in s that exist in dict. If two such substrings overlap, you need to wrap them together by only one pair of closed bold tag. Also, if two substrings wrapped by bold tags are consecutive, you need to combine them.
 
