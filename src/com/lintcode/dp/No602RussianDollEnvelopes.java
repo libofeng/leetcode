@@ -9,6 +9,7 @@ public class No602RussianDollEnvelopes {
      * @param envelopes: a number of envelopes with widths and heights
      * @return: the maximum number of envelopes
      */
+    // Time: O(N^2), Space: O(N)
     public int maxEnvelopes(int[][] envelopes) {
         Arrays.sort(envelopes, (A1, A2) -> {
             if (A1[0] == A2[0]) return A1[1] - A2[1];
@@ -34,6 +35,7 @@ public class No602RussianDollEnvelopes {
 
 
     // https://www.cnblogs.com/grandyang/p/5568818.html
+    // similar to LIS but 2D
     public int maxEnvelopes2(int[][] envelopes) {
         Arrays.sort(envelopes, (A1, A2) -> {
             if (A1[0] == A2[0]) return A2[1] - A1[1];
