@@ -41,4 +41,20 @@ public class No314BinaryTreeVerticalOrderTraversal {
         R.addAll(map.values());
         return R;
     }
+
+    // DFS, but this solution NOT pass the test-case, since the elements in every level may not match.
+    public List<List<Integer>> verticalOrder2(TreeNode root) {
+        final Map<Integer, List<Integer>> map = new TreeMap<>();
+        dfs(root, map, 0);
+
+        return new ArrayList<>(map.values());
+    }
+
+    private void dfs(TreeNode root, Map<Integer, List<Integer>> map, int col) {
+        if (root == null) return;
+
+        map.computeIfAbsent(col, k -> new ArrayList<>()).add(root.val);
+        dfs(root.left, map, col - 1);
+        dfs(root.right, map, col + 1);
+    }
 }
