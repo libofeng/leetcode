@@ -1,7 +1,6 @@
 package com.leetcode.tree;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class No545BoundaryOfBinaryTree {
@@ -55,14 +54,12 @@ So order them in anti-clockwise without duplicate nodes we have [1,2,4,7,8,9,10,
         if (root == null) return result;
 
         result.add(root.val);
-        findLeft(root.left, result);
 
+        findLeft(root.left, result);
         findLeaves(root.left, result);
         findLeaves(root.right, result);
 
-        final LinkedList<Integer> right = new LinkedList<>();
-        findRight(root.right, right);
-        result.addAll(right);
+        findRight(root.right, result);
 
         return result;
     }
@@ -72,24 +69,28 @@ So order them in anti-clockwise without duplicate nodes we have [1,2,4,7,8,9,10,
         if (root.left == null && root.right == null) return;
 
         result.add(root.val);
-        if (root.left == null) findLeft(root.right, result);
-        else findLeft(root.left, result);
+        if (root.left != null) findLeft(root.left, result);
+        else findLeft(root.right, result);
     }
 
     private void findLeaves(TreeNode root, List<Integer> result) {
         if (root == null) return;
-        if (root.left == null && root.right == null) result.add(root.val);
+        if (root.left == null && root.right == null) {
+            result.add(root.val);
+            return;
+        }
 
         findLeaves(root.left, result);
         findLeaves(root.right, result);
     }
 
-    private void findRight(TreeNode root, LinkedList<Integer> result) {
+    private void findRight(TreeNode root, List<Integer> result) {
         if (root == null) return;
         if (root.left == null && root.right == null) return;
 
-        result.addFirst(root.val);
-        if (root.right == null) findRight(root.left, result);
-        else findRight(root.right, result);
+
+        if (root.right != null) findRight(root.right, result);
+        else findRight(root.left, result);
+        result.add(root.val);
     }
 }
