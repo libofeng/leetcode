@@ -5,51 +5,42 @@ import java.util.*;
 public class No752OpenTheLock {
     public int openLock(String[] deadends, String target) {
         String start = "0000";
-        final Set<String> deadendSet = new HashSet<>(), visited = new HashSet<>();
-        deadendSet.addAll(Arrays.asList(deadends));
 
         final Queue<String> q = new LinkedList<>();
-        // Note this edge case!!!!
-        if (!deadendSet.contains(start)) {
-            q.offer(start);
-            visited.add(start);
-        }
+        final Set<String> visited = new HashSet<>(Arrays.asList(deadends));
+        if (visited.contains(start)) return -1;
 
-        int turns = 0;
+        q.offer(start);
+        visited.add(start);
+
+        int steps = 0;
         while (!q.isEmpty()) {
             int size = q.size();
             while (size-- > 0) {
                 String state = q.poll();
-                if (state.equals(target)) return turns;
+                if (state.equals(target)) return steps;
 
                 char[] chars = state.toCharArray();
                 for (int i = 0; i < chars.length; i++) {
-                    char c = chars[i];
+                    char oldChar = chars[i];
 
-                    chars[i] = forward(c);
-                    String forward = new String(chars);
-                    if (!deadendSet.contains(forward) && visited.add(forward)) q.offer(forward);
+                    String next;
 
-                    chars[i] = backward(c);
-                    String backward = new String(chars);
-                    if (!deadendSet.contains(backward) && visited.add(backward)) q.offer(backward);
+                    chars[i] = oldChar == '0' ? '9' : (char) (oldChar - 1);
+                    next = new String(chars);
+                    if (visited.add(next)) q.offer(next);
 
-                    chars[i] = c;
+                    chars[i] = oldChar == '9' ? '0' : (char) (oldChar + 1);
+                    next = new String(chars);
+                    if (visited.add(next)) q.offer(next);
+
+                    chars[i] = oldChar;
                 }
             }
-            turns++;
+
+            steps++;
         }
 
         return -1;
-    }
-
-    private char forward(char c) {
-        if (c == '9') return '0';
-        return (char) (c + 1);
-    }
-
-    private char backward(char c) {
-        if (c == '0') return '9';
-        return (char) (c - 1);
     }
 }
