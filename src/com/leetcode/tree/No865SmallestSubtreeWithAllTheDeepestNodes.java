@@ -32,22 +32,24 @@ public class No865SmallestSubtreeWithAllTheDeepestNodes {
     }
 
     // ---------------------------
-    private int maxDepth;
-    private TreeNode p;
+    private TreeNode lca;
+    private int maxDepth = 0;
 
     public TreeNode subtreeWithAllDeepest2(TreeNode root) {
-        if (root == null) return root;
-        depth(root, 0);
-        return p;
+        maxDepth(root, 0);
+
+        return lca;
     }
 
-    // return the deepest depth that the subtree can reach
-    private int depth(TreeNode root, int depth) {
-        if (root == null) return depth;
-        int l = depth(root.left, depth + 1), r = depth(root.right, depth + 1);
+    private int maxDepth(TreeNode root, int d) {
+        if (root == null) {
+            maxDepth = Math.max(maxDepth, d);
+            return d;
+        }
 
-        maxDepth = Math.max(maxDepth, Math.max(l, r));
-        if (l == r && l == maxDepth) p = root;
-        return Math.max(l, r);
+        int left = maxDepth(root.left, d + 1), right = maxDepth(root.right, d + 1);
+        if (left == maxDepth && right == maxDepth) lca = root;
+
+        return Math.max(left, right);
     }
 }
