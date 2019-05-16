@@ -32,7 +32,7 @@ public class BinaryTreeTopView {
         final Map<Integer, Integer> view = new TreeMap<>();
         final Queue<ColumnNode> q = new LinkedList<>();
 
-        if (root != null) q.offer(new ColumnNode(0, root));
+        if (root != null) q.offer(new ColumnNode(root, 0));
         while (!q.isEmpty()) {
             ColumnNode n = q.poll();
             TreeNode node = n.node;
@@ -41,20 +41,10 @@ public class BinaryTreeTopView {
             view.putIfAbsent(col, node.val);
             // view.put(col, node.val); // bottom view
 
-            if (node.left != null) q.offer(new ColumnNode(col - 1, node.left));
-            if (node.right != null) q.offer(new ColumnNode(col + 1, node.right));
+            if (node.left != null) q.offer(new ColumnNode(node.left, col - 1));
+            if (node.right != null) q.offer(new ColumnNode(node.right, col + 1));
         }
 
         return new ArrayList<>(view.values());
-    }
-
-    class ColumnNode {
-        TreeNode node;
-        int col;
-
-        ColumnNode(int col, TreeNode node) {
-            this.col = col;
-            this.node = node;
-        }
     }
 }
