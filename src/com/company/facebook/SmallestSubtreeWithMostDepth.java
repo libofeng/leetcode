@@ -61,16 +61,16 @@ public class SmallestSubtreeWithMostDepth {
         child3.children.add(new MultipleTreeNode(9));
 
         SmallestSubtreeWithMostDepth solution = new SmallestSubtreeWithMostDepth();
-        MultipleTreeNode subRoot = solution.find(root);
+        MultipleTreeNode subRoot = solution.find(root); // expected: 31
 
         System.out.println("subRoot.val = " + subRoot.val);
 
         solution = new SmallestSubtreeWithMostDepth();
-        subRoot = solution.find(null);
+        subRoot = solution.find(null); // expected: null
         System.out.println("subRoot = " + subRoot);
 
         solution = new SmallestSubtreeWithMostDepth();
-        subRoot = solution.find(new MultipleTreeNode(1));
+        subRoot = solution.find(new MultipleTreeNode(1)); // expected: 1
         System.out.println("subRoot.val = " + subRoot.val);
 
     }
