@@ -17,6 +17,7 @@ public class No7SerializeAndDeserializeBinaryTree {
      * designed by yourself, and deserialize it here as you serialize it in
      * "serialize" method.
      */
+    // use pre-order. if we use in-order, we need to treat the tree as a perfect tree.
     public TreeNode deserialize(String data) {
         return buildTree(data.split(","));
     }
