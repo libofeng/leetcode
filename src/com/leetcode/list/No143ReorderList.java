@@ -1,5 +1,8 @@
 package com.leetcode.list;
 
+import java.util.Deque;
+import java.util.LinkedList;
+
 public class No143ReorderList {
     public void reorderList(ListNode head) {
         if (head == null || head.next == null) return;
@@ -36,5 +39,31 @@ public class No143ReorderList {
         next.next = root;
         root.next = null;
         return root;
+    }
+
+
+    public void reorderList2(ListNode head) {
+        final Deque<ListNode> dq = new LinkedList<>();
+        ListNode p = head;
+        while (p != null) {
+            dq.offer(p);
+            p = p.next;
+        }
+
+        ListNode dummyHead = new ListNode(0), prev = dummyHead;
+        while (dq.size() > 1) {
+            prev.next = dq.pollFirst();
+            prev = prev.next;
+            prev.next = dq.pollLast();
+            prev = prev.next;
+        }
+
+        if (!dq.isEmpty()) {
+            prev.next = dq.pollLast();
+            prev = prev.next;
+        }
+
+        // clear the next pointer otherwise there is a circle.
+        prev.next = null;
     }
 }
