@@ -1,5 +1,7 @@
 package com.leetcode.array;
 
+import java.util.Arrays;
+
 public class No238ProductOfArrayExceptSelf {
     // two extra arrays
     public int[] productExceptSelf(int[] nums) {
@@ -22,13 +24,28 @@ public class No238ProductOfArrayExceptSelf {
         final int[] left = new int[nums.length], product = new int[nums.length];
 
         left[0] = 1;
-        for(int i = 1; i<n;i++) left[i] = left[i-1] * nums[i-1];
+        for (int i = 1; i < n; i++) left[i] = left[i - 1] * nums[i - 1];
 
         int right = 1;
-        for(int i = n - 1;i>=0;i--) {
+        for (int i = n - 1; i >= 0; i--) {
             product[i] = left[i] * right;
             right *= nums[i];
         }
         return product;
+    }
+
+    // reuse the result array
+    public int[] productExceptSelf3(int[] nums) {
+        final int[] result = new int[nums.length];
+        Arrays.fill(result, 1);
+        for (int i = 1; i < nums.length; i++) result[i] = result[i - 1] * nums[i - 1];
+
+        int right = 1;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            result[i] *= right;
+            right *= nums[i];
+        }
+
+        return result;
     }
 }
