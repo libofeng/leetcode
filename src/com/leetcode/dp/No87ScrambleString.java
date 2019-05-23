@@ -19,6 +19,7 @@ public class No87ScrambleString {
         return false;
     }
 
+    // https://leetcode.com/problems/scramble-string/discuss/29396/Simple-iterative-DP-Java-solution-with-explanation
     public boolean isScramble2(String s1, String s2) {
         final int n = s1.length();
         final boolean[][][] dp = new boolean[n][n][n + 1];
