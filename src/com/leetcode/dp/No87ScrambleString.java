@@ -1,24 +1,19 @@
 package com.leetcode.dp;
 
-import java.util.Arrays;
-
 public class No87ScrambleString {
     public boolean isScramble(String s1, String s2) {
+        if (s1.length() != s2.length()) return false;
         if (s1.equals(s2)) return true;
-        char[] chars1 = s1.toCharArray(), chars2 = s2.toCharArray();
-        Arrays.sort(chars1);
-        Arrays.sort(chars2);
-        if (!Arrays.equals(chars1, chars2)) return false;
+        final int[] counter = new int[26];
+        for (int i = 0; i < s1.length(); i++) counter[s1.charAt(i) - 'a']++;
+        for (int i = 0; i < s2.length(); i++) if (counter[s2.charAt(i) - 'a']-- == 0) return false;
 
-        final int n = s1.length();
-        for (int i = 1; i < n; i++) {
-            String s11 = s1.substring(0, i), s12 = s1.substring(i, n);
-            String s21 = s2.substring(0, i), s22 = s2.substring(i, n);
+        for (int i = 1; i < s1.length(); i++) {
+            if (isScramble(s1.substring(0, i), s2.substring(0, i))
+                    && isScramble(s1.substring(i), s2.substring(i))) return true;
 
-            if (isScramble(s11, s21) && isScramble(s12, s22)) return true;
-            s21 = s2.substring(n - s11.length(), n);
-            s22 = s2.substring(0, s12.length());
-            if (isScramble(s11, s21) && isScramble(s12, s22)) return true;
+            if (isScramble(s1.substring(0, i), s2.substring(s2.length() - i))
+                    && isScramble(s1.substring(i), s2.substring(0, s2.length() - i))) return true;
         }
 
         return false;
