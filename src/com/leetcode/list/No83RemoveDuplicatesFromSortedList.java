@@ -2,6 +2,20 @@ package com.leetcode.list;
 
 public class No83RemoveDuplicatesFromSortedList {
     public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode prev = head, current = head.next;
+        if (prev.val == current.val) {
+            prev.next = current.next;
+            current.next = null;
+            return deleteDuplicates(head);
+        }
+
+        head.next = deleteDuplicates(head.next);
+        return head;
+    }
+
+    public ListNode deleteDuplicates2(ListNode head) {
         ListNode current = head;
         while (current != null && current.next != null) {
             if (current.next.val == current.val) {
@@ -14,23 +28,21 @@ public class No83RemoveDuplicatesFromSortedList {
         return head;
     }
 
-    public ListNode deleteDuplicates2(ListNode head) {
-        if (head == null || head.next == null) return head;
-        ListNode dummy = new ListNode(head.val - 1);
-        dummy.next = head;
-        helper(dummy, head);
-        return dummy.next;
-    }
 
-    private void helper(ListNode prev, ListNode head) {
-        if (head == null) return;
+    public ListNode deleteDuplicates3(ListNode head) {
+        ListNode dummyHead = new ListNode(0), p = dummyHead;
 
-        if (prev.val == head.val) {
-            prev.next = head.next;
-            helper(prev, prev.next);
-        } else {
-            helper(head, head.next);
+        while (head != null) {
+            ListNode node = head;
+            head = head.next;
+            node.next = null;
+
+            if (p == dummyHead || node.val != p.val) {
+                p.next = node;
+                p = p.next;
+            }
         }
 
+        return dummyHead.next;
     }
 }
