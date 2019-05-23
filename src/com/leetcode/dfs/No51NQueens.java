@@ -1,44 +1,40 @@
 package com.leetcode.dfs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class No51NQueens {
     public List<List<String>> solveNQueens(int n) {
         final List<List<String>> result = new ArrayList<>();
-        final int[] queenColumn = new int[n];
-
-        dfs(n, queenColumn, result, 0);
+        dfs(n, 0, result, new int[n]);
 
         return result;
     }
 
-    private void dfs(int n, int[] queenColumn, List<List<String>> result, int row) {
-        if (row == n) {
-            List<String> solution = new ArrayList<>();
+    private void dfs(int n, int row, List<List<String>> result, int[] queens) {
+        if (n == row) {
+            StringBuilder sb = new StringBuilder(n);
+            final List<String> solution = new ArrayList<>();
             for (int i = 0; i < n; i++) {
-                char[] line = new char[n];
-                Arrays.fill(line, '.');
-                line[queenColumn[i]] = 'Q';
-                solution.add(new String(line));
+                sb.setLength(0);
+                for (int j = 0; j < n; j++) sb.append(j == queens[i] ? 'Q' : '.');
+                solution.add(sb.toString());
             }
             result.add(solution);
-
             return;
         }
 
-        for (int col = 0; col < n; col++) {
-            if (!isValid(n, queenColumn, row, col)) continue;
-            queenColumn[row] = col;
-            dfs(n, queenColumn, result, row + 1);
+        for (int i = 0; i < n; i++) {
+            queens[row] = i;
+            if (isValid(queens, row)) dfs(n, row + 1, result, queens);
         }
     }
 
-    private boolean isValid(int n, int[] queenColumn, int row, int col) {
+    private boolean isValid(int[] queens, int row) {
+        final int n = queens.length, col = queens[row];
         for (int i = 0; i < row; i++) {
-            if (queenColumn[i] == col) return false; // the same column
-            if (Math.abs(row - i) == Math.abs(col - queenColumn[i])) return false; // the same diagonal
+            if (col == queens[i]) return false;
+            if (Math.abs(row - i) == Math.abs(col - queens[i])) return false;
         }
 
         return true;
