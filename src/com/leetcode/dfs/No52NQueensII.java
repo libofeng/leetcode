@@ -3,33 +3,32 @@ package com.leetcode.dfs;
 public class No52NQueensII {
     private int count = 0;
 
+    // Time: O(N!)
     public int totalNQueens(int n) {
-        final int[] C = new int[n];
-
-        dfs(C, 0);
-
+        final int[] queens = new int[n];
+        dfs(queens, 0);
         return count;
     }
 
-    private void dfs(int[] C, int row) {
-        final int N = C.length;
+    private void dfs(int[] queens, int row) {
+        final int N = queens.length;
         if (row == N) {
             count++;
             return;
         }
 
         for (int j = 0; j < N; j++) {
-            if (!isValid(C, row, j)) continue;
+            if (!isValid(queens, row, j)) continue;
 
-            C[row] = j;
-            dfs(C, row + 1);
+            queens[row] = j;
+            dfs(queens, row + 1);
         }
     }
 
-    private boolean isValid(int[] C, int row, int col) {
+    private boolean isValid(int[] queens, int row, int col) {
         for (int i = 0; i < row; i++) {
-            if (C[i] == col) return false;
-            if (Math.abs(row - i) == Math.abs(col - C[i])) return false;
+            if (queens[i] == col) return false;
+            if (Math.abs(row - i) == Math.abs(col - queens[i])) return false;
         }
 
         return true;
