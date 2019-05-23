@@ -1,6 +1,7 @@
 package com.leetcode.dp;
 
 public class No87ScrambleString {
+    // Time: O(4^N) Space: O(N^2)
     public boolean isScramble(String s1, String s2) {
         if (s1.length() != s2.length()) return false;
         if (s1.equals(s2)) return true;
