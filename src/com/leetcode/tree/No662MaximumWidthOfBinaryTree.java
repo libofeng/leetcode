@@ -1,6 +1,8 @@
 package com.leetcode.tree;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class No662MaximumWidthOfBinaryTree {
@@ -34,5 +36,23 @@ public class No662MaximumWidthOfBinaryTree {
         }
 
         return max;
+    }
+
+    public int widthOfBinaryTree2(TreeNode root) {
+        return dfs(root, 0, 1, new ArrayList<>(), new ArrayList<>());
+    }
+
+    private int dfs(TreeNode root, int level, int id, List<Integer> start, List<Integer> end) {
+        if (root == null) return 0;
+        if (level == start.size()) {
+            start.add(id);
+            end.add(id);
+        } else end.set(level, id);
+
+        int current = end.get(level) - start.get(level) + 1;
+        int left = dfs(root.left, level + 1, id * 2, start, end);
+        int right = dfs(root.right, level + 1, id * 2 + 1, start, end);
+
+        return Math.max(current, Math.max(left, right));
     }
 }
