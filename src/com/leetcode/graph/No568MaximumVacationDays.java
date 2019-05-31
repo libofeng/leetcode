@@ -6,8 +6,8 @@ public class No568MaximumVacationDays {
     int maxVacation = 0;
 
 
-    // Time: O(K^N), Space: O(N)
-    // K: weeks, N: cities
+    // Time: O(N^K), Space: O(K)
+   // K: weeks, N: cities
     // TLE
     public int maxVacationDays(int[][] flights, int[][] days) {
         dfs(flights, days, 0, 0, 0);
