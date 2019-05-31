@@ -1,6 +1,8 @@
 package com.leetcode.array;
 
 public class No825FriendsOfAppropriateAges {
+    // Time: O(N^2), Space: O(1)
+    // TLE
     public int numFriendRequests(int[] ages) {
         int total = 0;
         for (int i = 0; i < ages.length; i++) {
@@ -21,6 +23,7 @@ public class No825FriendsOfAppropriateAges {
         return true;
     }
 
+    // Time: O(N), Space: O(1)
     public int numFriendRequests2(int[] ages) {
         final int[] counter = new int[121];
         for (int a : ages) counter[a]++;
