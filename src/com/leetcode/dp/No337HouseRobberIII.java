@@ -6,17 +6,19 @@ public class No337HouseRobberIII {
         return f(root);
     }
 
-    private int f(TreeNode root){
-        if(root == null) return 0;
+    // possible included root
+    private int f(TreeNode root) {
+        if (root == null) return 0;
 
-        int withRoot = root.val + g(root.left) + g(root.right);
+        int possibleWithRoot = root.val + g(root.left) + g(root.right);
         int withoutRoot = f(root.left) + f(root.right);
 
-        return Math.max(withRoot, withoutRoot);
+        return Math.max(possibleWithRoot, withoutRoot);
     }
 
-    private int g(TreeNode root){
-        if(root == null) return 0;
+    // excluded root
+    private int g(TreeNode root) {
+        if (root == null) return 0;
 
         return f(root.left) + f(root.right);
     }
