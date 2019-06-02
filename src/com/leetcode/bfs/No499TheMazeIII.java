@@ -3,82 +3,66 @@ package com.leetcode.bfs;
 import java.util.*;
 
 public class No499TheMazeIII {
-    /**
-     * @param maze: the maze
-     * @param ball: the ball position
-     * @param hole: the hole position
-     * @return: the lexicographically smallest way
-     */
+    private int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    private char[] directions = new char[]{'u', 'd', 'l', 'r'};
+
     public String findShortestWay(int[][] maze, int[] ball, int[] hole) {
-        return bfs(maze, ball, hole);
+        return bfs(maze, new Cell(ball[0], ball[1], 0, ""), hole);
     }
 
-    private int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-    private String[] directions = new String[]{"u", "d", "l", "r"};
+    private String bfs(int[][] maze, Cell src, int[] dst) {
+        final int m = maze.length, n = m == 0 ? 0 : maze[0].length;
+        final Cell[][] cells = new Cell[m][n];
 
-    private String bfs(int[][] maze, int[] start, int[] dst) {
-        final Queue<Stop> q = new LinkedList<>();
-        q.offer(new Stop(start[0], start[1], 0, ""));
-
-        int minSteps = Integer.MAX_VALUE;
-        final Map<Integer, List<String>> paths = new HashMap<>();
+        final Queue<Cell> q = new LinkedList<>();
+        q.offer(src);
 
         while (!q.isEmpty()) {
-            Stop src = q.poll();
-            int x = src.x, y = src.y, steps = src.steps;
+            Cell cell = q.poll();
 
-            if (x == dst[0] && y == dst[1]) {
-                minSteps = Math.min(minSteps, steps);
-                paths.putIfAbsent(steps, new ArrayList<>());
-                paths.get(steps).add(src.path);
-                continue;
-            } else maze[x][y] = 2;
-
-            for (int i = 0; i < dirs.length; i++) {
+            if (cells[cell.x][cell.y] != null && cell.compareTo(cells[cell.x][cell.y]) >= 0) continue;
+            cells[cell.x][cell.y] = cell;
+            if (cell.x == dst[0] && cell.y == dst[1]) continue;
+            for (int i = 0; i < 4; i++) {
+                char d = directions[i];
                 int[] dir = dirs[i];
-                String d = directions[i];
 
-                Stop next = keepGoing(maze, new Stop(x, y, steps, src.path + d), dir, dst);
-                if (next.steps == steps) continue;
-                if (maze[next.x][next.y] == 2) continue;
-
-                q.offer(next);
+                q.offer(keepGoing(maze, cell, dst, dir, d));
             }
         }
 
-        if (minSteps == Integer.MAX_VALUE) return "impossible";
-        List<String> result = paths.get(minSteps);
-        result.sort(String::compareTo);
-
-        return result.get(0);
+        return cells[dst[0]][dst[1]] == null ? "impossible" : cells[dst[0]][dst[1]].path;
     }
 
-    private Stop keepGoing(int[][] maze, Stop start, int[] dir, int[] dst) {
-        final int m = maze.length, n = maze[0].length;
-        final int x = start.x + dir[0], y = start.y + dir[1], steps = start.steps + 1;
+    private Cell keepGoing(int[][] maze, Cell cell, int[] dst, int[] dir, char d) {
+        final int m = maze.length, n = m == 0 ? 0 : maze[0].length;
+        int x = cell.x + dir[0], y = cell.y + dir[1], steps = cell.steps + 1;
 
-        if (x < 0 || y < 0 || x >= m || y >= n || maze[x][y] == 1) return start;
-        if (x == dst[0] && y == dst[1]) return new Stop(x, y, steps, start.path);
+        while (x >= 0 && y >= 0 && x < m && y < n && maze[x][y] != 1) {
+            if (x == dst[0] && y == dst[1]) return new Cell(x, y, steps, cell.path + d);
 
-        return keepGoing(maze, new Stop(x, y, steps, start.path), dir, dst);
+            x += dir[0];
+            y += dir[1];
+            steps++;
+        }
+
+        return new Cell(x - dir[0], y - dir[1], steps - 1, cell.path + d);
     }
 
-    class Stop {
+    class Cell implements Comparable<Cell> {
         int x, y, steps;
         String path;
 
-        Stop(int x, int y, int steps, String path) {
+        Cell(int x, int y, int steps, String path) {
             this.x = x;
             this.y = y;
             this.steps = steps;
             this.path = path;
         }
-    }
 
-    public static void main(String[] args) {
-        int[][] maze = new int[][]{{0, 0, 0, 0, 0}, {1, 1, 0, 0, 1}, {0, 0, 0, 0, 0}, {0, 1, 0, 0, 1}, {0, 1, 0, 0, 0}};
-        No499TheMazeIII solution = new No499TheMazeIII();
-        String path = solution.findShortestWay(maze, new int[]{4, 3}, new int[]{0, 1});
-        System.out.println("path = " + path);
+        public int compareTo(Cell that) {
+            if (this.steps == that.steps) return this.path.compareTo(that.path);
+            return this.steps - that.steps;
+        }
     }
 }
