@@ -7,6 +7,7 @@ import java.util.List;
 public class No329LongestIncreasingPathInAMatrix {
     private int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
+    // Time: O(MN), Space: O(MN)
     public int longestIncreasingPath(int[][] matrix) {
         final int m = matrix.length, n = m == 0 ? 0 : matrix[0].length;
         int[][] cache = new int[m][n];
@@ -33,6 +34,7 @@ public class No329LongestIncreasingPathInAMatrix {
     }
 
     // dp
+    // Time: O(MN*Log(MN)), Space: O(MN)
     public int longestIncreasingPath2(int[][] matrix) {
         final int m = matrix.length, n = m == 0 ? 0 : matrix[0].length;
         final int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
