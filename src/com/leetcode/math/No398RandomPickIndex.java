@@ -4,19 +4,15 @@ import java.util.*;
 
 public class No398RandomPickIndex {
 
-    final Map<Integer, List<Integer>> map = new HashMap<>();
-    final Random rnd = new Random();
+    private Map<Integer, List<Integer>> map = new HashMap<>();
+    private Random rnd = new Random();
 
     public No398RandomPickIndex(int[] nums) {
-        for (int i = 0; i < nums.length; i++) {
-            map.putIfAbsent(nums[i], new ArrayList<>());
-            map.get(nums[i]).add(i);
-        }
+        for (int i = 0; i < nums.length; i++) map.computeIfAbsent(nums[i], k -> new ArrayList<>()).add(i);
     }
 
     public int pick(int target) {
-        List<Integer> indexs = map.get(target);
-        return indexs.get(rnd.nextInt(indexs.size()));
+        final List<Integer> list = map.get(target);
+        return list.get(rnd.nextInt(list.size()));
     }
-
 }
