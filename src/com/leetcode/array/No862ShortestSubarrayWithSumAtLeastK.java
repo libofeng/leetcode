@@ -27,16 +27,15 @@ public class No862ShortestSubarrayWithSumAtLeastK {
         final int[] sums = new int[n + 1];
         for (int i = 1; i <= n; i++) sums[i] = sums[i - 1] + A[i - 1];
 
+        int minLen = Integer.MAX_VALUE;
         final Deque<Integer> dq = new LinkedList<>();
-        int minLen = n + 1;
         for (int i = 0; i <= n; i++) {
-            while (!dq.isEmpty() && sums[i] - sums[dq.peek()] >= K) {
-                minLen = Math.min(minLen, i - dq.poll());
-            }
-            while (!dq.isEmpty() && sums[i] <= sums[dq.peekLast()]) dq.pollLast();
+            int sum = sums[i];
+            while (!dq.isEmpty() && sum - sums[dq.peek()] >= K) minLen = Math.min(minLen, i - dq.poll());
+            while (!dq.isEmpty() && sums[dq.peek()] >= sum) dq.poll();
             dq.offer(i);
         }
 
-        return minLen == n + 1 ? -1 : minLen;
+        return minLen == Integer.MAX_VALUE ? -1 : minLen;
     }
 }
