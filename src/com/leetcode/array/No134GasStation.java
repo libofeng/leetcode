@@ -17,18 +17,18 @@ public class No134GasStation {
     }
 
     public int canCompleteCircuit2(int[] gas, int[] cost) {
-        int totalLeft = 0, sum = 0, index = -1;
+        int totalLeft = 0, left = 0, candidate = 0;
         for (int i = 0; i < gas.length; i++) {
             totalLeft += gas[i] - cost[i];
-            sum += gas[i] - cost[i];
+            left += gas[i] - cost[i];
 
-            if (sum < 0) {
-                sum = 0;
-                index = i;
+            // 局部条件，left<0则表示在[candidate, i]这个区间不可能有合法后选者
+            if (left < 0) {
+                left = 0;
+                candidate = i + 1;
             }
-
         }
 
-        return totalLeft >= 0 ? (index + 1) % gas.length : -1;
+        return totalLeft < 0 ? -1 : candidate;
     }
 }
