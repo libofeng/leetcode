@@ -9,43 +9,41 @@ public class No850RectangleAreaII {
 
     // Time: O(N * NLogN), Space: O(N)
     public int rectangleArea(int[][] rectangles) {
-        final int n = rectangles.length;
-        List<Interval> intervals = new ArrayList<>();
-
-        for (int[] line : rectangles) {
-            intervals.add(new Interval(line[0], line[2], line[1], false));
-            intervals.add(new Interval(line[0], line[2], line[3], true));
+        final List<HorizontalLine> list = new ArrayList<>();
+        for (int[] rect : rectangles) {
+            list.add(new HorizontalLine(rect[0], rect[2], rect[1], false));
+            list.add(new HorizontalLine(rect[0], rect[2], rect[3], true));
         }
-        intervals.sort((a, b) -> a.y - b.y);
+        list.sort((a, b) -> a.y - b.y);
 
         long area = 0;
-        int y = intervals.get(0).y;
-        final List<Interval> actives = new ArrayList<>();
-        for (Interval i : intervals) {
-            int maxX = -1;
+        int y = 0;
+        final List<HorizontalLine> actives = new ArrayList<>();
+        for (HorizontalLine l : list) {
             long totalX = 0;
-            for (Interval active : actives) {
+            int maxX = -1;
+            for (HorizontalLine active : actives) {
                 maxX = Math.max(maxX, active.start);
-                totalX += Math.max(active.end - maxX, 0);
+                totalX += Math.max(0, active.end - maxX);
                 maxX = Math.max(maxX, active.end);
             }
 
-            area = (area + totalX * (i.y - y)) % MOD;
-            y = i.y;
+            area = (area + totalX * (l.y - y)) % MOD;
+            y = l.y;
 
-            if (i.closed) {
-                Iterator<Interval> iterator = actives.iterator();
+            if (l.closed) {
                 // O(N)
+                Iterator<HorizontalLine> iterator = actives.iterator();
                 while (iterator.hasNext()) {
-                    Interval current = iterator.next();
-                    if (current.start == i.start && current.end == i.end) {
+                    HorizontalLine a = iterator.next();
+                    if (l.start == a.start && l.end == a.end) {
                         iterator.remove();
                         break;
                     }
                 }
             } else {
                 // O(NLogN)
-                actives.add(i);
+                actives.add(l);
                 actives.sort((a, b) -> a.start - b.start);
             }
         }
@@ -53,13 +51,13 @@ public class No850RectangleAreaII {
         return (int) area;
     }
 
-    class Interval {
+    class HorizontalLine {
         int start, end, y;
         boolean closed;
 
-        Interval(int s, int e, int y, boolean closed) {
-            this.start = s;
-            this.end = e;
+        HorizontalLine(int start, int end, int y, boolean closed) {
+            this.start = start;
+            this.end = end;
             this.y = y;
             this.closed = closed;
         }
