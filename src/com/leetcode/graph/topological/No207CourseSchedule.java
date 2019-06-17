@@ -1,6 +1,9 @@
 package com.leetcode.graph.topological;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 public class No207CourseSchedule {
     // Kahn's Algorithms, BFS based
@@ -31,34 +34,33 @@ public class No207CourseSchedule {
     // use Adjacency list to optimize Kahn's Algorithms
     // Time Complexity - O(V+E)，Space Complexity - O(VE)
     public boolean canFinish11(int numCourses, int[][] prerequisites) {
-        if (numCourses <= 0) return false;
-        else if (prerequisites == null || prerequisites.length == 0) return true;
-
         final List<List<Integer>> graph = new ArrayList<>();
-        for (int v = 0; v < numCourses; v++) graph.add(new ArrayList<>());
-        for (int[] e : prerequisites) graph.get(e[1]).add(e[0]);
-
         final int[] inDegree = new int[numCourses];
-        for (int[] edge : prerequisites) inDegree[edge[0]]++;
-
-        final Queue<Integer> q = new LinkedList<>();
-        for (int i = 0; i < inDegree.length; i++) if (inDegree[i] == 0) q.offer(i);
-
-        final List<Integer> R = new ArrayList<>();
-        while (!q.isEmpty()) {
-            int source = q.poll();
-            R.add(source);
-            for (int v : graph.get(source)) if (--inDegree[v] == 0) q.offer(v);
+        for (int i = 0; i < numCourses; i++) graph.add(new ArrayList<>());
+        for (int[] d : prerequisites) {
+            graph.get(d[1]).add(d[0]);
+            inDegree[d[0]]++;
         }
 
-        return R.size() == numCourses;
+        final Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) if (inDegree[i] == 0) q.offer(i);
+
+        int total = 0;
+        while (!q.isEmpty()) {
+            int c = q.poll();
+            total++;
+
+            for (int next : graph.get(c)) if (--inDegree[next] == 0) q.offer(next);
+        }
+
+        return total == numCourses;
     }
 
 
     //-----------------------------
 
     // Tarjan's Algorithms - DFS based
-    // Time Complexity - O(VE)，Space Complexity - O(V)
+    // Time Complexity - O(V+E)，Space Complexity - O(V)
     public boolean canFinish2(int numCourses, int[][] prerequisites) {
         if (numCourses <= 0) return false;
         if (prerequisites == null || prerequisites.length == 0) return true;
@@ -84,6 +86,7 @@ public class No207CourseSchedule {
 
     // use Adjacency list to optimize Tarjan's Algorithms
     // Time Complexity - O(V+E)，Space Complexity - O(VE)
+    // https://www.youtube.com/watch?v=QnWDU1wcsPA
     public boolean canFinish22(int numCourses, int[][] prerequisites) {
         if (numCourses <= 0) return false;
         if (prerequisites == null || prerequisites.length == 0) return true;
@@ -92,19 +95,20 @@ public class No207CourseSchedule {
         for (int i = 0; i < numCourses; i++) graph.add(new ArrayList<>());
         for (int[] p : prerequisites) graph.get(p[1]).add(p[0]);
 
-        final boolean[] visited = new boolean[numCourses];
-        final Stack<Integer> stack = new Stack<>();
+        final boolean[] visited = new boolean[numCourses], visiting = new boolean[numCourses];
 
-        for (int v = 0; v < numCourses; v++) if (!dfs(v, graph, visited, stack)) return false;
+        for (int v = 0; v < numCourses; v++) if (!dfs(v, graph, visited, visiting)) return false;
         return true;
     }
 
-    private boolean dfs(int v, List<List<Integer>> graph, boolean[] visited, Stack<Integer> stack) {
-        visited[v] = true;
-        for (int dv : graph.get(v)) if (visited[dv] || !dfs(dv, graph, visited, stack)) return false;
-        visited[v] = false;
+    private boolean dfs(int v, List<List<Integer>> graph, boolean[] visited, boolean[] visiting) {
+        if (visited[v]) return true;
 
-        stack.push(v);
+        visiting[v] = true;
+        for (int dv : graph.get(v)) if (visiting[dv] || !dfs(dv, graph, visited, visiting)) return false;
+        visiting[v] = false;
+        visited[v] = true;
+
         return true;
     }
 }
