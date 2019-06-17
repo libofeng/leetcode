@@ -1,7 +1,5 @@
 package com.leetcode.array;
 
-import java.util.Arrays;
-
 public class No493ReversePairs2 {
     public int reversePairs(int[] nums) {
         Node root = null;

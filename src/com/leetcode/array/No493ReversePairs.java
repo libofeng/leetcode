@@ -25,7 +25,7 @@ public class No493ReversePairs {
     public int reversePairs2(int[] nums) {
         final int n = nums.length;
         final int[] BIT = new int[n + 1];
-        final long[] copy = Arrays.stream(nums).asLongStream().map((i -> 2 * i)).toArray();
+        final long[] copy = Arrays.stream(nums).asLongStream().map(i -> 2 * i).toArray();
 
         Arrays.sort(copy);
 
