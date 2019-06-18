@@ -9,8 +9,8 @@ public class No892SurfaceAreaOf3DShapes {
                 if (grid[i][j] == 0) continue;
 
                 surface += grid[i][j] * 4 + 2;
-                if (i > 0) surface -= Math.min(grid[i - 1][j], grid[i][j]);
-                if (j > 0) surface -= Math.min(grid[i][j - 1], grid[i][j]);
+                if (i > 0) surface -= Math.min(grid[i - 1][j], grid[i][j]) * 2;
+                if (j > 0) surface -= Math.min(grid[i][j - 1], grid[i][j]) * 2;
             }
         }
 
