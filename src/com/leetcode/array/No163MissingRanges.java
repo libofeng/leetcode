@@ -22,23 +22,24 @@ Output: ["2", "4->49", "51->74", "76->99"]
     public List<String> findMissingRanges(int[] nums, int lower, int upper) {
         final List<String> result = new ArrayList<>();
         if (nums == null || nums.length == 0) {
-            result.add(buildRange(lower, upper));
+            result.add(build(lower, upper));
             return result;
         }
 
         final int n = nums.length;
-        if (lower < nums[0]) result.add(buildRange(lower, nums[0] - 1));
-        for (int i = 1; i < n; i++) {
-            if (nums[i] == nums[i - 1]) continue;
-            if (nums[i] != nums[i - 1] + 1) result.add(buildRange(nums[i - 1] + 1, nums[i] - 1));
+        if (lower < nums[0]) result.add(build(lower, nums[0] - 1));
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == nums[i - 1] + 1 || nums[i] == nums[i - 1]) continue;
+            result.add(build(nums[i - 1] + 1, nums[i] - 1));
         }
-        if (upper > nums[n - 1]) result.add(buildRange(nums[n - 1] + 1, upper));
+        if (nums[n - 1] < upper) result.add(build(nums[n - 1] + 1, upper));
 
         return result;
     }
 
-    private String buildRange(int start, int end) {
-        return start == end ? (start + "") : (start + "->" + end);
+    private String build(int start, int end) {
+        if (start == end) return "" + start;
+        return start + "->" + end;
     }
 
     public static void main(String[] args) {
