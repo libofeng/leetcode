@@ -24,4 +24,21 @@ public class No205IsomorphicStrings {
 
         return true;
     }
+
+    // use Array to get better performance.
+    public boolean isIsomorphic2(String s, String t) {
+        if (s.length() != t.length()) return false;
+
+        final char[] st = new char[128], ts = new char[128];
+        for (int i = 0; i < s.length(); i++) {
+            char a = s.charAt(i), b = t.charAt(i);
+            if (st[a] != 0 && st[a] != b) return false;
+            if (ts[b] != 0 && ts[b] != a) return false;
+
+            st[a] = b;
+            ts[b] = a;
+        }
+
+        return true;
+    }
 }
