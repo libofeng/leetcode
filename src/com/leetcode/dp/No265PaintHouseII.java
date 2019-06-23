@@ -50,27 +50,24 @@ Could you solve it in O(nk) runtime?
     // https://www.cnblogs.com/Dylan-Java-NYC/p/5327633.html
     public int minCostII2(int[][] costs) {
         final int n = costs.length, k = n == 0 ? 0 : costs[0].length;
-        if (n == 0) return 0;
 
-        int min1 = 0, min2 = 0, lastColor = -1;
+        int minCost = 0, min2Cost = 0, minIndex = -1;
         for (int i = 0; i < n; i++) {
-            int nextMin1 = Integer.MAX_VALUE, nextMin2 = Integer.MAX_VALUE, nextColor = -1;
-
+            int min = Integer.MAX_VALUE, min2 = min, index = -1;
             for (int j = 0; j < k; j++) {
-                int nextCost = (lastColor == j ? min2 : min1) + costs[i][j];
-                if (nextCost < nextMin1) {
-                    nextMin2 = nextMin1;
-                    nextMin1 = nextCost;
-                    nextColor = j;
-                } else if (nextCost < nextMin2) nextMin2 = nextCost;
-
+                int cost = ((minIndex == j) ? min2Cost : minCost) + costs[i][j];
+                if (cost < min) {
+                    min2 = min;
+                    min = cost;
+                    index = j;
+                } else if (cost < min2) min2 = cost;
             }
 
-            min1 = nextMin1;
-            min2 = nextMin2;
-            lastColor = nextColor;
+            minCost = min;
+            min2Cost = min2;
+            minIndex = index;
         }
 
-        return min1;
+        return minCost;
     }
 }
