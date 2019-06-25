@@ -10,7 +10,6 @@ public class No280WiggleSort {
     }
 
     public void wiggleSort2(int[] nums) {
-        if (nums.length <= 1) return;
         for (int i = 1; i < nums.length; i++) {
             int mod = (i & 1);
             if((mod == 1 && nums[i]<nums[i-1]) || (mod == 0 && nums[i]>nums[i-1])) swap(nums, i-1, i);
