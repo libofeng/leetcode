@@ -45,4 +45,19 @@ public class No311SparseMatrixMultiplication {
 
         return result;
     }
+
+    // optimized solution
+    public int[][] multiply2(int[][] A, int[][] B) {
+        final int m = A.length, t = A[0].length, n = B[0].length;
+        final int[][] result = new int[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int k = 0; k < t; k++) {
+                if (A[i][k] == 0) continue;
+                for (int j = 0; j < n; j++) result[i][j] += A[i][k] * B[k][j];
+            }
+        }
+
+        return result;
+    }
 }
