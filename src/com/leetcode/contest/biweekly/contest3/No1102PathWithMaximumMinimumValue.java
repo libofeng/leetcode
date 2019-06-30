@@ -17,7 +17,7 @@ public class No1102PathWithMaximumMinimumValue {
         while (!pq.isEmpty()) {
             int[] p = pq.poll();
             int val = p[0], i = p[1], j = p[2];
-            score[i][j] = Math.min(val, A[i][j]);
+            score[i][j] = Math.max(score[i][j], val);
 
             for (int[] dir : dirs) {
                 int x = i + dir[0], y = j + dir[1];
