@@ -24,16 +24,19 @@ public class No42TrappingRainWater {
 
     // 2 pointers
     public int trap2(int[] height) {
-        if (height.length <= 2) return 0;
+        int max = 0, left = 0, right = height.length - 1, total = 0;
 
-        int left = 0, right = height.length - 1, water = 0;
-        while (left < right) {
-            int min = Math.min(height[left], height[right]);
-            if (min == height[left]) while (++left < right && height[left] < min) water += min - height[left];
-            else while (left < --right && height[right] < min) water += min - height[right];
+        while (left <= right) {
+            if (height[left] <= height[right]) {
+                max = Math.max(max, height[left]);
+                total += max - height[left++];
+            } else {
+                max = Math.max(max, height[right]);
+                total += max - height[right--];
+            }
         }
 
-        return water;
+        return total;
     }
 
     public int trap3(int[] height) {
