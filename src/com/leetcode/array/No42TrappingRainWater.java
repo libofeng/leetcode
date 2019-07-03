@@ -6,20 +6,17 @@ public class No42TrappingRainWater {
     // https://www.cnblogs.com/grandyang/p/4402392.html
     // DP
     public int trap(int[] height) {
-        if (height.length <= 2) return 0;
+        final int n = height.length;
+        if (n < 3) return 0;
 
-        int[] maxL = new int[height.length], maxR = new int[height.length];
+        final int[] leftMax = new int[n], rightMax = new int[n];
+        for (int i = 1; i < n; i++) leftMax[i] = Math.max(height[i - 1], leftMax[i - 1]);
+        for (int i = n - 2; i >= 0; i--) rightMax[i] = Math.max(height[i + 1], rightMax[i + 1]);
 
-        maxL[0] = height[0];
-        for (int i = 1; i < maxL.length; i++) maxL[i] = height[i] > maxL[i - 1] ? height[i] : maxL[i - 1];
+        int total = 0;
+        for (int i = 1; i < n - 1; i++) total += Math.max(0, Math.min(leftMax[i], rightMax[i]) - height[i]);
 
-        maxR[maxR.length - 1] = height[height.length - 1];
-        for (int j = maxR.length - 2; j >= 0; j--) maxR[j] = height[j] > maxR[j + 1] ? height[j] : maxR[j + 1];
-
-        int water = 0;
-        for (int i = 0; i < height.length; i++) water += Math.min(maxL[i], maxR[i]) - height[i];
-
-        return water;
+        return total;
     }
 
     // 2 pointers
