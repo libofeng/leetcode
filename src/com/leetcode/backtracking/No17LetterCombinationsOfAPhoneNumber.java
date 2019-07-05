@@ -1,9 +1,6 @@
 package com.leetcode.backtracking;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class No17LetterCombinationsOfAPhoneNumber {
     // Time: 4^N, Space: 4^N
@@ -45,5 +42,25 @@ public class No17LetterCombinationsOfAPhoneNumber {
 
         combinations.addAll(q);
         return combinations;
+    }
+
+    // DFS
+    private final String[] buttons = new String[]{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+
+    public List<String> letterCombinations3(String digits) {
+        if (digits.isEmpty()) return new ArrayList<>();
+        return generate(digits, 0);
+    }
+
+    private List<String> generate(String digits, int p) {
+        if (p == digits.length()) return Arrays.asList("");
+
+        List<String> next = generate(digits, p + 1), list = new ArrayList<>();
+        ;
+        for (char c : buttons[digits.charAt(p) - '0'].toCharArray()) {
+            for (String s : next) list.add(c + s);
+        }
+
+        return list;
     }
 }
