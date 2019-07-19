@@ -38,6 +38,7 @@ public class FileSystem {
         if (!isPathValid(path)) return false;
 
         pathMap.put(path, val);
+        triggerWatch(path);
         return true;
     }
 
