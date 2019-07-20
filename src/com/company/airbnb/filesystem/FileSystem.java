@@ -1,4 +1,4 @@
-package com.company.airbnb;
+package com.company.airbnb.filesystem;
 
 import java.util.HashMap;
 import java.util.Map;
