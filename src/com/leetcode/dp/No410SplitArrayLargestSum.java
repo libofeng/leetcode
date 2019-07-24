@@ -23,4 +23,38 @@ public class No410SplitArrayLargestSum {
 
         return dp[m][n];
     }
+
+    public int splitArray2(int[] nums, int m) {
+        long totalSum = 0, maxNum = 0;
+        for (int num : nums) {
+            totalSum += num;
+            maxNum = Math.max(maxNum, num);
+        }
+
+        if (m == 1) return (int) totalSum;
+        return (int) findMinGroup(nums, m, maxNum, totalSum);
+    }
+
+    private long findMinGroup(int[] nums, int m, long lo, long hi) {
+        while (lo < hi) {
+            long mid = lo + (hi - lo) / 2;
+            if (isValid(nums, m, mid)) hi = mid;
+            else lo = mid + 1;
+        }
+
+        return lo;
+    }
+
+    private boolean isValid(int[] nums, int m, long maxSum) {
+        int groups = 1;
+        long sum = 0;
+        for (int n : nums) {
+            if (sum + n > maxSum) {
+                sum = n;
+                if (++groups > m) return false;
+            } else sum += n;
+        }
+
+        return true;
+    }
 }
