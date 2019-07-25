@@ -3,6 +3,7 @@ package com.leetcode.contest.contest136;
 public class No1041RobotBoundedInCircle {
 
     // https://www.youtube.com/watch?v=wWDOAcWy0QY
+    // https://leetcode.com/problems/robot-bounded-in-circle/discuss/290856/JavaC%2B%2BPython-Let-Chopper-Help-Explain
     private int[][] dirs = new int[][]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 
     public boolean isRobotBounded(String instructions) {
