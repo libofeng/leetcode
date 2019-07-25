@@ -125,4 +125,39 @@ public class No184Sum {
 
         return R;
     }
+
+    public List<List<Integer>> fourSum5(int[] nums, int target) {
+        Arrays.sort(nums);
+        final List<List<Integer>> result = new ArrayList<>();
+
+        helper(nums, target, result, 0, 4, new ArrayList<>());
+        return result;
+    }
+
+    private void helper(int[] nums, int target, List<List<Integer>> result, int index, int k, List<Integer> list) {
+        if (k == 2) {
+            int lo = index, hi = nums.length - 1;
+            while (lo < hi) {
+                int sum = nums[lo] + nums[hi];
+                if (sum == target) {
+                    final List<Integer> r = new ArrayList<>(list);
+                    r.add(nums[lo++]);
+                    r.add(nums[hi--]);
+                    result.add(r);
+
+                    while (lo < hi && nums[lo] == nums[lo - 1]) lo++;
+                    while (lo < hi && nums[hi] == nums[hi + 1]) hi--;
+                } else if (sum < target) lo++;
+                else hi--;
+            }
+        } else {
+            for (int i = index; i < nums.length; i++) {
+                if (i > index && nums[i] == nums[i - 1]) continue;
+
+                list.add(nums[i]);
+                helper(nums, target - nums[i], result, i + 1, k - 1, list);
+                list.remove(list.size() - 1);
+            }
+        }
+    }
 }
