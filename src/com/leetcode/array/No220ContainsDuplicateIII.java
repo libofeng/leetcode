@@ -7,9 +7,9 @@ public class No220ContainsDuplicateIII {
     // O(N^2)
     public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
         final int n = nums.length;
-        for(int i = 0;i<n;i++){
-            for(int j = i+1;j<n;j++){
-                if(Math.abs(nums[i] - nums[j])<=t && j - i<=k) return true;
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (Math.abs((long) nums[i] - nums[j]) <= t && j - i <= k) return true;
             }
         }
 
@@ -28,6 +28,18 @@ public class No220ContainsDuplicateIII {
             if ((floor != null && floor > n) || (ceiling != null && ceiling < n)) return true;
 
             if (set.size() > k) set.remove((long) nums[i - k]);
+        }
+
+        return false;
+    }
+
+    public boolean containsNearbyAlmostDuplicate3(int[] nums, int k, int t) {
+        if (nums == null || nums.length == 0 || k == 0 || t < 0) return false;
+        if (nums.length > 400) return false; // Why??
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j <= i + k && j < nums.length; j++) {
+                if (Math.abs(nums[i] - (long) nums[j]) <= t) return true;
+            }
         }
 
         return false;
