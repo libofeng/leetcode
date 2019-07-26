@@ -1,6 +1,7 @@
 package com.leetcode.string;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class No49GroupAnagrams {
     public List<List<String>> groupAnagrams(String[] strs) {
@@ -14,6 +15,24 @@ public class No49GroupAnagrams {
         }
 
         return new ArrayList<>(groups.values());
+    }
+
+    public List<List<String>> groupAnagrams3(String[] strs) {
+        Map<String, List<String>> groups = new HashMap<>();
+        Arrays.stream(strs).forEach(
+                k -> groups.computeIfAbsent(normalize(k), kk -> new ArrayList<>()).add(k));
+        return new ArrayList<>(groups.values());
+    }
+
+    public List<List<String>> groupAnagrams4(String[] strs) {
+        return new ArrayList<>(Arrays.stream(strs).collect(Collectors.groupingBy(this::normalize)).values());
+    }
+
+    private String normalize(String s) {
+        char[] chars = s.toCharArray();
+        Arrays.sort(chars);
+
+        return new String(chars);
     }
 
     /*一、 什么是“素数”？
