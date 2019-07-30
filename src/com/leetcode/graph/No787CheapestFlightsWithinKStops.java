@@ -153,6 +153,22 @@ public class No787CheapestFlightsWithinKStops {
         return min == max ? -1 : min;
     }
 
+    // DP
+    public int findCheapestPrice8(int n, int[][] flights, int src, int dst, int K) {
+        //dp[i][j] denotes the cheapest price within i-1 stops, stop in j city
+        long[][] dp = new long[K + 2][n];
+        for (long[] d : dp) Arrays.fill(d, Integer.MAX_VALUE);
+        dp[0][src] = 0;
+        for (int i = 1; i < K + 2; i++) {
+            dp[i][src] = 0;
+            for (int[] f : flights) {
+                dp[i][f[1]] = Math.min(dp[i][f[1]], dp[i - 1][f[0]] + f[2]);
+            }
+        }
+        return dp[K + 1][dst] == Integer.MAX_VALUE ? -1 : (int) dp[K + 1][dst];
+    }
+
+
     //    ----------------------
     private class City implements Comparable<City> {
         int id;
@@ -173,41 +189,30 @@ public class No787CheapestFlightsWithinKStops {
     // Dijkstra's
     // https://blog.csdn.net/qq_26410101/article/details/80910474
     public int findCheapestPrice6(int n, int[][] flights, int src, int dst, int K) {
-        int[][] srcToDst = new int[n][n];
-        for (int i = 0; i < flights.length; i++)
-            srcToDst[flights[i][0]][flights[i][1]] = flights[i][2];
+        final List<List<int[]>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
+        for (int[] f : flights) graph.get(f[0]).add(new int[]{f[1], f[2]});
 
-        PriorityQueue<City> minHeap = new PriorityQueue<>();
-        minHeap.offer(new City(src, 0, 0));
+        final Queue<int[]> pq = new PriorityQueue<>((a, b) -> a[2] - b[2]);
+        pq.offer(new int[]{src, 0, 0});
 
-        int[] cost = new int[n];
-        Arrays.fill(cost, Integer.MAX_VALUE);
-        cost[src] = 0;
-        int[] stop = new int[n];
-        Arrays.fill(stop, Integer.MAX_VALUE);
-        stop[src] = 0;
+        final int[] costs = new int[n];
+        final boolean[] visited = new boolean[n];
+        Arrays.fill(costs, Integer.MAX_VALUE);
 
-        while (!minHeap.isEmpty()) {
-            City curCity = minHeap.poll();
-            if (curCity.id == dst) return curCity.cost;
-            if (curCity.stops == K + 1) continue;
-            int[] nexts = srcToDst[curCity.id];
-            for (int i = 0; i < n; i++) {
-                if (nexts[i] != 0) {
-                    int newCost = curCity.cost + nexts[i];
-                    int newStop = curCity.stops + 1;
-                    if (newCost < cost[i]) {
-                        minHeap.offer(new City(i, newCost, newStop));
-                        cost[i] = newCost;
-                    } else if (newStop < stop[i]) {
-                        minHeap.offer(new City(i, newCost, newStop));
-                        stop[i] = newStop;
-                    }
-                }
+        while (!pq.isEmpty()) {
+            int city = pq.peek()[0], stop = pq.peek()[1], cost = pq.poll()[2];
+
+            if (cost < costs[city]) costs[city] = cost;
+
+            if (stop > K) continue;
+            visited[city] = true;
+            for (int[] next : graph.get(city)) {
+                if (!visited[next[0]]) pq.offer(new int[]{next[0], stop + 1, cost + next[1]});
             }
         }
 
-        return cost[dst] == Integer.MAX_VALUE ? -1 : cost[dst];
+        return costs[dst] == Integer.MAX_VALUE ? -1 : costs[dst];
     }
 
     // Dijkstra's 2
@@ -217,43 +222,22 @@ public class No787CheapestFlightsWithinKStops {
         for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
         for (int[] f : flights) graph.get(f[0]).add(new int[]{f[1], f[2]});
 
-        final Comparator<int[]> comparator = new Comparator<int[]>() {
-            public int compare(int[] a, int[] b) {
-                return a[1] - b[1];
-            }
-        };
-
-        final PriorityQueue<int[]> pq = new PriorityQueue<>(comparator);
+        final Queue<int[]> pq = new PriorityQueue<>((a, b) -> a[2] - b[2]);
         pq.offer(new int[]{src, 0, 0});
 
         final boolean[] visited = new boolean[n];
         while (!pq.isEmpty()) {
-            int[] flight = pq.poll();
-            int city = flight[0], cost = flight[1], stops = flight[2];
-            if (dst == city) return cost;
-            if (stops > K) continue;
+            int city = pq.peek()[0], stop = pq.peek()[1], cost = pq.poll()[2];
+            if (city == dst) return cost;
+            if (stop > K) continue;
 
             visited[city] = true;
-            for (int[] f : graph.get(city)) if (!visited[f[0]]) pq.offer(new int[]{f[0], f[1] + cost, stops + 1});
+            for (int[] next : graph.get(city)) {
+                if (!visited[next[0]]) pq.offer(new int[]{next[0], stop + 1, cost + next[1]});
+            }
         }
 
         return -1;
-    }
-
-
-    // DP
-    public int findCheapestPrice8(int n, int[][] flights, int src, int dst, int K) {
-        //dp[i][j] denotes the cheapest price within i-1 stops, stop in j city
-        long[][] dp = new long[K + 2][n];
-        for (long[] d : dp) Arrays.fill(d, Integer.MAX_VALUE);
-        dp[0][src] = 0;
-        for (int i = 1; i < K + 2; i++) {
-            dp[i][src] = 0;
-            for (int[] f : flights) {
-                dp[i][f[1]] = Math.min(dp[i][f[1]], dp[i - 1][f[0]] + f[2]);
-            }
-        }
-        return dp[K + 1][dst] == Integer.MAX_VALUE ? -1 : (int) dp[K + 1][dst];
     }
 
 
