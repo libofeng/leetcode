@@ -102,7 +102,8 @@ public class No787CheapestFlightsWithinKStops {
         return minCost == Integer.MAX_VALUE ? -1 : minCost;
     }
 
-    // Bellman-Ford
+    // Bellman-ford
+    // https://www.youtube.com/watch?v=FtN3BYH2Zes
 
     // BF runs V-1 iterations since that's the longest possible path from src to dest - one that uses every vertex.
     // In this problem, since the longest path is given as K+1, you only need to run it that many iterations.
@@ -110,26 +111,46 @@ public class No787CheapestFlightsWithinKStops {
     // See https://en.wikipedia.org/wiki/Bellman–Ford_algorithm
     //        "After i repetitions of for loop... if there is a path from s to u with at most i edges,
     //        then Distance(u) is at most the length of the shortest path from s to u with at most i edges."
+    // Time: O(KE), Space: O(V)
     public int findCheapestPrice4(int n, int[][] flights, int src, int dst, int K) {
         final int INF = 1000007;
         int[] cost = new int[n];
         Arrays.fill(cost, INF);
         cost[src] = 0;
 
-        int minCost = INF;
         for (int i = 0; i <= K; i++) {
-            int[] current = new int[n];
-            Arrays.fill(current, INF);
-            for (int[] f : flights) current[f[1]] = Math.min(current[f[1]], cost[f[0]] + f[2]);
-            cost = current;
-            minCost = Math.min(minCost, cost[dst]);
+            int[] next = new int[n];
+            Arrays.fill(next, INF);
+            next[src] = 0;
+
+            for (int[] f : flights) next[f[1]] = Math.min(next[f[1]], cost[f[0]] + f[2]);
+            cost = next;
         }
 
-        return minCost == INF ? -1 : minCost;
+        return cost[dst] == INF ? -1 : cost[dst];
+    }
+
+    // DP
+    // Another version of 4th
+    // Time: O(KE), Space: O(V)
+    // Commonly, Bellman-Ford time complexity is O((V-1)E), (V-1) stands for path length of (V-1)
+    // the path length K+1 means K stops: eg. A -> B -> C, the length path is 2, but 1 stop.
+    public int findCheapestPrice5(int n, int[][] flights, int src, int dst, int K) {
+        //dp[i][j] denotes the cheapest price within i-1 stops, stop in j city
+        final int INF = 1000007;
+        int[][] dp = new int[K + 2][n];
+        for (int[] d : dp) Arrays.fill(d, INF);
+        dp[0][src] = 0;
+
+        for (int i = 1; i < K + 2; i++) {
+            dp[i][src] = 0;
+            for (int[] f : flights) dp[i][f[1]] = Math.min(dp[i][f[1]], dp[i - 1][f[0]] + f[2]);
+        }
+        return dp[K + 1][dst] == INF ? -1 : dp[K + 1][dst];
     }
 
     // Bellman Ford 2
-    public int findCheapestPrice5(int n, int[][] flights, int src, int dst, int K) {
+    public int findCheapestPrice8(int n, int[][] flights, int src, int dst, int K) {
         int max = (int) 1e9 + 7;
         int[][] cost = new int[n][n];
         for (int i = 0; i < n; i++)
@@ -151,21 +172,6 @@ public class No787CheapestFlightsWithinKStops {
             if (i < cost[dst].length) min = Math.min(min, cost[dst][i]);
         }
         return min == max ? -1 : min;
-    }
-
-    // DP
-    public int findCheapestPrice8(int n, int[][] flights, int src, int dst, int K) {
-        //dp[i][j] denotes the cheapest price within i-1 stops, stop in j city
-        long[][] dp = new long[K + 2][n];
-        for (long[] d : dp) Arrays.fill(d, Integer.MAX_VALUE);
-        dp[0][src] = 0;
-        for (int i = 1; i < K + 2; i++) {
-            dp[i][src] = 0;
-            for (int[] f : flights) {
-                dp[i][f[1]] = Math.min(dp[i][f[1]], dp[i - 1][f[0]] + f[2]);
-            }
-        }
-        return dp[K + 1][dst] == Integer.MAX_VALUE ? -1 : (int) dp[K + 1][dst];
     }
 
 
