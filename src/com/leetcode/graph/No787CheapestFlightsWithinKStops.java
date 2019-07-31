@@ -10,30 +10,27 @@ public class No787CheapestFlightsWithinKStops {
 
     // http://www.cnblogs.com/grandyang/p/9109981.html
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
-        if (src == dst) return 0;
         final List<List<int[]>> graph = new ArrayList<>();
         for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
-        for (int[] flight : flights) graph.get(flight[0]).add(new int[]{flight[1], flight[2]});
-        if (graph.get(src).isEmpty()) return -1;
+        for (int[] f : flights) graph.get(f[0]).add(new int[]{f[1], f[2]});
 
         final Queue<int[]> q = new LinkedList<>();
         q.offer(new int[]{src, 0});
 
-        int minCost = Integer.MAX_VALUE;
-        while (!q.isEmpty() && K-- >= 0) {
+        int paths = 0, minCost = Integer.MAX_VALUE;
+        while (!q.isEmpty() && paths <= K + 1) {
             int size = q.size();
             while (size-- > 0) {
-                int[] stop = q.poll();
-                int city = stop[0], cost = stop[1];
-
-                for (int[] next : graph.get(city)) {
-                    int nextCity = next[0], price = next[1], nextCost = cost + price;
-                    if (nextCost >= minCost) continue;
-
-                    if (dst == nextCity) minCost = nextCost;
-                    else q.offer(new int[]{nextCity, nextCost});
+                int city = q.peek()[0], cost = q.poll()[1];
+                if (cost >= minCost) continue;
+                if (city == dst) {
+                    minCost = cost;
+                    continue;
                 }
+
+                for (int[] next : graph.get(city)) q.offer(new int[]{next[0], cost + next[1]});
             }
+            paths++;
         }
 
         return minCost == Integer.MAX_VALUE ? -1 : minCost;
@@ -42,27 +39,25 @@ public class No787CheapestFlightsWithinKStops {
     private int minCost = Integer.MAX_VALUE;
 
     public int findCheapestPrice2(int n, int[][] flights, int src, int dst, int K) {
-        if (src == dst) return 0;
         final List<List<int[]>> graph = new ArrayList<>();
         for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
-        for (int[] flight : flights) graph.get(flight[0]).add(new int[]{flight[1], flight[2]});
-        if (graph.get(src).isEmpty()) return -1;
+        for (int[] f : flights) graph.get(f[0]).add(new int[]{f[1], f[2]});
+        final boolean[] visiting = new boolean[n];
 
-        dfs(graph, src, 0, dst, K, new boolean[n]);
-
+        dfs(graph, src, dst, K, 0, 0, visiting);
         return minCost == Integer.MAX_VALUE ? -1 : minCost;
     }
 
-    private void dfs(List<List<int[]>> graph, int city, int cost, int dst, int k, boolean[] visiting) {
-        if (k < 0 || visiting[city]) return;
+    private void dfs(List<List<int[]>> graph, int city, int dst, int k, int paths, int cost, boolean[] visiting) {
+        if (paths >= k + 1 || visiting[city]) return;
 
         visiting[city] = true;
-        for (int[] f : graph.get(city)) {
-            int nextCity = f[0], nextCost = cost + f[1];
+        for (int[] next : graph.get(city)) {
+            int nextCity = next[0], nextCost = cost + next[1];
             if (nextCost >= minCost) continue;
 
             if (dst == nextCity) minCost = nextCost;
-            else dfs(graph, nextCity, nextCost, dst, k - 1, visiting);
+            else dfs(graph, nextCity, dst, k, paths + 1, nextCost, visiting);
         }
         visiting[city] = false;
     }
@@ -104,6 +99,7 @@ public class No787CheapestFlightsWithinKStops {
 
     // Bellman-ford
     // https://www.youtube.com/watch?v=FtN3BYH2Zes
+    // https://www.youtube.com/watch?v=oNI0rf2P9gE
 
     // BF runs V-1 iterations since that's the longest possible path from src to dest - one that uses every vertex.
     // In this problem, since the longest path is given as K+1, you only need to run it that many iterations.
@@ -149,29 +145,37 @@ public class No787CheapestFlightsWithinKStops {
         return dp[K + 1][dst] == INF ? -1 : dp[K + 1][dst];
     }
 
-    // Bellman Ford 2
+    // Floyd Warshall
+    // Time:O(N^3), Space: O(N^2)
     public int findCheapestPrice8(int n, int[][] flights, int src, int dst, int K) {
-        int max = (int) 1e9 + 7;
-        int[][] cost = new int[n][n];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++) cost[i][j] = max;
-
-        cost[src][0] = 0;
+        final int INF = 1000007;
+        final int[][] dp = new int[n][n];
         for (int i = 0; i < n; i++) {
-            for (int[] flight : flights) {
-                int from = flight[0], to = flight[1], w = flight[2];
-                for (int k = 1; k < n; k++) {
-                    if (cost[from][k - 1] + w < cost[to][k])
-                        cost[to][k] = cost[from][k - 1] + w;
+            for (int j = 0; j < n; j++) dp[i][j] = i == j ? 0 : INF;
+        }
+
+        final int[][] pathLens = new int[n][n];
+        for (int[] e : flights) {
+            dp[e[0]][e[1]] = e[2];
+            pathLens[e[0]][e[1]] = 1;
+        }
+
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    // if the path length is >= K + 1, that means the result in dp is not valid.
+                    // we don't need to store invalid numbers
+                    if (pathLens[i][k] + pathLens[k][j] >= K + 1 && j != dst) continue;
+
+                    if (dp[i][k] + dp[k][j] < dp[i][j] && pathLens[i][k] + pathLens[k][j] <= K + 1) {
+                        dp[i][j] = dp[i][k] + dp[k][j];
+                        pathLens[i][j] = pathLens[i][k] + pathLens[k][j];
+                    }
                 }
             }
         }
 
-        int min = max;
-        for (int i = 0; i <= K + 1; i++) {
-            if (i < cost[dst].length) min = Math.min(min, cost[dst][i]);
-        }
-        return min == max ? -1 : min;
+        return dp[src][dst] == INF ? -1 : dp[src][dst];
     }
 
 
